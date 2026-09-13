@@ -6,6 +6,10 @@ abstracts and downloadable PDFs, fieldwork photo galleries, an about page and a 
 Built with **Astro + Tailwind CSS + Markdown** — a static site that is fast, easy to maintain,
 and deployable to any static host (GitHub Pages, Netlify, Vercel, Cloudflare Pages, …).
 
+> **Developers:** read **[DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md)** first — it explains the
+> architecture, how Markdown content flows into the pages, and how the English/Thai language
+> system is wired and maintained.
+
 ---
 
 ## Tech stack

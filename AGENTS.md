@@ -39,6 +39,11 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 
 After changing components or pages, run `npm run check` and `npm run build`.
 
+## Maintenance guide
+
+For architecture, the Markdown → page content flow, and how the English/Thai language system is
+wired (dictionaries, thin page files, EN⇄TH switching), read `DEVELOPER_GUIDE.md`.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
