@@ -1,0 +1,6 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap — update the domain to match astro.config.mjs / src/site.config.ts
+Sitemap: https://yourname.example.edu/sitemap-index.xml

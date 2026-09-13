@@ -1,0 +1,171 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import PublicationCard from '../components/PublicationCard.astro';
+import EventCard from '../components/EventCard.astro';
+import { SITE } from '../site.config';
+import { getCollection } from 'astro:content';
+import { sortByYearDesc } from '../lib/publications';
+
+const publications = sortByYearDesc(await getCollection('publications')).slice(0, 3);
+const events = (await getCollection('events'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+const initials = SITE.name.replace('Dr. ', '').trim().split(/\s+/).map((w) => w[0]).join('');
+
+// schema.org Person — helps search engines and Google Scholar-style
+// crawlers associate the site with the author's academic identity.
+const personLd = [
+  {
+    '@type': 'Person',
+    name: SITE.name,
+    jobTitle: SITE.title,
+    url: SITE.url,
+    email: `mailto:${SITE.email}`,
+    worksFor: { '@type': 'Organization', name: SITE.organization },
+    sameAs: Object.values(SITE.profiles),
+    knowsAbout: SITE.interests,
+  },
+];
+---
+
+<Layout title={SITE.name} jsonLd={personLd}>
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-steel/10 blur-3xl" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -left-24 top-40 h-72 w-72 rounded-full bg-gold/10 blur-3xl" aria-hidden="true"></div>
+
+    <div class="mx-auto grid max-w-6xl gap-12 px-4 pb-16 pt-14 sm:px-6 md:grid-cols-[1.4fr_1fr] md:items-center md:pt-20">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-gold">{SITE.title}</p>
+        <h1 class="mt-4 font-serif text-4xl font-semibold leading-tight text-ink sm:text-5xl">
+          {SITE.name}
+        </h1>
+        <p class="mt-3 text-base text-ink-soft">{SITE.affiliation}</p>
+        <p class="mt-6 max-w-xl leading-relaxed text-ink-soft">
+          An anthropologist of religion, ritual and memory in mainland Southeast Asia — with a
+          particular focus on how sacred landscapes, material culture and collective remembrance
+          shape community life in northern Thailand. My work appears in both English and Thai, and
+          this site gathers my publications, fieldwork galleries, and research notes in one place.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a
+            href="/publications"
+            class="inline-flex items-center gap-2 rounded-full bg-navy px-6 py-3 text-sm font-medium text-paper transition-colors hover:bg-navy-light"
+          >
+            Browse publications
+            <Icon name="arrow-right" class="h-4 w-4" />
+          </a>
+          <a
+            href="/events"
+            class="inline-flex items-center gap-2 rounded-full border border-line bg-white px-6 py-3 text-sm font-medium text-ink transition-colors hover:border-navy hover:text-navy"
+          >
+            View fieldwork galleries
+          </a>
+        </div>
+      </div>
+
+      <!-- Profile portrait placeholder. Replace this card with an <img> of a
+           real photograph to personalise the site. -->
+      <div class="mx-auto w-full max-w-xs">
+        <div class="relative rounded-2xl border border-line bg-paper-dark p-2 shadow-sm">
+          <div class="flex aspect-[4/5] flex-col items-center justify-center rounded-xl bg-gradient-to-br from-navy to-navy-light">
+            <span class="font-serif text-6xl font-semibold tracking-wide text-paper/90">{initials}</span>
+            <span class="mt-2 text-xs uppercase tracking-[0.3em] text-paper/60">Anthropology</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Research interests -->
+  <section class="border-y border-line bg-paper-dark">
+    <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+      <div class="flex flex-wrap items-center gap-2.5">
+        <span class="mr-2 text-xs font-semibold uppercase tracking-widest text-ink-soft">Research interests</span>
+        {
+          SITE.interests.map((interest) => (
+            <span class="rounded-full border border-line bg-white px-4 py-1.5 text-sm text-ink-soft">
+              {interest}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured publications -->
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+    <div class="flex items-end justify-between gap-4">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Selected work</p>
+        <h2 class="mt-2 font-serif text-3xl font-semibold text-ink">Recent publications</h2>
+      </div>
+      <a href="/publications" class="inline-flex items-center gap-1.5 text-sm font-medium text-navy transition-colors hover:text-navy-light">
+        All publications
+        <Icon name="arrow-right" class="h-4 w-4" />
+      </a>
+    </div>
+
+    {
+      publications.length > 0 ? (
+        <div class="mt-8 grid gap-6 lg:grid-cols-3">
+          {publications.map((pub) => <PublicationCard publication={pub} />)}
+        </div>
+      ) : (
+        <p class="mt-8 rounded-xl border border-dashed border-line bg-paper-dark p-10 text-center text-sm text-ink-soft">
+          Publications will appear here once Markdown files are added under
+          <code class="mx-1 rounded bg-paper px-1.5 py-0.5 font-mono text-xs">src/content/publications/</code>.
+        </p>
+      )
+    }
+  </section>
+
+  <!-- Events teaser -->
+  <section class="border-t border-line bg-paper-dark">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">In the field</p>
+          <h2 class="mt-2 font-serif text-3xl font-semibold text-ink">Fieldwork &amp; events</h2>
+        </div>
+        <a href="/events" class="inline-flex items-center gap-1.5 text-sm font-medium text-navy transition-colors hover:text-navy-light">
+          All galleries
+          <Icon name="arrow-right" class="h-4 w-4" />
+        </a>
+      </div>
+
+      {
+        events.length > 0 ? (
+          <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {events.map((event) => <EventCard event={event} />)}
+          </div>
+        ) : (
+          <p class="mt-8 rounded-xl border border-dashed border-line bg-paper p-10 text-center text-sm text-ink-soft">
+            Photo galleries will appear here once event Markdown files are added under
+            <code class="mx-1 rounded bg-paper px-1.5 py-0.5 font-mono text-xs">src/content/events/</code>.
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Contact CTA -->
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+    <div class="relative overflow-hidden rounded-2xl bg-navy px-8 py-12 text-center sm:px-16">
+      <div class="pointer-events-none absolute -left-16 -top-16 h-56 w-56 rounded-full bg-white/5 blur-2xl" aria-hidden="true"></div>
+      <h2 class="font-serif text-2xl font-semibold text-paper sm:text-3xl">Interested in collaboration or fieldwork exchange?</h2>
+      <p class="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-paper/80">
+        I welcome correspondence from students, colleagues and institutions working on religion,
+        ritual, heritage and the anthropology of Southeast Asia.
+      </p>
+      <a
+        href="/contact"
+        class="mt-8 inline-flex items-center gap-2 rounded-full bg-paper px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-paper-dark"
+      >
+        <Icon name="mail" class="h-4 w-4" />
+        Get in touch
+      </a>
+    </div>
+  </section>
+</Layout>

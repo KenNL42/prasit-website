@@ -1,0 +1,114 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../site.config';
+
+const education = [
+  { degree: 'Ph.D. in Anthropology', place: 'University of Cambridge, United Kingdom', year: '2012' },
+  { degree: 'M.A. in Southeast Asian Studies', place: 'Chulalongkorn University, Thailand', year: '2006' },
+  { degree: 'B.A. in History (First Class Honours)', place: 'Chiang Mai University, Thailand', year: '2003' },
+];
+
+const positions = [
+  { role: 'Assistant Professor of Anthropology', place: 'Chiang Mai University', period: '2018 – present' },
+  { role: 'Lecturer in Anthropology', place: 'Chiang Mai University', period: '2013 – 2018' },
+  { role: 'Postdoctoral Research Fellow', place: 'École française d’Extrême-Orient (EFEO), Bangkok', period: '2012 – 2013' },
+];
+---
+
+<Layout title="About" description="Biography, academic background and research interests.">
+  <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <!-- Page header -->
+    <div class="max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">About</p>
+      <h1 class="mt-3 font-serif text-4xl font-semibold text-ink">Biography</h1>
+    </div>
+
+    <div class="mt-10 grid gap-14 lg:grid-cols-[1.6fr_1fr]">
+      <!-- Main bio -->
+      <div class="max-w-2xl space-y-6 text-[15px] leading-relaxed text-ink-soft">
+        <p>
+          I am an anthropologist working at the intersection of religion, ritual and collective
+          memory in mainland Southeast Asia. My research asks how communities make and remake
+          sacred space — through pilgrimage, temple renovation, spirit cults and commemorative
+          practice — and how those processes bear on questions of belonging, heritage and
+          political identity today.
+        </p>
+        <p>
+          My primary fieldwork has been carried out in northern Thailand and the upper Mekong
+          region, where I have conducted long-term ethnographic research since 2007. I am
+          particularly interested in material culture: the ways that objects — Buddha images,
+          amulets, monuments, archives — carry memory across generations and become the focus of
+          religious and civic devotion.
+        </p>
+        <p>
+          My work has been published in both English and Thai. Writing in Thai has been
+          deliberate: I believe anthropological knowledge should speak to the communities it
+          studies, and much of my recent writing addresses audiences of Thai students,
+          heritage practitioners and the wider public.
+        </p>
+        <p>
+          At the university I teach courses on the anthropology of religion, ethnographic
+          methods, and the anthropology of Southeast Asia, and I regularly supervise fieldwork
+          projects across the region.
+        </p>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="space-y-6">
+        <div class="rounded-xl border border-line bg-white p-6 shadow-sm">
+          <h2 class="text-xs font-semibold uppercase tracking-widest text-ink-soft">Academic positions</h2>
+          <ul class="mt-4 space-y-4">
+            {positions.map((item) => (
+              <li>
+                <p class="text-sm font-medium text-ink">{item.role}</p>
+                <p class="text-sm text-ink-soft">{item.place}</p>
+                <p class="text-xs text-ink-soft/80">{item.period}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="rounded-xl border border-line bg-white p-6 shadow-sm">
+          <h2 class="text-xs font-semibold uppercase tracking-widest text-ink-soft">Education</h2>
+          <ul class="mt-4 space-y-4">
+            {education.map((item) => (
+              <li>
+                <p class="text-sm font-medium text-ink">{item.degree}</p>
+                <p class="text-sm text-ink-soft">{item.place}</p>
+                <p class="text-xs text-ink-soft/80">{item.year}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="rounded-xl border border-line bg-white p-6 shadow-sm">
+          <h2 class="text-xs font-semibold uppercase tracking-widest text-ink-soft">Languages</h2>
+          <ul class="mt-4 space-y-2 text-sm text-ink-soft">
+            <li class="flex justify-between"><span>Thai</span><span class="text-ink">Native</span></li>
+            <li class="flex justify-between"><span>English</span><span class="text-ink">Fluent</span></li>
+            <li class="flex justify-between"><span>Northern Thai (Lanna)</span><span class="text-ink">Working</span></li>
+            <li class="flex justify-between"><span>French</span><span class="text-ink">Reading</span></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Research interests -->
+    <section class="mt-16 border-t border-line pt-12">
+      <h2 class="font-serif text-2xl font-semibold text-ink">Research interests</h2>
+      <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          SITE.interests.map((interest, i) => (
+            <div class="flex items-start gap-3 rounded-xl border border-line bg-white p-5 shadow-sm">
+              <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-paper-dark text-navy">
+                <Icon name={i % 2 === 0 ? 'globe' : 'university'} class="h-4 w-4" />
+              </span>
+              <p class="text-sm font-medium text-ink">{interest}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</Layout>

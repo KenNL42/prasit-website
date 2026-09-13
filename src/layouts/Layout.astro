@@ -1,0 +1,109 @@
+---
+import { SITE } from '../site.config';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  /** Page <title> (site name is appended automatically). */
+  title: string;
+  /** Meta description. */
+  description?: string;
+  /** Optional canonical path (defaults to the current URL). */
+  canonicalPath?: string;
+  /** Language of the page content: "en" or "th". */
+  lang?: 'en' | 'th';
+  /** Open Graph / social type: "website" or "article". */
+  type?: 'website' | 'article';
+  /**
+   * Extra schema.org nodes (plain objects) merged into the page's
+   * JSON-LD graph. The WebSite and Organization nodes are always included.
+   */
+  jsonLd?: Array<Record<string, unknown>>;
+}
+
+const {
+  title,
+  description = SITE.description,
+  canonicalPath = Astro.url.pathname,
+  lang = 'en',
+  type = 'website',
+  jsonLd = [],
+} = Astro.props;
+
+const canonical = new URL(canonicalPath, SITE.url).toString();
+const fullTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
+
+const ogImage = new URL('/og-image.png', SITE.url).toString();
+const ogLocale = lang === 'th' ? 'th_TH' : 'en_US';
+
+/** Always-present structured data: the website itself and the organisation. */
+const siteGraph = [
+  {
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: SITE.url,
+    description: SITE.description,
+    inLanguage: 'en',
+  },
+  {
+    '@type': 'Organization',
+    name: SITE.organization,
+    url: SITE.url,
+  },
+  ...jsonLd,
+];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.name} />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#1e3a5f" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon-180.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITE.name} — ${SITE.title}`} />
+
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Structured data (schema.org) -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': siteGraph })} />
+
+    <!-- Fonts: Lora + Inter for Latin, Noto Sans Thai for Thai content. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+Thai:wght@400;500;600;700&family=Noto+Serif+Thai:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <Nav />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

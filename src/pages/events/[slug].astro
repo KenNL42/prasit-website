@@ -1,0 +1,113 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import PhotoGallery from '../../components/PhotoGallery.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { listAlbumPhotoUrls } from '../../lib/albums';
+import { SITE } from '../../site.config';
+
+export async function getStaticPaths() {
+  const events = await getCollection('events');
+  return events.map((event) => ({
+    params: { slug: event.id },
+    props: { event },
+  }));
+}
+
+interface Props {
+  event: CollectionEntry<'events'>;
+}
+
+const { event } = Astro.props;
+const { Content } = await render(event);
+const photos = listAlbumPhotoUrls(event.data.album);
+const formattedDate = event.data.date.toLocaleDateString('en-GB', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+const hasDescription = (event.body ?? '').trim().length > 0;
+const eventImages = photos.slice(0, 3);
+
+// schema.org Event — exposes the gallery to search engines and rich results.
+const eventLd = [
+  {
+    '@type': 'Event',
+    name: event.data.title,
+    startDate: event.data.date.toISOString(),
+    ...(event.data.location ? { location: { '@type': 'Place', name: event.data.location } } : {}),
+    ...(hasDescription
+      ? { description: (event.body ?? '').trim().slice(0, 500) }
+      : {}),
+    ...(eventImages.length > 0
+      ? { image: eventImages.map((url) => new URL(url, SITE.url).toString()) }
+      : {}),
+  },
+];
+---
+
+<Layout
+  title={event.data.title}
+  description={`${event.data.title} — photo gallery${event.data.location ? `, ${event.data.location}` : ''}.`}
+  type="article"
+  jsonLd={eventLd}
+>
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="mb-8">
+      <ol class="flex items-center gap-2 text-sm text-ink-soft">
+        <li><a href="/events" class="transition-colors hover:text-navy">Fieldwork &amp; events</a></li>
+        <li aria-hidden="true"><Icon name="chevron-right" class="h-3.5 w-3.5" /></li>
+        <li class="truncate text-ink">{event.data.title}</li>
+      </ol>
+    </nav>
+
+    <!-- Header -->
+    <header class="max-w-3xl">
+      <h1 class="font-serif text-4xl font-semibold leading-tight text-ink">{event.data.title}</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-ink-soft">
+        <span class="inline-flex items-center gap-2">
+          <Icon name="calendar" class="h-4 w-4 text-navy" />
+          <time datetime={event.data.date.toISOString()}>{formattedDate}</time>
+        </span>
+        {
+          event.data.location && (
+            <span class="inline-flex items-center gap-2">
+              <Icon name="location" class="h-4 w-4 text-navy" />
+              {event.data.location}
+            </span>
+          )
+        }
+        <span class="inline-flex items-center gap-2">
+          <Icon name="university" class="h-4 w-4 text-navy" />
+          {photos.length} photo{photos.length === 1 ? '' : 's'}
+        </span>
+      </div>
+    </header>
+
+    <!-- Description -->
+    {
+      hasDescription && (
+        <div class="prose-content mt-6 max-w-3xl">
+          <Content />
+        </div>
+      )
+    }
+
+    <!-- Gallery -->
+    <section class="mt-10" aria-label="Photo gallery">
+      <PhotoGallery photos={photos} alt={event.data.title} />
+    </section>
+
+    <!-- Back link -->
+    <p class="mt-12">
+      <a
+        href="/events"
+        class="inline-flex items-center gap-2 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:border-navy hover:text-navy"
+      >
+        <Icon name="chevron-left" class="h-4 w-4" />
+        Back to all events
+      </a>
+    </p>
+  </div>
+</Layout>

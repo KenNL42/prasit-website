@@ -1,0 +1,73 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PublicationCard from './PublicationCard.astro';
+import Icon from './Icon.astro';
+import { sortByYearDesc } from '../lib/publications';
+
+interface Props {
+  publications: CollectionEntry<'publications'>[];
+  /** Show the abstract toggle on each card. */
+  showAbstract?: boolean;
+}
+
+const { publications, showAbstract = true } = Astro.props;
+const sorted = sortByYearDesc(publications);
+---
+
+{
+  sorted.length > 0 ? (
+    <div data-pub-filter>
+      <div class="relative max-w-md">
+        <Icon name="search" class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-soft" />
+        <input
+          type="search"
+          placeholder="Filter by title, author, year…"
+          aria-label="Filter publications"
+          data-filter-input
+          class="w-full rounded-full border border-line bg-white py-2.5 pl-10 pr-4 text-sm text-ink placeholder:text-ink-soft/70 focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/20"
+        />
+      </div>
+
+      <p class="mt-4 text-sm text-ink-soft" data-filter-count>
+        Showing {sorted.length} publication{sorted.length === 1 ? '' : 's'}
+      </p>
+
+      <div class="mt-6 grid gap-6 lg:grid-cols-2">
+        {sorted.map((pub) => (
+          <div data-pub-item>
+            <PublicationCard publication={pub} showAbstract={showAbstract} />
+          </div>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div class="rounded-xl border border-dashed border-line bg-paper-dark p-12 text-center text-sm text-ink-soft">
+      No publications yet. Add Markdown files under
+      <code class="mx-1 rounded bg-paper px-1.5 py-0.5 font-mono text-xs">src/content/publications/</code>
+      to list them here.
+    </div>
+  )
+}
+
+<script>
+  const root = document.querySelector('[data-pub-filter]');
+  if (root) {
+    const input = root.querySelector<HTMLInputElement>('[data-filter-input]');
+    const count = root.querySelector('[data-filter-count]');
+    const items = Array.from(root.querySelectorAll<HTMLElement>('[data-pub-item]'));
+    const texts = items.map((item) => item.textContent?.toLowerCase() ?? '');
+
+    input?.addEventListener('input', () => {
+      const query = (input.value ?? '').trim().toLowerCase();
+      let visible = 0;
+      items.forEach((item, index) => {
+        const match = query === '' || texts[index].includes(query);
+        item.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+      if (count) {
+        count.textContent = query === '' ? `Showing ${items.length} publication${items.length === 1 ? '' : 's'}` : `Showing ${visible} of ${items.length} publication${items.length === 1 ? '' : 's'}`;
+      }
+    });
+  }
+</script>

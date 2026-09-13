@@ -1,0 +1,111 @@
+---
+import { SITE } from '../site.config';
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/publications', label: 'Publications' },
+  { href: '/events', label: 'Fieldwork & Events' },
+  { href: '/contact', label: 'Contact' },
+];
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+
+<header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur">
+  <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6" aria-label="Main navigation">
+    <a href="/" class="flex items-center gap-2.5" aria-label={`${SITE.name} — home`}>
+      <span class="flex h-9 w-9 items-center justify-center rounded-full bg-navy font-serif text-lg font-semibold text-paper">
+        {SITE.name.replace('Dr. ', '').trim().charAt(0)}
+      </span>
+      <span class="hidden leading-tight sm:block">
+        <span class="block font-serif text-[15px] font-semibold tracking-tight text-ink">{SITE.name}</span>
+        <span class="block text-[11px] uppercase tracking-widest text-ink-soft">Anthropology</span>
+      </span>
+    </a>
+
+    <!-- Desktop links -->
+    <ul class="hidden items-center gap-1 md:flex">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class:list={[
+                'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                isActive(link.href) ? 'text-navy' : 'text-ink-soft hover:text-ink',
+              ]}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+      <li class="ml-2">
+        <a
+          href="/contact"
+          class="inline-flex items-center gap-1.5 rounded-full bg-navy px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-navy-light"
+        >
+          Get in touch
+        </a>
+      </li>
+    </ul>
+
+    <!-- Mobile menu button -->
+    <button
+      id="nav-toggle"
+      type="button"
+      class="inline-flex h-10 w-10 items-center justify-center rounded-md text-ink-soft transition-colors hover:bg-paper-dark hover:text-ink md:hidden"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="h-5 w-5" aria-hidden="true">
+        <path d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden border-t border-line bg-paper md:hidden">
+    <ul class="mx-auto max-w-6xl space-y-1 px-4 py-3">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class:list={[
+                'block rounded-md px-3 py-2.5 text-sm font-medium transition-colors',
+                isActive(link.href) ? 'bg-paper-dark text-navy' : 'text-ink-soft hover:bg-paper-dark hover:text-ink',
+              ]}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobile-menu');
+  if (toggle && menu) {
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!expanded));
+      menu.classList.toggle('hidden', expanded);
+    });
+    // Close the menu when a link is chosen.
+    menu.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', () => {
+        toggle.setAttribute('aria-expanded', 'false');
+        menu.classList.add('hidden');
+      });
+    });
+  }
+</script>

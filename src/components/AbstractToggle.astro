@@ -1,0 +1,93 @@
+---
+/**
+ * Shows an abstract with an optional "more…" toggle.
+ *
+ * Usage:
+ *   <AbstractToggle id="pub-1" isLong={body.length > 300}>
+ *     <Content />  <!-- rendered markdown abstract -->
+ *   </AbstractToggle>
+ *
+ * - Short abstracts are shown in full, no toggle.
+ * - Long abstracts are clamped to 3 lines with a "more… / show less"
+ *   button (progressive enhancement, works without JS for short text).
+ */
+interface Props {
+  /** Unique id for this instance (used for the toggle wiring). */
+  id: string;
+  /** Whether the abstract is long enough to need the toggle. */
+  isLong?: boolean;
+  /** Text shown for the collapsed state (default "more…"). */
+  moreLabel?: string;
+  /** Text shown for the expanded state (default "show less"). */
+  lessLabel?: string;
+}
+
+const { id, isLong = false, moreLabel = 'more…', lessLabel = 'show less' } = Astro.props;
+const targetId = `abstract-${id}`;
+---
+
+{
+  isLong ? (
+    <div>
+      <div id={targetId} class="abstract-collapsed prose-content">
+        <slot />
+      </div>
+      <button
+        type="button"
+        data-abstract-toggle
+        data-target={targetId}
+        data-more={moreLabel}
+        data-less={lessLabel}
+        class="mt-2 inline-flex items-center gap-1 text-sm font-medium text-navy transition-colors hover:text-navy-light"
+        aria-expanded="false"
+        aria-controls={targetId}
+      >
+        <span data-label>{moreLabel}</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-3.5 w-3.5 transition-transform"
+          data-chevron
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+    </div>
+  ) : (
+    <div class="prose-content">
+      <slot />
+    </div>
+  )
+}
+
+<script>
+  // Toggle long abstracts between a 3-line clamp and the full text.
+  // A single delegated listener covers every instance on the page.
+  document.addEventListener('click', (event) => {
+    const button = (event.target as HTMLElement | null)?.closest('[data-abstract-toggle]') as
+      | HTMLButtonElement
+      | null;
+    if (!button) return;
+
+    const target = document.getElementById(button.dataset.target ?? '');
+    if (!target) return;
+
+    const expanded = target.classList.toggle('abstract-collapsed');
+    button.setAttribute('aria-expanded', String(!expanded));
+
+    const label = button.querySelector('[data-label]');
+    if (label) {
+      label.textContent = expanded ? (button.dataset.less ?? 'show less') : (button.dataset.more ?? 'more…');
+    }
+    const chevron = button.querySelector('[data-chevron]');
+    if (chevron) {
+      chevron.classList.toggle('rotate-180', !expanded);
+    }
+  });
+</script>

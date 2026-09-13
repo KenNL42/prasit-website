@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens (Tailwind CSS v4 theme)
+   Professional academic palette: warm paper background, deep navy blue
+   accents, muted gold highlights.
+--------------------------------------------------------------------------- */
+@theme {
+  /* Colours */
+  --color-paper: #fbf9f4;
+  --color-paper-dark: #f4f0e7;
+  --color-ink: #20281f;
+  --color-ink-soft: #4d5a52;
+  --color-navy: #1e3a5f;
+  --color-navy-light: #2c5282;
+  --color-steel: #5f7f9e;
+  --color-gold: #a9853b;
+  --color-line: #e4ded2;
+
+  /* Fonts — Latin serif/sans paired with Thai fallbacks (Noto Sans/Serif Thai). */
+  --font-serif: "Lora", "Noto Serif Thai", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", "Noto Sans Thai", Tahoma, "Leelawadee UI", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* Base */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-navy);
+    color: var(--color-paper);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* Prose styling for rendered Markdown (abstracts, event descriptions). */
+.prose-content {
+  line-height: 1.75;
+  color: var(--color-ink-soft);
+}
+
+.prose-content p + p {
+  margin-top: 0.75rem;
+}
+
+.prose-content a {
+  color: var(--color-navy);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-content strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+/* Abstracts: collapsed state clamps to 3 lines; expanded state shows all. */
+.abstract-collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Lightbox */
+.lightbox-open {
+  overflow: hidden;
+}

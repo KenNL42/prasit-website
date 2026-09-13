@@ -1,0 +1,107 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import AbstractToggle from './AbstractToggle.astro';
+import Icon from './Icon.astro';
+import { buildCitation, pdfUrl } from '../lib/publications';
+
+interface Props {
+  publication: CollectionEntry<'publications'>;
+  /** Hide the abstract entirely (e.g. compact list mode). */
+  showAbstract?: boolean;
+}
+
+const { publication: pub, showAbstract = true } = Astro.props;
+const { Content } = await render(pub);
+const url = pdfUrl(pub);
+const abstractLength = (pub.body ?? '').trim().length;
+const citation = buildCitation(pub);
+const langTag = pub.data.language === 'th' ? 'th' : 'en';
+---
+
+<article
+  lang={langTag}
+  class="flex flex-col rounded-xl border border-line bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+>
+  <!-- Header: type badge + year -->
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="rounded-full bg-paper-dark px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-navy">
+      {pub.data.type}
+    </span>
+    <span class="text-sm text-ink-soft">{pub.data.year}</span>
+    {
+      pub.data.language === 'th' && (
+        <span class="rounded-full bg-navy px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-paper">
+          ไทย
+        </span>
+      )
+    }
+    {
+      pub.data.tags.slice(0, 3).map((tag) => (
+        <span class="rounded-full border border-line px-3 py-1 text-[11px] text-ink-soft">{tag}</span>
+      ))
+    }
+  </div>
+
+  <!-- Title -->
+  <h3 class="mt-3 font-serif text-lg font-semibold leading-snug text-ink">
+    {pub.data.title}
+  </h3>
+
+  <!-- Authors -->
+  {
+    pub.data.authors.length > 0 && (
+      <p class="mt-1.5 text-sm text-ink-soft">{pub.data.authors.join(' · ')}</p>
+    )
+  }
+
+  <!-- Venue -->
+  {
+    pub.data.journal && (
+      <p class="mt-1 text-sm italic text-ink-soft">{pub.data.journal}</p>
+    )
+  }
+
+  <!-- Abstract with toggle -->
+  {
+    showAbstract && (
+      <div class="mt-4">
+        <AbstractToggle id={pub.id.replace(/[^a-zA-Z0-9-]/g, '-')} isLong={abstractLength > 300}>
+          <Content />
+        </AbstractToggle>
+      </div>
+    )
+  }
+
+  <!-- Footer: citation + download -->
+  <div class="mt-auto pt-5">
+    <p class="border-t border-line pt-4 text-[13px] leading-relaxed text-ink-soft">{citation}</p>
+    <div class="mt-3 flex flex-wrap items-center gap-4">
+      {
+        url && (
+          <a
+            href={url}
+            download
+            class="inline-flex items-center gap-2 rounded-full bg-navy px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-navy-light"
+          >
+            <Icon name="download" class="h-4 w-4" />
+            Download PDF
+          </a>
+        )
+      }
+      {
+        pub.data.doi && (
+          <a
+            href={`https://doi.org/${pub.data.doi}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-sm font-medium text-navy transition-colors hover:text-navy-light"
+          >
+            DOI: {pub.data.doi}
+            <Icon name="external" class="h-3.5 w-3.5" />
+          </a>
+        )
+      }
+    </div>
+  </div>
+</article>
