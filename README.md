@@ -55,6 +55,23 @@ npm run build
 npm run preview
 ```
 
+## Languages (English / Thai)
+
+The site is fully bilingual. **English** pages live at the root (`/about`, `/publications`, …) and
+**Thai** pages under the `/th/` prefix (`/th/about`, `/th/publications`, …). A language switcher in
+the navigation bar jumps between the same page in the other language; every page also carries
+`hreflang` alternates and localized meta/Open Graph tags.
+
+- UI strings live in `src/i18n/dictionaries.ts` — the `en` object defines the structure and the
+  compiler guarantees `th` covers every key. Add new UI text there.
+- Site identity (`src/site.config.ts`) is language-neutral, with a Thai `affiliationTh` line.
+- Publication content is already language-specific (English vs Thai Markdown files), and the site
+  UI around it switches: on `/th/…` you get Thai labels, badges, buttons and the Thai description
+  of each event (`descriptionTh` in `src/content/events/*.md`).
+- Routing follows Astro's i18n rule: with `prefixDefaultLocale: false`, the file structure must
+  mirror the URL structure — English page files at `src/pages/` root, Thai page files under
+  `src/pages/th/`. Both are thin wrappers around shared components in `src/components/pages/`.
+
 ## Project structure
 
 ```
@@ -73,6 +90,11 @@ src/
       *.md                ← one Markdown file per event/gallery
   content.config.ts       ← content schemas (validation rules)
   site.config.ts          ← site-wide settings: name, email, profiles, interests
+  i18n/
+    dictionaries.ts       ← EN/TH UI strings (single source of truth)
+    index.ts              ← locale helpers (URL switching, neutral paths)
+  components/
+    pages/                ← shared page bodies rendered in both languages
   layouts/ components/ lib/ pages/ styles/
 scripts/
   generate-placeholders.mjs  ← creates sample PDFs/images (safe to re-run)

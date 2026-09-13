@@ -1,0 +1,44 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import EventCard from '../EventCard.astro';
+import { getCollection } from 'astro:content';
+import { getDictionary, type Locale } from '../../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+
+const events = (await getCollection('events')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const metaDescription =
+  lang === 'th'
+    ? 'คลังภาพถ่ายจากงานภาคสนาม การประชุมวิชาการ และกิจกรรมสาธารณะ'
+    : 'Photo galleries from fieldwork, conferences and public lectures.';
+---
+
+<Layout title={t.events.title} description={metaDescription} lang={lang}>
+  <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <div class="max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">{t.events.eyebrow}</p>
+      <h1 class="mt-3 font-serif text-4xl font-semibold text-ink">{t.events.title}</h1>
+      <p class="mt-4 text-[15px] leading-relaxed text-ink-soft">{t.events.intro}</p>
+    </div>
+
+    {
+      events.length > 0 ? (
+        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {events.map((event) => <EventCard event={event} lang={lang} />)}
+        </div>
+      ) : (
+        <div class="mt-10 rounded-xl border border-dashed border-line bg-paper-dark p-12 text-center text-sm text-ink-soft">
+          {t.events.empty}
+        </div>
+      )
+    }
+  </div>
+</Layout>

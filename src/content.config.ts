@@ -65,6 +65,8 @@ const events = defineCollection({
     album: z.string(),
     /** Optional explicit cover photo file name; defaults to the first photo. */
     cover: z.string().optional(),
+    /** Optional Thai translation of the description (shown on /th/ pages). */
+    descriptionTh: z.string().optional(),
     tags: z.array(z.string()).default([]),
   }),
 });

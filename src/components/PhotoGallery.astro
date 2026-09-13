@@ -13,10 +13,16 @@ interface Props {
   photos: string[];
   /** Base alt text (file name is appended for uniqueness). */
   alt: string;
+  /** UI language of the surrounding page. */
+  lang?: 'en' | 'th';
 }
 
-const { photos, alt } = Astro.props;
+const { photos, alt, lang = 'en' } = Astro.props;
 const galleryId = `gallery-${Math.random().toString(36).slice(2, 8)}`;
+const emptyMessage =
+  lang === 'th'
+    ? 'ยังไม่มีภาพในอัลบั้มนี้ กรุณาใส่ภาพลงในโฟลเดอร์อัลบั้ม (public/pictures/…) เพื่อแสดงผล'
+    : 'No photos have been added to this album yet. Place images inside the album folder (public/pictures/…) to display them here.';
 ---
 
 {
@@ -91,9 +97,7 @@ const galleryId = `gallery-${Math.random().toString(36).slice(2, 8)}`;
     </div>
   ) : (
     <div class="rounded-xl border border-dashed border-line bg-paper-dark p-12 text-center text-sm text-ink-soft">
-      No photos have been added to this album yet. Place images inside the album folder
-      (<code class="mx-1 rounded bg-paper px-1.5 py-0.5 font-mono text-xs">public/pictures/…</code>)
-      to display them here.
+      {emptyMessage}
     </div>
   )
 }

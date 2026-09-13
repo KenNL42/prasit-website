@@ -2,15 +2,20 @@
 import type { CollectionEntry } from 'astro:content';
 import Icon from './Icon.astro';
 import { coverPhotoUrl, listAlbumPhotos } from '../lib/albums';
+import { getDictionary, type Locale } from '../i18n';
 
 interface Props {
   event: CollectionEntry<'events'>;
+  /** UI language of the surrounding page. */
+  lang?: Locale;
 }
 
-const { event } = Astro.props;
+const { event, lang = 'en' } = Astro.props;
+const t = getDictionary(lang);
+const prefix = lang === 'th' ? '/th' : '';
 const cover = coverPhotoUrl(event.data.album, event.data.cover);
 const photoCount = listAlbumPhotos(event.data.album).length;
-const formattedDate = event.data.date.toLocaleDateString('en-GB', {
+const formattedDate = event.data.date.toLocaleDateString(lang === 'th' ? 'th-TH' : 'en-GB', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
@@ -18,7 +23,7 @@ const formattedDate = event.data.date.toLocaleDateString('en-GB', {
 ---
 
 <a
-  href={`/events/${event.id}/`}
+  href={`${prefix}/events/${event.id}/`}
   class="group flex flex-col overflow-hidden rounded-xl border border-line bg-white shadow-sm transition-shadow hover:shadow-md"
 >
   <div class="relative aspect-[4/3] overflow-hidden bg-paper-dark">
@@ -26,7 +31,7 @@ const formattedDate = event.data.date.toLocaleDateString('en-GB', {
       cover ? (
         <img
           src={cover}
-          alt={`Cover photo — ${event.data.title}`}
+          alt={`${event.data.title} — ${lang === 'th' ? 'ภาพปก' : 'cover photo'}`}
           loading="lazy"
           class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -39,7 +44,7 @@ const formattedDate = event.data.date.toLocaleDateString('en-GB', {
     {
       photoCount > 0 && (
         <span class="absolute bottom-3 right-3 rounded-full bg-ink/70 px-3 py-1 text-xs font-medium text-paper backdrop-blur">
-          {photoCount} photo{photoCount === 1 ? '' : 's'}
+          {t.common.photos(photoCount)}
         </span>
       )
     }
@@ -71,7 +76,7 @@ const formattedDate = event.data.date.toLocaleDateString('en-GB', {
       )
     }
     <p class="mt-auto flex items-center gap-1.5 pt-4 text-sm font-medium text-navy">
-      View gallery
+      {t.common.viewGallery}
       <Icon name="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
     </p>
   </div>

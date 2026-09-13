@@ -4,14 +4,18 @@ import { render } from 'astro:content';
 import AbstractToggle from './AbstractToggle.astro';
 import Icon from './Icon.astro';
 import { buildCitation, pdfUrl } from '../lib/publications';
+import { getDictionary, type Locale } from '../i18n';
 
 interface Props {
   publication: CollectionEntry<'publications'>;
   /** Hide the abstract entirely (e.g. compact list mode). */
   showAbstract?: boolean;
+  /** UI language of the surrounding page. */
+  lang?: Locale;
 }
 
-const { publication: pub, showAbstract = true } = Astro.props;
+const { publication: pub, showAbstract = true, lang = 'en' } = Astro.props;
+const t = getDictionary(lang);
 const { Content } = await render(pub);
 const url = pdfUrl(pub);
 const abstractLength = (pub.body ?? '').trim().length;
@@ -26,13 +30,13 @@ const langTag = pub.data.language === 'th' ? 'th' : 'en';
   <!-- Header: type badge + year -->
   <div class="flex flex-wrap items-center gap-2">
     <span class="rounded-full bg-paper-dark px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-navy">
-      {pub.data.type}
+      {t.typeLabels[pub.data.type] ?? pub.data.type}
     </span>
     <span class="text-sm text-ink-soft">{pub.data.year}</span>
     {
       pub.data.language === 'th' && (
         <span class="rounded-full bg-navy px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-paper">
-          ไทย
+          {t.publications.thaiBadge}
         </span>
       )
     }
@@ -66,7 +70,12 @@ const langTag = pub.data.language === 'th' ? 'th' : 'en';
   {
     showAbstract && (
       <div class="mt-4">
-        <AbstractToggle id={pub.id.replace(/[^a-zA-Z0-9-]/g, '-')} isLong={abstractLength > 300}>
+        <AbstractToggle
+          id={pub.id.replace(/[^a-zA-Z0-9-]/g, '-')}
+          isLong={abstractLength > 300}
+          moreLabel={t.common.more}
+          lessLabel={t.common.less}
+        >
           <Content />
         </AbstractToggle>
       </div>
@@ -85,7 +94,7 @@ const langTag = pub.data.language === 'th' ? 'th' : 'en';
             class="inline-flex items-center gap-2 rounded-full bg-navy px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-navy-light"
           >
             <Icon name="download" class="h-4 w-4" />
-            Download PDF
+            {t.common.downloadPdf}
           </a>
         )
       }

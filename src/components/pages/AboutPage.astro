@@ -1,0 +1,93 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../Icon.astro';
+import { getDictionary, type Locale } from '../../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const metaDescription =
+  lang === 'th'
+    ? 'ประวัติย่อ พื้นฐานการศึกษา และความสนใจวิจัยของอาจารย์'
+    : 'Biography, academic background and research interests.';
+---
+
+<Layout title={t.about.title} description={metaDescription} lang={lang}>
+  <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <!-- Page header -->
+    <div class="max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">{t.about.eyebrow}</p>
+      <h1 class="mt-3 font-serif text-4xl font-semibold text-ink">{t.about.title}</h1>
+    </div>
+
+    <div class="mt-10 grid gap-14 lg:grid-cols-[1.6fr_1fr]">
+      <!-- Main bio -->
+      <div class="max-w-2xl space-y-6 text-[15px] leading-relaxed text-ink-soft">
+        <p>{t.about.bio1}</p>
+        <p>{t.about.bio2}</p>
+        <p>{t.about.bio3}</p>
+        <p>{t.about.bio4}</p>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="space-y-6">
+        <div class="rounded-xl border border-line bg-white p-6 shadow-sm">
+          <h2 class="text-xs font-semibold uppercase tracking-widest text-ink-soft">{t.about.positions}</h2>
+          <ul class="mt-4 space-y-4">
+            {t.about.positionsList.map((item) => (
+              <li>
+                <p class="text-sm font-medium text-ink">{item.role}</p>
+                <p class="text-sm text-ink-soft">{item.place}</p>
+                <p class="text-xs text-ink-soft/80">{item.period}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="rounded-xl border border-line bg-white p-6 shadow-sm">
+          <h2 class="text-xs font-semibold uppercase tracking-widest text-ink-soft">{t.about.education}</h2>
+          <ul class="mt-4 space-y-4">
+            {t.about.educationList.map((item) => (
+              <li>
+                <p class="text-sm font-medium text-ink">{item.degree}</p>
+                <p class="text-sm text-ink-soft">{item.place}</p>
+                <p class="text-xs text-ink-soft/80">{item.year}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="rounded-xl border border-line bg-white p-6 shadow-sm">
+          <h2 class="text-xs font-semibold uppercase tracking-widest text-ink-soft">{t.about.languages}</h2>
+          <ul class="mt-4 space-y-2 text-sm text-ink-soft">
+            {t.about.languagesList.map((item) => (
+              <li class="flex justify-between">
+                <span>{item.name}</span><span class="text-ink">{item.level}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Research interests -->
+    <section class="mt-16 border-t border-line pt-12">
+      <h2 class="font-serif text-2xl font-semibold text-ink">{t.about.researchInterests}</h2>
+      <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          t.home.interests.map((interest, i) => (
+            <div class="flex items-start gap-3 rounded-xl border border-line bg-white p-5 shadow-sm">
+              <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-paper-dark text-navy">
+                <Icon name={i % 2 === 0 ? 'globe' : 'university'} class="h-4 w-4" />
+              </span>
+              <p class="text-sm font-medium text-ink">{interest}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</Layout>

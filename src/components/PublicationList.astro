@@ -3,15 +3,21 @@ import type { CollectionEntry } from 'astro:content';
 import PublicationCard from './PublicationCard.astro';
 import Icon from './Icon.astro';
 import { sortByYearDesc } from '../lib/publications';
+import { getDictionary, type Locale } from '../i18n';
 
 interface Props {
   publications: CollectionEntry<'publications'>[];
   /** Show the abstract toggle on each card. */
   showAbstract?: boolean;
+  /** UI language of the surrounding page. */
+  lang?: Locale;
 }
 
-const { publications, showAbstract = true } = Astro.props;
+const { publications, showAbstract = true, lang = 'en' } = Astro.props;
+const t = getDictionary(lang);
 const sorted = sortByYearDesc(publications);
+const showingAllText = t.common.showingAll(sorted.length);
+const showingOfTemplate = t.common.showingOf('{n}', '{m}');
 ---
 
 {
@@ -21,40 +27,40 @@ const sorted = sortByYearDesc(publications);
         <Icon name="search" class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-soft" />
         <input
           type="search"
-          placeholder="Filter by title, author, year…"
-          aria-label="Filter publications"
+          placeholder={t.common.filterPlaceholder}
+          aria-label={t.common.filterPlaceholder}
           data-filter-input
           class="w-full rounded-full border border-line bg-white py-2.5 pl-10 pr-4 text-sm text-ink placeholder:text-ink-soft/70 focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/20"
         />
       </div>
 
       <p class="mt-4 text-sm text-ink-soft" data-filter-count>
-        Showing {sorted.length} publication{sorted.length === 1 ? '' : 's'}
+        {showingAllText}
       </p>
 
       <div class="mt-6 grid gap-6 lg:grid-cols-2">
         {sorted.map((pub) => (
           <div data-pub-item>
-            <PublicationCard publication={pub} showAbstract={showAbstract} />
+            <PublicationCard publication={pub} showAbstract={showAbstract} lang={lang} />
           </div>
         ))}
       </div>
     </div>
   ) : (
     <div class="rounded-xl border border-dashed border-line bg-paper-dark p-12 text-center text-sm text-ink-soft">
-      No publications yet. Add Markdown files under
-      <code class="mx-1 rounded bg-paper px-1.5 py-0.5 font-mono text-xs">src/content/publications/</code>
-      to list them here.
+      {lang === 'th'
+        ? 'ยังไม่มีสิ่งพิมพ์ กรุณาเพิ่มไฟล์ Markdown ในโฟลเดอร์ src/content/publications/ เพื่อแสดงผล'
+        : 'No publications yet. Add Markdown files under src/content/publications/ to list them here.'}
     </div>
   )
 }
 
-<script>
+<script define:vars={{ showingAllText, showingOfTemplate }} is:inline>
   const root = document.querySelector('[data-pub-filter]');
   if (root) {
-    const input = root.querySelector<HTMLInputElement>('[data-filter-input]');
+    const input = root.querySelector('[data-filter-input]');
     const count = root.querySelector('[data-filter-count]');
-    const items = Array.from(root.querySelectorAll<HTMLElement>('[data-pub-item]'));
+    const items = Array.from(root.querySelectorAll('[data-pub-item]'));
     const texts = items.map((item) => item.textContent?.toLowerCase() ?? '');
 
     input?.addEventListener('input', () => {
@@ -66,7 +72,10 @@ const sorted = sortByYearDesc(publications);
         if (match) visible++;
       });
       if (count) {
-        count.textContent = query === '' ? `Showing ${items.length} publication${items.length === 1 ? '' : 's'}` : `Showing ${visible} of ${items.length} publication${items.length === 1 ? '' : 's'}`;
+        count.textContent =
+          query === ''
+            ? showingAllText
+            : showingOfTemplate.replace('{n}', String(visible)).replace('{m}', String(items.length));
       }
     });
   }

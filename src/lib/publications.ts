@@ -8,11 +8,6 @@ export const PDF_FOLDERS: Record<'en' | 'th', string> = {
   th: 'publications_thai',
 };
 
-export const LANGUAGE_LABELS: Record<'en' | 'th', string> = {
-  en: 'English',
-  th: 'ไทย (Thai)',
-};
-
 /**
  * Resolve the downloadable PDF URL for a publication.
  * `pdf` is a bare file name resolved against the language folder;

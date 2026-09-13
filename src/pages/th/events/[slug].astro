@@ -1,5 +1,5 @@
 ---
-import EventGalleryPage from '../../components/pages/EventGalleryPage.astro';
+import EventGalleryPage from '../../../components/pages/EventGalleryPage.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -14,4 +14,4 @@ interface Props {
 const { event } = Astro.props;
 ---
 
-<EventGalleryPage lang="en" event={event} />
+<EventGalleryPage lang="th" event={event} />

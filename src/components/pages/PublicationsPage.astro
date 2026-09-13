@@ -1,0 +1,81 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../Icon.astro';
+import { getCollection } from 'astro:content';
+import { sortByYearDesc } from '../../lib/publications';
+import { getDictionary, type Locale } from '../../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const prefix = lang === 'th' ? '/th' : '';
+
+const publications = await getCollection('publications');
+const enCount = publications.filter((p) => p.data.language === 'en').length;
+const thCount = publications.filter((p) => p.data.language === 'th').length;
+const latest = sortByYearDesc(publications)[0];
+
+const metaDescription =
+  lang === 'th'
+    ? 'ผลงานตีพิมพ์ทางวิชาการทั้งภาษาอังกฤษและภาษาไทย พร้อมบทคัดย่อและไฟล์ PDF'
+    : 'Peer-reviewed publications, book chapters and working papers in English and Thai, with abstracts and downloadable PDFs.';
+---
+
+<Layout title={t.publications.title} description={metaDescription} lang={lang}>
+  <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <div class="max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">{t.publications.eyebrow}</p>
+      <h1 class="mt-3 font-serif text-4xl font-semibold text-ink">{t.publications.title}</h1>
+      <p class="mt-4 text-[15px] leading-relaxed text-ink-soft">
+        {t.publications.intro}
+        {latest && t.publications.latestNote(latest.data.year)}
+      </p>
+    </div>
+
+    <div class="mt-10 grid gap-6 md:grid-cols-2">
+      <!-- English -->
+      <a
+        href={`${prefix}/publications/english`}
+        class="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-white p-8 shadow-sm transition-shadow hover:shadow-md"
+      >
+        <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-steel/10 blur-2xl" aria-hidden="true"></div>
+        <span class="inline-flex w-fit items-center gap-2 rounded-full bg-paper-dark px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-navy">
+          <Icon name="globe" class="h-3.5 w-3.5" />
+          {t.publications.english}
+        </span>
+        <h2 class="mt-5 font-serif text-2xl font-semibold text-ink">{t.publications.englishCardTitle}</h2>
+        <p class="mt-2 text-sm leading-relaxed text-ink-soft">
+          {t.publications.englishCardText} {t.common.entries(enCount)}.
+        </p>
+        <p class="mt-auto flex items-center gap-1.5 pt-6 text-sm font-medium text-navy">
+          {t.publications.englishCardTitle}
+          <Icon name="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+        </p>
+      </a>
+
+      <!-- Thai -->
+      <a
+        href={`${prefix}/publications/thai`}
+        class="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-white p-8 shadow-sm transition-shadow hover:shadow-md"
+        lang="th"
+      >
+        <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gold/10 blur-2xl" aria-hidden="true"></div>
+        <span class="inline-flex w-fit items-center gap-2 rounded-full bg-navy px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-paper">
+          <Icon name="globe" class="h-3.5 w-3.5" />
+          {t.publications.thai}
+        </span>
+        <h2 class="mt-5 font-serif text-2xl font-semibold text-ink">{t.publications.thaiCardTitle}</h2>
+        <p class="mt-2 text-sm leading-relaxed text-ink-soft">
+          {t.publications.thaiCardText} {t.common.entries(thCount)}.
+        </p>
+        <p class="mt-auto flex items-center gap-1.5 pt-6 text-sm font-medium text-navy">
+          {t.publications.thaiCardTitle}
+          <Icon name="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+        </p>
+      </a>
+    </div>
+  </div>
+</Layout>

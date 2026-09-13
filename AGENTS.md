@@ -28,6 +28,12 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
   `src/lib/albums.ts`.
 - **Site-wide settings:** `src/site.config.ts` (name, email, profiles, interests, address).
 - **Design tokens:** `src/styles/global.css` (`@theme` block — colors and fonts, incl. Thai stacks).
+- **i18n:** The site is bilingual (EN at root URLs, TH under `/th/`). UI strings live in
+  `src/i18n/dictionaries.ts` (the `en` object defines the structure; `th` is type-checked to match).
+  Page files mirror URLs (Astro i18n `prefixDefaultLocale: false`): English pages at
+  `src/pages/` root, Thai pages under `src/pages/th/`, both thin wrappers around shared components
+  in `src/components/pages/`. Event Thai descriptions use `descriptionTh` frontmatter.
+  Locale URL helpers (`otherLocaleUrl`, `neutralPath`) are in `src/i18n/index.ts`.
 
 ## Verification
 

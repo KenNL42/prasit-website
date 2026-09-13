@@ -4,26 +4,32 @@ import Icon from './Icon.astro';
 import PublicationList from './PublicationList.astro';
 import { SITE } from '../site.config';
 import { getCollection } from 'astro:content';
-import { LANGUAGE_LABELS, pdfUrl } from '../lib/publications';
+import { pdfUrl } from '../lib/publications';
+import { getDictionary, type Locale } from '../i18n';
 
 interface Props {
+  /** UI language of the page ("en" or "th"). */
+  lang: Locale;
+  /** Which publications to list: "en" or "th". */
   language: 'en' | 'th';
 }
 
-const { language } = Astro.props;
+const { lang, language } = Astro.props;
+const t = getDictionary(lang);
 const all = await getCollection('publications');
 const pubs = all.filter((p) => p.data.language === language);
-const isThai = language === 'th';
-const title = isThai ? 'สิ่งพิมพ์ภาษาไทย' : 'Publications in English';
-const metaDescription = isThai
-  ? 'บทความและงานเขียนภาษาไทยของอาจารย์ พร้อมบทคัดย่อและไฟล์ PDF'
+
+const title = language === 'th' ? t.publications.thTitle : t.publications.enTitle;
+const intro = language === 'th' ? t.publications.thIntro : t.publications.enIntro;
+const metaDescription = language === 'th'
+  ? lang === 'th'
+    ? 'บทความและงานเขียนภาษาไทยของอาจารย์ พร้อมบทคัดย่อและไฟล์ PDF'
+    : 'Thai-language journal articles and essays, with abstracts and downloadable PDFs.'
   : 'English-language journal articles, book chapters and reviews, with abstracts and downloadable PDFs.';
-const intro = isThai
-  ? 'งานเขียนภาษาไทยมุ่งสู่ผู้อ่านในประเทศ ทั้งนักศึกษา นักวิชาการ และผู้ปฏิบัติงานด้านวัฒนธรรม เพื่อให้ความรู้ทางมานุษยวิทยาเข้าถึงสังคมที่เราศึกษา'
-  : 'Journal articles, book chapters and reviews written for an international readership.';
-const backLabel = isThai ? 'ดูสิ่งพิมพ์ภาษาอังกฤษ' : 'View Thai publications';
-const backHref = isThai ? '/publications/english' : '/publications/thai';
-const pageLang: 'en' | 'th' = language;
+
+const backHref = language === 'th' ? t.publications.backToEn : t.publications.backToTh;
+const backTarget: 'en' | 'th' = language === 'th' ? 'en' : 'th';
+const prefix = lang === 'th' ? '/th' : '';
 
 // schema.org ItemList of ScholarlyArticle entries for this language page.
 const articleLd = [
@@ -49,14 +55,14 @@ const articleLd = [
 ];
 ---
 
-<Layout title={title} description={metaDescription} lang={pageLang} jsonLd={articleLd}>
+<Layout title={title} description={metaDescription} lang={lang} jsonLd={articleLd}>
   <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
     <!-- Breadcrumb -->
     <nav aria-label="Breadcrumb" class="mb-8">
       <ol class="flex items-center gap-2 text-sm text-ink-soft">
-        <li><a href="/publications" class="transition-colors hover:text-navy">Publications</a></li>
+        <li><a href={`${prefix}/publications`} class="transition-colors hover:text-navy">{t.publications.breadcrumb}</a></li>
         <li aria-hidden="true"><Icon name="chevron-right" class="h-3.5 w-3.5" /></li>
-        <li class="text-ink">{LANGUAGE_LABELS[language]}</li>
+        <li class="text-ink">{language === 'th' ? t.publications.thai : t.publications.english}</li>
       </ol>
     </nav>
 
@@ -64,23 +70,23 @@ const articleLd = [
       <div class="flex items-center gap-3">
         <h1 class="font-serif text-4xl font-semibold text-ink">{title}</h1>
         <span class="rounded-full bg-paper-dark px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-navy">
-          {pubs.length} {isThai ? 'รายการ' : pubs.length === 1 ? 'entry' : 'entries'}
+          {t.common.entries(pubs.length)}
         </span>
       </div>
       <p class="mt-4 text-[15px] leading-relaxed text-ink-soft">{intro}</p>
       <p class="mt-3">
         <a
-          href={backHref}
+          href={`${prefix}/publications/${backTarget}`}
           class="inline-flex items-center gap-1.5 text-sm font-medium text-navy transition-colors hover:text-navy-light"
         >
           <Icon name="arrow-right" class="h-4 w-4 rotate-180" />
-          {backLabel}
+          {backHref}
         </a>
       </p>
     </div>
 
     <div class="mt-10">
-      <PublicationList publications={pubs} />
+      <PublicationList publications={pubs} lang={lang} />
     </div>
   </div>
 </Layout>

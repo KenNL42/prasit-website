@@ -13,6 +13,8 @@ export const SITE = {
   title: 'Assistant Professor of Anthropology',
   /** Department / faculty line, e.g. your university. */
   affiliation: 'Department of Anthropology, Faculty of Social Sciences, Chiang Mai University',
+  /** Thai version of the affiliation line (used on /th/ pages). */
+  affiliationTh: 'ภาควิชามานุษยวิทยา คณะสังคมศาสตร์ มหาวิทยาลัยเชียงใหม่',
   /** Employer / university (used in SEO structured data). */
   organization: 'Chiang Mai University',
   /** One-line professional summary used in <meta> tags and the hero. */
