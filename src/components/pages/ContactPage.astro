@@ -10,6 +10,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = getDictionary(lang);
+const address = lang === 'th' ? SITE.addressTh : SITE.address;
 
 const profileEntries = Object.entries(SITE.profiles);
 const metaDescription =
@@ -102,8 +103,8 @@ const metaDescription =
           <h2 class="font-serif text-lg font-semibold text-ink">{t.contact.office}</h2>
           <p class="mt-3 flex items-start gap-2 text-sm leading-relaxed text-ink-soft">
             <Icon name="location" class="mt-0.5 h-4 w-4 shrink-0 text-navy" />
-            <span>
-              {SITE.address.map((line) => <span class="block">{line}</span>)}
+            <span lang={lang === 'th' ? 'th' : 'en'}>
+              {address.map((line) => <span class="block">{line}</span>)}
             </span>
           </p>
         </section>

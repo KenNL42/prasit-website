@@ -11,6 +11,12 @@ const { lang = 'en' } = Astro.props;
 const t = getDictionary(lang);
 const prefix = lang === 'th' ? '/th' : '';
 
+// Localized identity: name, title, affiliation and address have Thai variants.
+const name = lang === 'th' ? SITE.nameTh : SITE.name;
+const title = lang === 'th' ? SITE.titleTh : SITE.title;
+const affiliation = lang === 'th' ? SITE.affiliationTh : SITE.affiliation;
+const address = lang === 'th' ? SITE.addressTh : SITE.address;
+
 const links = [
   { href: '/about', label: t.nav.about },
   { href: '/publications', label: t.nav.publications },
@@ -21,10 +27,10 @@ const links = [
 
 <footer class="border-t border-line bg-paper-dark">
   <div class="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-3">
-    <div>
-      <p class="font-serif text-lg font-semibold text-ink">{SITE.name}</p>
-      <p class="mt-2 max-w-xs text-sm leading-relaxed text-ink-soft">{SITE.title}</p>
-      <p class="mt-2 max-w-xs text-sm leading-relaxed text-ink-soft">{SITE.affiliation}</p>
+    <div lang={lang === 'th' ? 'th' : 'en'}>
+      <p class="font-serif text-lg font-semibold text-ink">{name}</p>
+      <p class="mt-2 max-w-xs text-sm leading-relaxed text-ink-soft">{title}</p>
+      <p class="mt-2 max-w-xs text-sm leading-relaxed text-ink-soft">{affiliation}</p>
     </div>
 
     <nav aria-label={t.footer.site}>
@@ -44,14 +50,14 @@ const links = [
       </p>
       <p class="mt-3 flex items-start gap-2 text-sm text-ink-soft">
         <Icon name="location" class="mt-0.5 h-4 w-4 shrink-0 text-navy" />
-        <span>{SITE.address.join(' · ')}</span>
+        <span>{address.join(' · ')}</span>
       </p>
     </div>
   </div>
 
   <div class="border-t border-line">
     <p class="mx-auto max-w-6xl px-4 py-5 text-xs text-ink-soft sm:px-6">
-      {t.footer.rights(SITE.name)}
+      {t.footer.rights(name)}
     </p>
   </div>
 </footer>

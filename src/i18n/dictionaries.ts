@@ -119,7 +119,7 @@ const en = {
     thIntro:
       'งานเขียนภาษาไทยมุ่งสู่ผู้อ่านในประเทศ ทั้งนักศึกษา นักวิชาการ และผู้ปฏิบัติงานด้านวัฒนธรรม เพื่อให้ความรู้ทางมานุษยวิทยาเข้าถึงสังคมที่เราศึกษา',
     backToEn: 'View English publications',
-    backToTh: 'ดูสิ่งพิมพ์ภาษาอังกฤษ',
+    backToTh: 'View Thai publications',
   },
   events: {
     eyebrow: 'In the field',

@@ -9,8 +9,12 @@ export const SITE = {
   url: 'https://yourname.example.edu',
   /** Short name shown in the navigation bar. */
   name: 'Dr. Niran Chanthana',
+  /** Thai version of the name (used on /th/ pages). */
+  nameTh: 'ดร.นิรันดร์ จันทนา',
   /** Full professional title (shown on the home page hero). */
   title: 'Assistant Professor of Anthropology',
+  /** Thai version of the professional title (used on /th/ pages). */
+  titleTh: 'ผู้ช่วยศาสตราจารย์ด้านมานุษยวิทยา',
   /** Department / faculty line, e.g. your university. */
   affiliation: 'Department of Anthropology, Faculty of Social Sciences, Chiang Mai University',
   /** Thai version of the affiliation line (used on /th/ pages). */
@@ -24,6 +28,8 @@ export const SITE = {
   email: 'niran.chanthana@example.edu',
   /** Office / postal address lines. */
   address: ['Faculty of Social Sciences, Chiang Mai University', '239 Huay Kaew Road, Suthep, Muang', 'Chiang Mai 50200, Thailand'],
+  /** Thai version of the address (used on /th/ pages). */
+  addressTh: ['คณะสังคมศาสตร์ มหาวิทยาลัยเชียงใหม่', '239 ถนนห้วยแก้ว ตำบลสุเทพ อำเภอเมือง', 'เชียงใหม่ 50200 ประเทศไทย'],
   /** Academic profiles (label → URL). Empty entries are hidden automatically. */
   profiles: {
     'Google Scholar': 'https://scholar.google.com',
