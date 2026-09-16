@@ -115,9 +115,9 @@ const en = {
     enTitle: 'Publications in English',
     enIntro:
       'Journal articles, book chapters and reviews written for an international readership.',
-    thTitle: 'สิ่งพิมพ์ภาษาไทย',
+    thTitle: 'Publications in Thai',
     thIntro:
-      'งานเขียนภาษาไทยมุ่งสู่ผู้อ่านในประเทศ ทั้งนักศึกษา นักวิชาการ และผู้ปฏิบัติงานด้านวัฒนธรรม เพื่อให้ความรู้ทางมานุษยวิทยาเข้าถึงสังคมที่เราศึกษา',
+      'Journal articles and essays written for readers in Thailand — students, scholars and heritage practitioners — bringing anthropological knowledge to the society we study.',
     backToEn: 'View English publications',
     backToTh: 'View Thai publications',
   },
