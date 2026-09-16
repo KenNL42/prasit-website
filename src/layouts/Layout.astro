@@ -109,29 +109,6 @@ const siteGraph = [
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+Thai:wght@400;500;600;700&family=Noto+Serif+Thai:wght@400;600&display=swap"
       rel="stylesheet"
     />
-
-    <!-- Change this line to construct an absolute fallback root -->
-		
-		<!-- Intercepts clicked root-absolute paths and routes them safely into the repo subfolder -->
-		<script is:inline>
-			const repoBase = import.meta.env.BASE_URL; // e.g. "/my-repo/"
-			
-			if (repoBase && repoBase !== '/') {
-				document.addEventListener('click', (e) => {
-					const originLink = e.target.closest('a');
-					if (!originLink) return;
-					
-					const href = originLink.getAttribute('href');
-					// If the link is absolute to the domain root but doesn't already start with the repo subfolder
-					if (href && href.startsWith('/') && !href.startsWith(repoBase)) {
-						e.preventDefault();
-						// Strip the leading slash and join it with the repo base
-						const cleanHref = href === '/' ? '' : href.substring(1);
-						window.location.href = repoBase + cleanHref;
-					}
-				});
-			}
-		</script>
   </head>
   <body class="flex min-h-screen flex-col">
     <Nav lang={lang} />
