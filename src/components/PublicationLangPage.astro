@@ -28,7 +28,8 @@ const metaDescription = language === 'th'
   : 'English-language journal articles, book chapters and reviews, with abstracts and downloadable PDFs.';
 
 const backHref = language === 'th' ? t.publications.backToEn : t.publications.backToTh;
-const backTarget: 'en' | 'th' = language === 'th' ? 'en' : 'th';
+// Route segment of the OTHER publication language page (english | thai).
+const backTarget: 'english' | 'thai' = language === 'th' ? 'english' : 'thai';
 const prefix = lang === 'th' ? '/th' : '';
 
 // schema.org ItemList of ScholarlyArticle entries for this language page.
@@ -74,15 +75,17 @@ const articleLd = [
         </span>
       </div>
       <p class="mt-4 text-[15px] leading-relaxed text-ink-soft">{intro}</p>
-      <p class="mt-3">
-        <a
-          href={`${prefix}/publications/${backTarget}`}
-          class="inline-flex items-center gap-1.5 text-sm font-medium text-navy transition-colors hover:text-navy-light"
-        >
-          <Icon name="arrow-right" class="h-4 w-4 rotate-180" />
-          {backHref}
-        </a>
-      </p>
+    </div>
+
+    <!-- Link to the other publication language, right-aligned, pointing right -->
+    <div class="mt-5 flex justify-end">
+      <a
+        href={`${prefix}/publications/${backTarget}`}
+        class="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-4 py-2 text-sm font-medium text-navy transition-colors hover:border-navy hover:text-navy-light"
+      >
+        {backHref}
+        <Icon name="arrow-right" class="h-4 w-4" />
+      </a>
     </div>
 
     <div class="mt-10">
