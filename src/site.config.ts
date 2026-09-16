@@ -8,9 +8,9 @@ export const SITE = {
   /** Base URL used for sitemap + canonical links. Keep the trailing slash off. */
   url: 'https://yourname.example.edu',
   /** Short name shown in the navigation bar. */
-  name: 'Dr. Niran Chanthana',
+  name: 'Dr. Prasit Leepreecha',
   /** Thai version of the name (used on /th/ pages). */
-  nameTh: 'ดร.นิรันดร์ จันทนา',
+  nameTh: 'ดร.ประสิทธิ์ ลีปรีชา',
   /** Full professional title (shown on the home page hero). */
   title: 'Assistant Professor of Anthropology',
   /** Thai version of the professional title (used on /th/ pages). */
@@ -23,9 +23,9 @@ export const SITE = {
   organization: 'Chiang Mai University',
   /** One-line professional summary used in <meta> tags and the hero. */
   description:
-    'Anthropologist specialising in religion, ritual and memory in mainland Southeast Asia. Publications in English and Thai, fieldwork photo galleries, and academic contact details.',
+    'Anthropologist specialising in ingedineous people in Northern Thailand. Publications in English and Thai, fieldwork photo galleries, and academic contact details.',
   /** Primary contact email shown on the contact page and footer. */
-  email: 'niran.chanthana@example.edu',
+  email: 'prasit.lee@cmu.ac.th',
   /** Office / postal address lines. */
   address: ['Faculty of Social Sciences, Chiang Mai University', '239 Huay Kaew Road, Suthep, Muang', 'Chiang Mai 50200, Thailand'],
   /** Thai version of the address (used on /th/ pages). */
