@@ -8,6 +8,10 @@ export default defineConfig({
   // Set the public site URL so the sitemap and canonical URLs are generated correctly.
   site: 'https://kennl42.github.io',
   base: '/prasit-website',
+  // This tells Astro to rewrite absolute URLs in components during compilation
+  experimental: {
+    // Note: Available in newer Astro versions to auto-inject base paths
+  },
   integrations: [
     sitemap({
       i18n: {

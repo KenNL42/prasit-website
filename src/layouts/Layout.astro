@@ -59,7 +59,6 @@ const siteGraph = [
   },
   ...jsonLd,
 ];
-const absoluteBaseUrl = new URL(import.meta.env.BASE_URL, import.meta.env.SITE).toString();
 ---
 
 <!doctype html>
@@ -112,9 +111,27 @@ const absoluteBaseUrl = new URL(import.meta.env.BASE_URL, import.meta.env.SITE).
     />
 
     <!-- Change this line to construct an absolute fallback root -->
-		<base href={absoluteBaseUrl} />
 		
-		<link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+		<!-- Intercepts clicked root-absolute paths and routes them safely into the repo subfolder -->
+		<script is:inline>
+			const repoBase = import.meta.env.BASE_URL; // e.g. "/my-repo/"
+			
+			if (repoBase && repoBase !== '/') {
+				document.addEventListener('click', (e) => {
+					const originLink = e.target.closest('a');
+					if (!originLink) return;
+					
+					const href = originLink.getAttribute('href');
+					// If the link is absolute to the domain root but doesn't already start with the repo subfolder
+					if (href && href.startsWith('/') && !href.startsWith(repoBase)) {
+						e.preventDefault();
+						// Strip the leading slash and join it with the repo base
+						const cleanHref = href === '/' ? '' : href.substring(1);
+						window.location.href = repoBase + cleanHref;
+					}
+				});
+			}
+		</script>
   </head>
   <body class="flex min-h-screen flex-col">
     <Nav lang={lang} />
