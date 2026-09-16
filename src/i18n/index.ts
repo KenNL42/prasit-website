@@ -12,13 +12,12 @@ export function getDictionary(lang: Locale): Dictionary {
  * URL of the same page in the other locale.
  * `pathname` is the current URL path, which may include the `/th/` prefix.
  */
-export function otherLocaleUrl(lang: Locale, pathname: string): string {
-  let neutralPath = pathname;
-  if (lang === 'th' && (pathname === '/th' || pathname.startsWith('/th/'))) {
-    neutralPath = pathname.slice(3) || '/';
-  }
-  const other: Locale = lang === 'en' ? 'th' : 'en';
-  return getRelativeLocaleUrl(other, neutralPath === '/' ? undefined : neutralPath);
+export function otherLocaleUrl(currentLang: string, neutralPath: string) {
+  const targetLang = currentLang === 'en' ? 'th' : 'en';
+  
+  // Astro's getRelativeLocaleUrl automatically reads your astro.config.mjs 
+  // and prepends BOTH the '/project1' base and the language code smoothly.
+  return getRelativeLocaleUrl(targetLang, neutralPath);
 }
 
 /** Language-neutral path (strips the `/th/` prefix when present). */

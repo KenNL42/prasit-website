@@ -24,13 +24,24 @@ const links = [
   { href: '/contact', label: t.nav.contact },
 ];
 
-// Compare against the language-neutral path so the active state works on
-// both the root (English) and /th/ (Thai) pages.
-const path = neutralPath(lang, Astro.url.pathname);
+// 1. Fetch the raw path from the browser
+const rawPathname = Astro.url.pathname;
+
+// 2. Safely extract the base prefix so your local path evaluation utilities work correctly
+const basePrefix = import.meta.env.BASE_URL.replace(/\/$/, ''); // e.g., "/project1"
+const cleanPathname = (basePrefix && rawPathname.startsWith(basePrefix))
+  ? rawPathname.substring(basePrefix.length) || '/'
+  : rawPathname;
+
+// 3. Keep your active state evaluations neutral
+const path = neutralPath(lang, cleanPathname);
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`);
 
+// 4. FIX: Do NOT manually add `basePrefix` here. 
+// If otherLocaleUrl uses Astro's native i18n, it ALREADY includes "/project1".
 const switchHref = otherLocaleUrl(lang, path);
+
 const switchLabel = lang === 'en' ? 'ไทย' : 'English';
 const switchTitle = lang === 'en' ? 'เปลี่ยนเป็นภาษาไทย' : 'Switch to English';
 ---
