@@ -206,8 +206,14 @@ Rules:
 - To add a string: add the key to **both** `en` and `th`.
 - Functions are allowed for dynamic strings, e.g. `showingOf: (n, m) => …`; they are called with
   the template placeholders `'{n}'`/`'{m}'` and interpolated in the inline filter script.
+- **The `en` dictionary must always hold English text** — even for keys about Thai content
+  (`thTitle`, `thIntro`, `thaiCardTitle`, `thaiCardText`, `backToTh`, …). Past bugs rendered
+  Thai UI on English pages because the `en` values were Thai. Only the `th` block contains Thai
+  UI text.
 - Site identity (name, email, addresses, profile links) is *not* a UI string — it lives in
-  `src/site.config.ts` (with `affiliationTh` for the Thai affiliation line).
+  `src/site.config.ts`, with Thai variants for Thai pages: `nameTh`, `titleTh`,
+  `affiliationTh`, `addressTh`. The footer, nav brand, and contact address pick the right one
+  based on `lang`.
 
 ### 4.3 How a page is wired (both languages)
 
@@ -269,7 +275,13 @@ Thai visitor lands on the English page. Search for every `href=` when adding mar
 | `/th/publications/thai` | `th` | `th` |
 
 Each page links to the *other* publication language (e.g. `/th/publications/thai` links back to
-`/th/publications/english`) via `backTarget`.
+`/th/publications/english`) via `backTarget`. The button labels come from `backToEn`/`backToTh`
+in the dictionary — "View English/Thai publications" in English, "ดูสิ่งพิมพ์ภาษาอังกฤษ/ภาษาไทย"
+in Thai. The link text must follow the **UI** language (a Thai-content page on the English site
+still shows English button text).
+
+> **Pitfall:** `backTarget` must be the route segments `'english'`/`'thai'`, never `'en'`/`'th'`
+> — the latter produced broken `/publications/en` URLs.
 
 ---
 
@@ -311,9 +323,14 @@ A card appears on `/events` and `/th/events`; the child page `/events/<name>` an
    (`nav.teaching`).
 4. Run `npm run check` and `npm run build`; confirm `/teaching` and `/th/teaching` render.
 
-### Change site identity (name, email, profiles)
+### Change site identity (name, title, email, address, profiles)
 
-Edit `src/site.config.ts`. If the owner's name changes, also update:
+Edit `src/site.config.ts`. Provide **both languages** for everything displayed on Thai pages:
+`name`/`nameTh`, `title`/`titleTh`, `affiliation`/`affiliationTh`, `address`/`addressTh`.
+These are consumed by the footer, the nav brand (including the monogram initial, which derives
+from the localized name), and the contact page.
+
+If the owner's name changes, also update:
 
 - `INITIALS` at the top of `scripts/generate-og-image.mjs` and the `<text>` in `public/favicon.svg`,
   then run `npm run generate:og` (or delete the files and rebuild).
@@ -323,24 +340,28 @@ Edit `src/site.config.ts`. If the owner's name changes, also update:
 
 ## 6. Rules & pitfalls
 
-1. **Never hardcode UI text** — use `src/i18n/dictionaries.ts`.
+1. **Never hardcode UI text** — use `src/i18n/dictionaries.ts`. The `en` block must hold
+   **English** text even for Thai-content pages (the `th` block is the only place Thai UI text
+   belongs).
 2. **Never write a page only in one language.** Root file (en) + `th/` file are both required;
    keep them thin wrappers around a shared component.
 3. **`[lang]` dynamic routes don't work with `prefixDefaultLocale: false`.** Use explicit
    root + `th/` folders.
 4. **Prefix internal links with `/th` on Thai pages** (`${prefix}/…`) — the most common i18n bug.
-5. **Inline scripts with `define:vars` must be `is:inline`** and cannot use TypeScript type
+5. **Cross-language links use the route segments `english`/`thai`**, never `en`/`th`
+   (`PublicationLangPage`'s `backTarget`).
+6. **Inline scripts with `define:vars` must be `is:inline`** and cannot use TypeScript type
    annotations (e.g. `PublicationList.astro`, `PhotoGallery.astro`, `ContactPage.astro`).
-6. **Event bodies are English.** To show Thai text on `/th/events/…`, add `descriptionTh`
+7. **Event bodies are English.** To show Thai text on `/th/events/…`, add `descriptionTh`
    (rendered as plain text with line breaks preserved; Markdown is not rendered there).
-7. **Thai year display** uses Buddhist Era (`latestNote` adds 543 to the CE `year` in the Thai
+8. **Thai year display** uses Buddhist Era (`latestNote` adds 543 to the CE `year` in the Thai
    dictionary only) — keep CE years in the Markdown frontmatter.
-8. **Sitemap alternates** need the explicit `i18n` option on the `sitemap()` integration
+9. **Sitemap alternates** need the explicit `i18n` option on the `sitemap()` integration
    (§4.4); they are not inferred from the Astro `i18n` config.
-9. **Sample content** (`npm run generate:placeholders`) never overwrites existing files and its
-   output is git-ignored. The OG image / touch icon (`public/og-image.png`,
-   `public/favicon-180.png`) are real committed assets.
-10. **Content schema changes** (new frontmatter field) go in `src/content.config.ts`; old
+10. **Sample content** (`npm run generate:placeholders`) never overwrites existing files and its
+    output is git-ignored. The OG image / touch icon (`public/og-image.png`,
+    `public/favicon-180.png`) are real committed assets.
+11. **Content schema changes** (new frontmatter field) go in `src/content.config.ts`; old
     Markdown files that omit optional fields are fine (`.optional()`), but required fields fail
     the build with a clear message.
 
