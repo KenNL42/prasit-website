@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   // Set the public site URL so the sitemap and canonical URLs are generated correctly.
-  site: 'https://KenNL42.github.io',
+  site: 'https://kennl42.github.io',
   base: '/prasit-website',
   integrations: [
     sitemap({
