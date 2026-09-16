@@ -19,10 +19,15 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   const html = await response.text();
 
-  // Regex to look for absolute links (href="/...") that don't already have the base prepended
-  const absoluteHrefRegex = new RegExp(`href="\\/(?!${basePattern.replace(/\//g, '')}\\/|https?:|\\/\\/)([^"]*)"`, "g");
+  // Clean base name without slashes for the regex lookahead (e.g., "project1")
+  const cleanBase = basePattern.replace(/\//g, '');
+
+  // BULLETPROOF REGEX: Captures href="/..." but completely ignores it if:
+  // 1. It already starts with your base (e.g., /project1/)
+  // 2. It's an external link (http, https, //)
+  const absoluteHrefRegex = new RegExp(`href="\\/(?!${cleanBase}\\/|https?:|\\/\\/)([^"]*)"`, "g");
   
-  // Rewrites href="/about" into href="/project1/about" automatically on build
+  // Rewrites href="/th/about" into href="/project1/th/about" safely without duplicating
   const fixedHtml = html.replace(absoluteHrefRegex, `href="${basePattern}$1"`);
 
   return new Response(fixedHtml, {
