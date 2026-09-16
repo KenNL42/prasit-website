@@ -6,7 +6,8 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   // Set the public site URL so the sitemap and canonical URLs are generated correctly.
-  site: 'https://yourname.example.edu',
+  site: 'https://KenNL42.github.io',
+  base: '/prasit-website',
   integrations: [
     sitemap({
       i18n: {
@@ -28,5 +29,10 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      watch: {
+        usePolling: true,
+      },
+    },
   },
 });
