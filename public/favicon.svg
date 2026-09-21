@@ -6,5 +6,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
   <rect width="128" height="128" rx="28" fill="#1e3a5f"/>
   <rect x="40" y="92" width="48" height="4" rx="2" fill="#a9853b"/>
-  <text x="64" y="72" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="44" font-weight="600" fill="#fbf9f4">NC</text>
+  <text x="64" y="72" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="44" font-weight="600" fill="#fbf9f4">PL</text>
 </svg>
