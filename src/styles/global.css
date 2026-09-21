@@ -20,6 +20,11 @@
   /* Fonts — Latin serif/sans paired with Thai fallbacks (Noto Sans/Serif Thai). */
   --font-serif: "Lora", "Noto Serif Thai", Georgia, "Times New Roman", serif;
   --font-sans: "Inter", "Noto Sans Thai", Tahoma, "Leelawadee UI", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Site content width. Every `max-w-6xl` on the site resolves to this
+     token — widen the whole layout by bumping this one value (default
+     72rem ≈ 1152px; 88rem ≈ 1408px). */
+  --container-6xl: 88rem;
 }
 
 /* Base */
