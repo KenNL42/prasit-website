@@ -162,6 +162,12 @@ const aboutImages = [
     subtitle: 'RITUAL OBJECTS & MANUSCRIPTS',
     hue: ['#7a5c2e', '#a9853b'],
   },
+  {
+    file: 'public/pictures/about/photo-03.svg',
+    label: 'Museum Exhibition — Lanna Collection',
+    subtitle: 'TEMPORARY EXHIBITION · 2021',
+    hue: ['#14532d', '#2c6654'],
+  },
 ];
 
 /* ------------------------------------------------------------------ */

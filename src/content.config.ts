@@ -90,6 +90,11 @@ const about = defineCollection({
     order: z.number().default(0),
     /** Optional image shown beside this block (public path). */
     image: z.string().optional(),
+    /**
+     * Render ONLY the image + caption as a standalone figure, centered in
+     * the column (the body/textTh are ignored). Default: text beside image.
+     */
+    imageOnly: z.boolean().default(false),
     /** English caption under the image (also the alt text). */
     caption: z.string().optional(),
     /** Thai caption under the image (used on /th/ pages). */

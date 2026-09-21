@@ -46,12 +46,37 @@ const aboutLd = [
     </div>
 
     <div class="mt-10 grid gap-14 lg:grid-cols-[1.6fr_1fr]">
-      <!-- Main bio (content collection blocks, images alternate sides) -->
+      <!-- Main bio (content collection blocks).
+           - default: text, with optional image beside it (sides alternate)
+           - imageOnly: standalone centered figure (image + caption only) -->
       <div class="max-w-2xl space-y-10">
         {
           renderedBlocks.map(({ block, Content }, index) => {
             const hasImage = Boolean(block.data.image);
             const imageOnLeft = index % 2 === 0;
+            const figureCaption = lang === 'th' && block.data.captionTh ? block.data.captionTh : block.data.caption;
+            const figureAlt = figureCaption ?? t.about.title;
+
+            if (hasImage && block.data.imageOnly) {
+              return (
+                <figure class="m-0 flex flex-col items-center">
+                  <img
+                    src={block.data.image!}
+                    alt={figureAlt}
+                    loading="lazy"
+                    class="aspect-[4/3] w-full max-w-xl rounded-xl border border-line object-cover shadow-sm"
+                  />
+                  {
+                    figureCaption && (
+                      <figcaption class="mt-2 text-center text-xs leading-relaxed text-ink-soft">
+                        {figureCaption}
+                      </figcaption>
+                    )
+                  }
+                </figure>
+              );
+            }
+
             return (
               <div
                 class:list={[
@@ -79,14 +104,14 @@ const aboutLd = [
                     <figure class:list={['m-0', imageOnLeft ? 'md:order-2' : 'md:order-1']}>
                       <img
                         src={block.data.image!}
-                        alt={lang === 'th' && block.data.captionTh ? block.data.captionTh : (block.data.caption ?? t.about.title)}
+                        alt={figureAlt}
                         loading="lazy"
                         class="aspect-[4/3] w-full rounded-xl border border-line object-cover shadow-sm"
                       />
                       {
-                        (block.data.caption || block.data.captionTh) && (
+                        figureCaption && (
                           <figcaption class="mt-2 text-xs leading-relaxed text-ink-soft">
-                            {lang === 'th' && block.data.captionTh ? block.data.captionTh : block.data.caption}
+                            {figureCaption}
                           </figcaption>
                         )
                       }

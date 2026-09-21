@@ -38,7 +38,8 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 - **Content (Markdown):** `src/content/publications/en|th/*.md` (one file per publication,
   abstract in the body), `src/content/events/*.md` (one file per photo album), and
   `src/content/about/*.md` (About-page biography blocks, ordered via `order` frontmatter; each
-  block may carry an optional `image` + `caption`/`captionTh` and a `textTh` translation).
+  block may carry an optional `image` + `caption`/`captionTh`, a `textTh` translation, and
+  `imageOnly: true` to render a standalone centered figure instead of a text-and-image row).
 - **Content schemas:** `src/content.config.ts`. Uses the modern content-layer API —
   `loader: glob(...)` — required in Astro 7 (bare `type: 'content'` collections are skipped).
 - **Static files:** PDFs in `public/publications_english/` and `public/publications_thai/`; event
