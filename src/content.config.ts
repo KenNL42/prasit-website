@@ -99,7 +99,10 @@ const about = defineCollection({
     caption: z.string().optional(),
     /** Thai caption under the image (used on /th/ pages). */
     captionTh: z.string().optional(),
-    /** Thai translation of the body (plain text; falls back to the body). */
+    /**
+     * Thai translation of the body — also Markdown (paragraphs, lists,
+     * etc.), rendered via `marked`. Falls back to the English body.
+     */
     textTh: z.string().optional(),
   }),
 });

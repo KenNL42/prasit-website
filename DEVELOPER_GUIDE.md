@@ -175,12 +175,37 @@ image: "/pictures/about/photo-01.jpg"   # optional public image path
 imageOnly: true                         # optional: standalone centered figure (no text column)
 caption: "Ethnographic fieldwork in the upper Mekong region, 2019."   # EN caption (also alt text)
 captionTh: "งานภาคสนามเชิงชาติพันธุ์วรรณนา…"                            # Thai caption
-textTh: >                               # optional Thai translation (plain text)
+textTh: |                               # optional Thai translation — ALSO Markdown
   งานสนามหลักของผมอยู่ในภาคเหนือของประเทศไทย…
 ---
 
 The English text of this block, as Markdown.
 ```
+
+**Both the English body and `textTh` are Markdown**, so they support multiple paragraphs
+(blank line between them) and lists:
+
+```markdown
+---
+order: 7
+textTh: |
+  ความเชี่ยวชาญของผมครอบคลุมสามด้านที่ทำงานร่วมกัน:
+
+  - ศาสนา พิธีกรรม และพื้นที่ศักดิ์สิทธิ์
+  - ความทรงจำร่วมและมรดกวัฒนธรรม
+
+  นอกเหนือจากงานวิจัย…
+---
+
+These are my areas of expertise:
+
+- Religion, ritual and sacred landscapes
+- Collective memory and cultural heritage
+```
+
+> **YAML gotcha:** write `textTh` with the **literal** block style `|`, not the folded style `>`.
+> `>` collapses newlines into spaces, which merges list items into one line. This bit us once —
+> the rendered Thai list came out as a single `<li>`.
 
 Rendering rules (`src/components/pages/AboutPage.astro`):
 
@@ -191,7 +216,8 @@ Rendering rules (`src/components/pages/AboutPage.astro`):
    full-bleed pictures with a description.
 3. The image is a `<figure>` with a `<figcaption>` (semantic HTML, good for SEO); the caption
    doubles as the `alt` text. Thai pages use `captionTh`, English pages use `caption`.
-4. Text: Thai page → `textTh` when present (plain text), otherwise the English Markdown body.
+4. Text: Thai page → `textTh` when present (Markdown, rendered via `marked` — the only dependency
+   added for this), otherwise the English Markdown body.
 5. The About page ships `ProfilePage` JSON-LD with `mainEntity: Person` (shared `personLd()`
    helper in `src/lib/seo.ts`).
 

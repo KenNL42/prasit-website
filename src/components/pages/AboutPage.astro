@@ -1,5 +1,6 @@
 ---
 import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import { marked } from 'marked';
 import Layout from '../../layouts/Layout.astro';
 import Icon from '../Icon.astro';
 import { getCollection, render } from 'astro:content';
@@ -87,9 +88,8 @@ const aboutLd = [
                   {
                     lang === 'th' && (block.data.textTh ?? '').trim()
                       ? (
-                        <div class="whitespace-pre-line text-[15px] leading-relaxed text-ink-soft">
-                          {block.data.textTh}
-                        </div>
+                        // textTh is Markdown too — paragraphs, lists, etc.
+                        <div class="prose-content text-[15px]" set:html={marked.parse(block.data.textTh!)} />
                       )
                       : (
                         <div class="prose-content text-[15px]">
