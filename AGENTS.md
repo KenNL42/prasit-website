@@ -36,7 +36,9 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 ## Project layout (this site)
 
 - **Content (Markdown):** `src/content/publications/en|th/*.md` (one file per publication,
-  abstract in the body) and `src/content/events/*.md` (one file per photo album).
+  abstract in the body), `src/content/events/*.md` (one file per photo album), and
+  `src/content/about/*.md` (About-page biography blocks, ordered via `order` frontmatter; each
+  block may carry an optional `image` + `caption`/`captionTh` and a `textTh` translation).
 - **Content schemas:** `src/content.config.ts`. Uses the modern content-layer API —
   `loader: glob(...)` — required in Astro 7 (bare `type: 'content'` collections are skipped).
 - **Static files:** PDFs in `public/publications_english/` and `public/publications_thai/`; event
@@ -50,6 +52,8 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 - **i18n:** UI strings in `src/i18n/dictionaries.ts` (the `en` object defines the structure; the
   `th` object is type-checked to cover every key). Locale helpers (`getDictionary`,
   `otherLocaleUrl`, `neutralPath`) in `src/i18n/index.ts`.
+- **SEO structured data:** shared `personLd()` in `src/lib/seo.ts` — used by the Home page
+  (`Person`) and the About page (`ProfilePage` with `mainEntity: Person`).
 
 ## Hard rules (do not break these)
 
@@ -64,6 +68,8 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
    page files at `src/pages/` root, Thai page files under `src/pages/th/`. Do **not** convert to
    `[lang]` dynamic routes unless you also set `prefixDefaultLocale: true` — Astro generates
    `/en/…` URLs and the build fails otherwise.
+   **`src/pages/th/` is required** — empirically verified: removing it drops the build from 18 to
+   9 pages. Astro never synthesizes pages for other locales from root files.
 4. **Every page exists twice** — a thin root file (`<Page lang="en" />`) and a thin `th/` file
    (`<Page lang="th" />`), both rendering a shared component in `src/components/pages/` that
    takes `lang: Locale`. Keep the logic in the shared component.

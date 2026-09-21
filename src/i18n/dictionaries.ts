@@ -69,14 +69,6 @@ const en = {
   about: {
     eyebrow: 'About',
     title: 'Biography',
-    bio1:
-      'I am an anthropologist working at the intersection of religion, ritual and collective memory in mainland Southeast Asia. My research asks how communities make and remake sacred space — through pilgrimage, temple renovation, spirit cults and commemorative practice — and how those processes bear on questions of belonging, heritage and political identity today.',
-    bio2:
-      'My primary fieldwork has been carried out in northern Thailand and the upper Mekong region, where I have conducted long-term ethnographic research since 2007. I am particularly interested in material culture: the ways that objects — Buddha images, amulets, monuments, archives — carry memory across generations and become the focus of religious and civic devotion.',
-    bio3:
-      'My work has been published in both English and Thai. Writing in Thai has been deliberate: I believe anthropological knowledge should speak to the communities it studies, and much of my recent writing addresses audiences of Thai students, heritage practitioners and the wider public.',
-    bio4:
-      'At the university I teach courses on the anthropology of religion, ethnographic methods, and the anthropology of Southeast Asia, and I regularly supervise fieldwork projects across the region.',
     positions: 'Academic positions',
     positionsList: [
       { role: 'Assistant Professor of Anthropology', place: 'Chiang Mai University', period: '2018 – present' },
@@ -218,14 +210,6 @@ const th: Dictionary = {
   about: {
     eyebrow: 'เกี่ยวกับ',
     title: 'ประวัติย่อ',
-    bio1:
-      'ผมเป็นนักมานุษยวิทยาที่ทำงานอยู่บนจุดตัดของศาสนา พิธีกรรม และความทรงจำร่วมในเอเชียตะวันออกเฉียงใต้ งานวิจัยของผมสอบถามว่าชุมชนสร้างและสร้างใหม่ซึ่งพื้นที่ศักดิ์สิทธิ์อย่างไร — ผ่านการจาริกแสวงบุญ การบูรณปฏิสังขรณ์วัด ลัทธิผี และแนวปฏิบัติรำลึก — และกระบวนการเหล่านี้เกี่ยวข้องกับคำถามเรื่องการเป็นเจ้าของ มรดกวัฒนธรรม และอัตลักษณ์ทางการเมืองในปัจจุบันอย่างไร',
-    bio2:
-      'งานสนามหลักของผมอยู่ในภาคเหนือของประเทศไทยและภูมิภาคลุ่มน้ำโขงตอนบน ซึ่งผมได้ทำการวิจัยเชิงชาติพันธุ์วรรณนาแบบระยะยาวมาตั้งแต่ปี พ.ศ. 2550 ผมสนใจเป็นพิเศษในวัตถุวัฒนธรรม: วิธีที่วัตถุ — พระพุทธรูป เครื่องราง อนุสาวรีย์ จดหมายเหตุ — รับส่งความทรงจำข้ามรุ่นและกลายเป็นจุดรวมของความศรัทธาทางศาสนาและทางพลเมือง',
-    bio3:
-      'ผลงานของผมตีพิมพ์ทั้งภาษาอังกฤษและภาษาไทย การเขียนเป็นภาษาไทยเป็นการตัดสินใจอย่างตั้งใจ: ผมเชื่อว่าความรู้ทางมานุษยวิทยาควรสื่อสารกับสังคมที่เราศึกษา และงานเขียนช่วงหลังของผมจำนวนมากกล่าวถึงผู้อ่านชาวไทย ทั้งนักศึกษา ผู้ปฏิบัติงานด้านมรดกวัฒนธรรม และสาธารณชนในวงกว้าง',
-    bio4:
-      'ในมหาวิทยาลัย ผมสอนวิชามานุษยวิทยาศาสนา ระเบียบวิธีชาติพันธุ์วรรณนา และมานุษยวิทยาแห่งเอเชียตะวันออกเฉียงใต้ และเป็นที่ปรึกษาโครงการภาคสนามของนักศึกษาในภูมิภาคนี้อย่างสม่ำเสมอ',
     positions: 'ตำแหน่งทางวิชาการ',
     positionsList: [
       { role: 'ผู้ช่วยศาสตราจารย์ด้านมานุษยวิทยา', place: 'มหาวิทยาลัยเชียงใหม่', period: 'พ.ศ. 2561 – ปัจจุบัน' },

@@ -71,4 +71,32 @@ const events = defineCollection({
   }),
 });
 
-export const collections = { publications, events };
+/**
+ * About-page biography blocks. One Markdown file per block, rendered in
+ * order on the About page:
+ *
+ *   src/content/about/01-introduction.md
+ *   src/content/about/02-fieldwork.md   ← optional image + caption
+ *
+ * The Markdown body is the English text; `textTh` is the Thai translation
+ * (plain text, shown on /th/ pages — falls back to the body if absent).
+ * `image` is a public path (e.g. /pictures/about/photo-01.jpg) with an
+ * English caption (also used as alt text) and an optional Thai caption.
+ */
+const about = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/about' }),
+  schema: z.object({
+    /** Render order on the page (ascending). */
+    order: z.number().default(0),
+    /** Optional image shown beside this block (public path). */
+    image: z.string().optional(),
+    /** English caption under the image (also the alt text). */
+    caption: z.string().optional(),
+    /** Thai caption under the image (used on /th/ pages). */
+    captionTh: z.string().optional(),
+    /** Thai translation of the body (plain text; falls back to the body). */
+    textTh: z.string().optional(),
+  }),
+});
+
+export const collections = { publications, events, about };

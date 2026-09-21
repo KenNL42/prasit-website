@@ -1,7 +1,10 @@
 ---
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
 import Layout from '../../layouts/Layout.astro';
 import Icon from '../Icon.astro';
+import { getCollection, render } from 'astro:content';
 import { getDictionary, type Locale } from '../../i18n';
+import { personLd } from '../../lib/seo';
 
 interface Props {
   lang: Locale;
@@ -13,9 +16,28 @@ const metaDescription =
   lang === 'th'
     ? 'ประวัติย่อ พื้นฐานการศึกษา และความสนใจวิจัยของอาจารย์'
     : 'Biography, academic background and research interests.';
+
+// Biography blocks come from the `about` content collection
+// (src/content/about/*.md), sorted by `order`. Each block may carry an
+// optional image + caption (see the collection schema in content.config.ts).
+const blocks = (await getCollection('about')).sort((a, b) => a.data.order - b.data.order);
+const renderedBlocks = await Promise.all(
+  blocks.map(async (block) => ({ block, Content: (await render(block)).Content })),
+);
+
+// schema.org ProfilePage → Person, so the About page is understood as
+// describing the site owner.
+const aboutLd = [
+  {
+    '@type': 'ProfilePage',
+    name: t.about.title,
+    url: getAbsoluteLocaleUrl(lang, '/about'),
+    mainEntity: personLd(),
+  },
+];
 ---
 
-<Layout title={t.about.title} description={metaDescription} lang={lang}>
+<Layout title={t.about.title} description={metaDescription} lang={lang} jsonLd={aboutLd}>
   <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
     <!-- Page header -->
     <div class="max-w-3xl">
@@ -24,12 +46,57 @@ const metaDescription =
     </div>
 
     <div class="mt-10 grid gap-14 lg:grid-cols-[1.6fr_1fr]">
-      <!-- Main bio -->
-      <div class="max-w-2xl space-y-6 text-[15px] leading-relaxed text-ink-soft">
-        <p>{t.about.bio1}</p>
-        <p>{t.about.bio2}</p>
-        <p>{t.about.bio3}</p>
-        <p>{t.about.bio4}</p>
+      <!-- Main bio (content collection blocks, images alternate sides) -->
+      <div class="max-w-2xl space-y-10">
+        {
+          renderedBlocks.map(({ block, Content }, index) => {
+            const hasImage = Boolean(block.data.image);
+            const imageOnLeft = index % 2 === 0;
+            return (
+              <div
+                class:list={[
+                  hasImage && 'grid gap-6 md:grid-cols-[1fr_0.9fr] md:items-center',
+                ]}
+              >
+                <div class:list={[hasImage && imageOnLeft && 'md:order-1']}>
+                  {
+                    lang === 'th' && (block.data.textTh ?? '').trim()
+                      ? (
+                        <div class="whitespace-pre-line text-[15px] leading-relaxed text-ink-soft">
+                          {block.data.textTh}
+                        </div>
+                      )
+                      : (
+                        <div class="prose-content text-[15px]">
+                          <Content />
+                        </div>
+                      )
+                  }
+                </div>
+
+                {
+                  hasImage && (
+                    <figure class:list={['m-0', imageOnLeft ? 'md:order-2' : 'md:order-1']}>
+                      <img
+                        src={block.data.image!}
+                        alt={lang === 'th' && block.data.captionTh ? block.data.captionTh : (block.data.caption ?? t.about.title)}
+                        loading="lazy"
+                        class="aspect-[4/3] w-full rounded-xl border border-line object-cover shadow-sm"
+                      />
+                      {
+                        (block.data.caption || block.data.captionTh) && (
+                          <figcaption class="mt-2 text-xs leading-relaxed text-ink-soft">
+                            {lang === 'th' && block.data.captionTh ? block.data.captionTh : block.data.caption}
+                          </figcaption>
+                        )
+                      }
+                    </figure>
+                  )
+                }
+              </div>
+            );
+          })
+        }
       </div>
 
       <!-- Sidebar -->

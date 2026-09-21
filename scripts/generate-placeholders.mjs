@@ -148,6 +148,22 @@ const albums = [
   },
 ];
 
+// About-page biography images (public/pictures/about/photo-*.svg).
+const aboutImages = [
+  {
+    file: 'public/pictures/about/photo-01.svg',
+    label: 'Fieldwork — Upper Mekong Region',
+    subtitle: 'ETHNOGRAPHIC FIELDWORK · 2019',
+    hue: ['#1e3a5f', '#2c5282'],
+  },
+  {
+    file: 'public/pictures/about/photo-02.svg',
+    label: 'Temple Archive — Lamphun',
+    subtitle: 'RITUAL OBJECTS & MANUSCRIPTS',
+    hue: ['#7a5c2e', '#a9853b'],
+  },
+];
+
 /* ------------------------------------------------------------------ */
 /* Write everything (skip files that already exist)                    */
 /* ------------------------------------------------------------------ */
@@ -178,6 +194,17 @@ for (const album of albums) {
     writeFileSync(target, makeSvg(`${album.label} — ${i}`, album.subtitle, hue));
     created++;
   }
+}
+
+for (const img of aboutImages) {
+  const target = join(root, img.file);
+  mkdirSync(dirname(target), { recursive: true });
+  if (existsSync(target)) {
+    skipped++;
+    continue;
+  }
+  writeFileSync(target, makeSvg(img.label, img.subtitle, img.hue));
+  created++;
 }
 
 console.log(`Placeholders created: ${created}  (already present, skipped: ${skipped})`);
