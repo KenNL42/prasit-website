@@ -27,3 +27,5 @@ pnpm-debug.log*
 public/publications_english/*.pdf
 public/publications_thai/*.pdf
 public/pictures/*/photo-*.svg
+
+.vscode/

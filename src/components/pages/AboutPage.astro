@@ -50,7 +50,7 @@ const aboutLd = [
       <!-- Main bio (content collection blocks).
            - default: text, with optional image beside it (sides alternate)
            - imageOnly: standalone centered figure (image + caption only) -->
-      <div class="max-w-2xl space-y-10">
+      <div class="max-w-2xl flex flex-col gap-10">
         {
           renderedBlocks.map(({ block, Content }, index) => {
             const hasImage = Boolean(block.data.image);
@@ -65,7 +65,7 @@ const aboutLd = [
                     src={block.data.image!}
                     alt={figureAlt}
                     loading="lazy"
-                    class="aspect-[4/3] w-full max-w-xl rounded-xl border border-line object-cover shadow-sm"
+                    class="w-full max-w-sm rounded-xl border border-line object-cover shadow-sm"
                   />
                   {
                     figureCaption && (
@@ -89,7 +89,7 @@ const aboutLd = [
                     lang === 'th' && (block.data.textTh ?? '').trim()
                       ? (
                         // textTh is Markdown too — paragraphs, lists, etc.
-                        <div class="prose-content text-[15px]" set:html={marked.parse(block.data.textTh!)} />
+                        <div class="flex flex-col prose-content text-[15px] space-y-2" set:html={marked.parse(block.data.textTh!)} />
                       )
                       : (
                         <div class="prose-content text-[15px]">

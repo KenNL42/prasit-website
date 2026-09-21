@@ -28,5 +28,10 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      watch: {
+        usePolling: true, // Enables polling-based file tracking
+      },
+    },
   },
 });

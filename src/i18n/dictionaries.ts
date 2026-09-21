@@ -55,7 +55,7 @@ const en = {
     allGalleries: 'All galleries',
     ctaTitle: 'Interested in collaboration or fieldwork exchange?',
     ctaText:
-      'I welcome correspondence from students, colleagues and institutions working on religion, ritual, heritage and the anthropology of Southeast Asia.',
+      'I welcome correspondence from students, colleagues and institutions working on indigenity  and the anthropology of Hmong.',
     getInTouch: 'Get in touch',
     interests: [
       'Indegenious',

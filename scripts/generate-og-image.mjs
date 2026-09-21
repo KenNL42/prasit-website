@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /* Update these to match src/site.config.ts */
-const INITIALS = 'NC';
+const INITIALS = 'PL';
 const WORDMARK = 'ANTHROPOLOGY';
 
 /* ------------------------------------------------------------------ */
