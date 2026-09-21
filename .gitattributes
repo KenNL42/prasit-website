@@ -1,0 +1,38 @@
+# End-of-line normalization.
+#
+# Strategy: normalize ALL text files to LF in the repository AND in working
+# trees (`eol=lf`). The repo is already LF-only; this file makes that
+# deterministic for every contributor, OS and tool, instead of depending on
+# each machine's core.autocrlf setting. It also keeps the Node scripts and
+# Markdown content byte-identical on Windows and Unix.
+#
+# Alternative: use `* text=auto` (without `eol=lf`) if you prefer Windows
+# contributors to get CRLF working trees while the repo stores LF.
+
+# Normalize text files; check them out as LF everywhere.
+* text=auto eol=lf
+
+# Files that must never be touched by EOL conversion or diffs.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.pdf binary
+*.eot binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.zip binary
+
+# Git for Windows may guess wrong on these — pin them explicitly.
+*.mjs text eol=lf
+*.astro text eol=lf
+*.ts text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.svg text eol=lf

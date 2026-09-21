@@ -1,0 +1,22 @@
+# EditorConfig — complements .gitattributes so editors write files that
+# match the repository's LF line endings and UTF-8 encoding.
+# Supported natively by VS Code and most editors.
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdown: preserve intentional trailing spaces (hard line breaks).
+[*.md]
+trim_trailing_whitespace = false
+
+# Binary files: leave encoding/endings alone.
+[*.{png,jpg,jpeg,gif,webp,avif,ico,pdf,zip}]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
