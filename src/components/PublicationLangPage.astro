@@ -20,7 +20,6 @@ const all = await getCollection('publications');
 const pubs = all.filter((p) => p.data.language === language);
 
 const title = language === 'th' ? t.publications.thTitle : t.publications.enTitle;
-const intro = language === 'th' ? t.publications.thIntro : t.publications.enIntro;
 const metaDescription = language === 'th'
   ? lang === 'th'
     ? 'บทความและงานเขียนภาษาไทยของอาจารย์ พร้อมบทคัดย่อและไฟล์ PDF'
@@ -74,7 +73,6 @@ const articleLd = [
           {t.common.entries(pubs.length)}
         </span>
       </div>
-      <p class="mt-4 text-[15px] leading-relaxed text-ink-soft">{intro}</p>
     </div>
 
     <!-- Link to the other publication language, right-aligned, pointing right -->

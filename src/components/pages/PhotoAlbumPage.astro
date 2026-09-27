@@ -9,76 +9,80 @@ import { getDictionary, type Locale } from '../../i18n';
 
 interface Props {
   lang: Locale;
-  event: CollectionEntry<'events'>;
+  album: CollectionEntry<'photos'>;
 }
 
-const { lang, event } = Astro.props;
+const { lang, album } = Astro.props;
 const t = getDictionary(lang);
-const { Content } = await render(event);
+const { Content } = await render(album);
 
-const photos = listAlbumPhotoUrls(event.data.album);
-const formattedDate = event.data.date.toLocaleDateString(lang === 'th' ? 'th-TH' : 'en-GB', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-});
-const bodyText = (event.body ?? '').trim();
-const descriptionTh = (event.data.descriptionTh ?? '').trim();
+const photos = listAlbumPhotoUrls(album.data.album);
+const formattedDate = album.data.date
+  ? album.data.date.toLocaleDateString(lang === 'th' ? 'th-TH' : 'en-GB', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : undefined;
+const bodyText = (album.body ?? '').trim();
+const descriptionTh = (album.data.descriptionTh ?? '').trim();
 const hasEnglishDescription = bodyText.length > 0;
 const hasThaiDescription = descriptionTh.length > 0;
-const eventImages = photos.slice(0, 3);
+const albumImages = photos.slice(0, 5);
 const prefix = lang === 'th' ? '/th' : '';
 
 const metaDescription =
   lang === 'th'
-    ? `${event.data.title} — คลังภาพถ่าย${event.data.location ? `, ${event.data.location}` : ''}`
-    : `${event.data.title} — photo gallery${event.data.location ? `, ${event.data.location}` : ''}.`;
+    ? `${album.data.title} — คลังภาพถ่าย${album.data.location ? `, ${album.data.location}` : ''}`
+    : `${album.data.title} — photo gallery${album.data.location ? `, ${album.data.location}` : ''}.`;
 
-// schema.org Event — exposes the gallery to search engines and rich results.
-const eventLd = [
+// schema.org ImageGallery — exposes the album to search engines.
+const galleryLd = [
   {
-    '@type': 'Event',
-    name: event.data.title,
-    startDate: event.data.date.toISOString(),
-    ...(event.data.location ? { location: { '@type': 'Place', name: event.data.location } } : {}),
+    '@type': 'ImageGallery',
+    name: album.data.title,
     ...(hasEnglishDescription ? { description: bodyText.slice(0, 500) } : {}),
-    ...(eventImages.length > 0
-      ? { image: eventImages.map((url) => new URL(url, SITE.url).toString()) }
+    ...(albumImages.length > 0
+      ? { image: albumImages.map((url) => new URL(url, SITE.url).toString()) }
       : {}),
   },
 ];
 ---
 
 <Layout
-  title={event.data.title}
+  title={album.data.title}
   description={metaDescription}
   lang={lang}
   type="article"
-  jsonLd={eventLd}
+  jsonLd={galleryLd}
 >
   <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
     <!-- Breadcrumb -->
     <nav aria-label="Breadcrumb" class="mb-8">
       <ol class="flex items-center gap-2 text-sm text-ink-soft">
-        <li><a href={`${prefix}/events`} class="transition-colors hover:text-navy">{t.events.breadcrumb}</a></li>
+        <li><a href={`${prefix}/photos`} class="transition-colors hover:text-navy">{t.photos.breadcrumb}</a></li>
         <li aria-hidden="true"><Icon name="chevron-right" class="h-3.5 w-3.5" /></li>
-        <li class="truncate text-ink">{event.data.title}</li>
+        <li class="truncate text-ink">{album.data.title}</li>
       </ol>
     </nav>
 
     <!-- Header -->
     <header class="max-w-3xl">
-      <h1 class="font-serif text-4xl font-semibold leading-tight text-ink">{event.data.title}</h1>
+      <h1 class="font-serif text-4xl font-semibold leading-tight text-ink">{album.data.title}</h1>
       <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-ink-soft">
-        <span class="inline-flex items-center gap-2">
-          <Icon name="calendar" class="h-4 w-4 text-navy" />
-          <time datetime={event.data.date.toISOString()}>{formattedDate}</time>
-        </span>
         {
-          event.data.location && (
+          formattedDate && (
+            <span class="inline-flex items-center gap-2">
+              <Icon name="calendar" class="h-4 w-4 text-navy" />
+              <time datetime={album.data.date!.toISOString()}>{formattedDate}</time>
+            </span>
+          )
+        }
+        {
+          album.data.location && (
             <span class="inline-flex items-center gap-2">
               <Icon name="location" class="h-4 w-4 text-navy" />
-              {event.data.location}
+              {album.data.location}
             </span>
           )
         }
@@ -103,18 +107,18 @@ const eventLd = [
     }
 
     <!-- Gallery -->
-    <section class="mt-10" aria-label={t.events.title}>
-      <PhotoGallery photos={photos} alt={event.data.title} lang={lang} />
+    <section class="mt-10" aria-label={album.data.title}>
+      <PhotoGallery photos={photos} alt={album.data.title} lang={lang} />
     </section>
 
     <!-- Back link -->
     <p class="mt-12">
       <a
-        href={`${prefix}/events`}
+        href={`${prefix}/photos`}
         class="inline-flex items-center gap-2 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:border-navy hover:text-navy"
       >
         <Icon name="chevron-left" class="h-4 w-4" />
-        {t.common.backToEvents}
+        {t.common.backToPhotos}
       </a>
     </p>
   </div>

@@ -1,0 +1,45 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PhotoCard from '../PhotoCard.astro';
+import { getCollection } from 'astro:content';
+import { getDictionary, type Locale } from '../../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+
+const albums = (await getCollection('photos')).sort((a, b) => {
+  const aDate = a.data.date?.getTime() ?? 0;
+  const bDate = b.data.date?.getTime() ?? 0;
+  return bDate - aDate;
+});
+
+const metaDescription =
+  lang === 'th'
+    ? 'คลังภาพถ่ายจากบุคคลต่าง ๆ ทั้งงานภาคสนาม การประชุมวิชาการ และกิจกรรมสาธารณะ'
+    : 'A gallery of photographs contributed by individuals — fieldwork, conferences and public events.';
+---
+
+<Layout title={t.photos.title} description={metaDescription} lang={lang}>
+  <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <div class="max-w-3xl">
+      <h1 class="font-serif text-4xl font-semibold text-ink">{t.photos.title}</h1>
+      <p class="mt-4 text-[15px] leading-relaxed text-ink-soft">{t.photos.intro}</p>
+    </div>
+
+    {
+      albums.length > 0 ? (
+        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {albums.map((album) => <PhotoCard album={album} lang={lang} />)}
+        </div>
+      ) : (
+        <div class="mt-10 rounded-xl border border-dashed border-line bg-paper-dark p-12 text-center text-sm text-ink-soft">
+          {t.photos.empty}
+        </div>
+      )
+    }
+  </div>
+</Layout>

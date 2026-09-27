@@ -5,25 +5,28 @@ import { coverPhotoUrl, listAlbumPhotos } from '../lib/albums';
 import { getDictionary, type Locale } from '../i18n';
 
 interface Props {
-  event: CollectionEntry<'events'>;
+  /** A person's photo album (entry of the `photos` collection). */
+  album: CollectionEntry<'photos'>;
   /** UI language of the surrounding page. */
   lang?: Locale;
 }
 
-const { event, lang = 'en' } = Astro.props;
+const { album, lang = 'en' } = Astro.props;
 const t = getDictionary(lang);
 const prefix = lang === 'th' ? '/th' : '';
-const cover = coverPhotoUrl(event.data.album, event.data.cover);
-const photoCount = listAlbumPhotos(event.data.album).length;
-const formattedDate = event.data.date.toLocaleDateString(lang === 'th' ? 'th-TH' : 'en-GB', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-});
+const cover = coverPhotoUrl(album.data.album, album.data.cover);
+const photoCount = listAlbumPhotos(album.data.album).length;
+const formattedDate = album.data.date
+  ? album.data.date.toLocaleDateString(lang === 'th' ? 'th-TH' : 'en-GB', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : undefined;
 ---
 
 <a
-  href={`${prefix}/events/${event.id}/`}
+  href={`${prefix}/photos/${album.id}/`}
   class="group flex flex-col overflow-hidden rounded-xl border border-line bg-white shadow-sm transition-shadow hover:shadow-md"
 >
   <div class="relative aspect-[4/3] overflow-hidden bg-paper-dark">
@@ -31,7 +34,7 @@ const formattedDate = event.data.date.toLocaleDateString(lang === 'th' ? 'th-TH'
       cover ? (
         <img
           src={cover}
-          alt={`${event.data.title} — ${lang === 'th' ? 'ภาพปก' : 'cover photo'}`}
+          alt={`${album.data.title} — ${lang === 'th' ? 'ภาพปก' : 'cover photo'}`}
           loading="lazy"
           class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -51,25 +54,31 @@ const formattedDate = event.data.date.toLocaleDateString(lang === 'th' ? 'th-TH'
   </div>
 
   <div class="flex flex-1 flex-col p-5">
-    <div class="flex items-center gap-2 text-xs text-ink-soft">
-      <Icon name="calendar" class="h-3.5 w-3.5 text-navy" />
-      <time datetime={event.data.date.toISOString()}>{formattedDate}</time>
+    <div class="flex flex-wrap items-center gap-2 text-xs text-ink-soft">
       {
-        event.data.location && (
+        formattedDate && (
+          <span class="inline-flex items-center gap-1">
+            <Icon name="calendar" class="h-3.5 w-3.5 text-navy" />
+            <time datetime={album.data.date!.toISOString()}>{formattedDate}</time>
+          </span>
+        )
+      }
+      {
+        album.data.location && (
           <span class="inline-flex items-center gap-1">
             <Icon name="location" class="h-3.5 w-3.5 text-navy" />
-            {event.data.location}
+            {album.data.location}
           </span>
         )
       }
     </div>
     <h3 class="mt-2 font-serif text-lg font-semibold text-ink transition-colors group-hover:text-navy">
-      {event.data.title}
+      {album.data.title}
     </h3>
     {
-      event.data.tags.length > 0 && (
+      album.data.tags.length > 0 && (
         <p class="mt-2 flex flex-wrap gap-1.5">
-          {event.data.tags.map((tag) => (
+          {album.data.tags.map((tag) => (
             <span class="rounded-full bg-paper-dark px-2.5 py-0.5 text-[11px] text-ink-soft">{tag}</span>
           ))}
         </p>

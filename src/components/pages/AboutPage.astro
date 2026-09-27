@@ -42,8 +42,7 @@ const aboutLd = [
   <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
     <!-- Page header -->
     <div class="max-w-3xl">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">{t.about.eyebrow}</p>
-      <h1 class="mt-3 font-serif text-4xl font-semibold text-ink">{t.about.title}</h1>
+      <h1 class="font-serif text-4xl font-semibold text-ink">{t.about.title}</h1>
     </div>
 
     <div class="mt-10 grid gap-14 lg:grid-cols-[1.6fr_1fr]">
@@ -55,8 +54,10 @@ const aboutLd = [
           renderedBlocks.map(({ block, Content }, index) => {
             const hasImage = Boolean(block.data.image);
             const imageOnLeft = index % 2 === 0;
-            const figureCaption = lang === 'th' && block.data.captionTh ? block.data.captionTh : block.data.caption;
-            const figureAlt = figureCaption ?? t.about.title;
+            // Thai caption wins on Thai pages, falling back to the English
+            // caption; empty strings are treated as absent.
+            const figureCaption = ((lang === 'th' && block.data.captionTh) || block.data.caption)?.trim() || '';
+            const figureAlt = figureCaption || t.about.title;
 
             if (hasImage && block.data.imageOnly) {
               return (

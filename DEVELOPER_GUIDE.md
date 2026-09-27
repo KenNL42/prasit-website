@@ -35,7 +35,9 @@ src/
   content/
     publications/en/*.md             ← English publications (metadata + abstract)
     publications/th/*.md             ← Thai publications
-    events/*.md                      ← one file per event / photo album
+    photos/*.md                      ← one file per person / photo album
+    archives/*.md                    ← PDF-less publications (Relevant Archives)
+    about/*.md                       ← About-page biography blocks
   content.config.ts                  ← zod schemas validating every Markdown file
   site.config.ts                     ← site identity: name, email, profiles, addresses
   i18n/
@@ -58,7 +60,7 @@ src/
   pages/
     index.astro about.astro contact.astro
     publications/{index,english,thai}.astro
-    events/{index,[slug]}.astro
+    photos/{index,[slug]}.astro
     th/                              ← exact mirror of the above (Thai versions)
   styles/global.css                  ← Tailwind @theme tokens (colors, fonts)
 scripts/
@@ -68,7 +70,7 @@ scripts/
 
 ### The central idea
 
-- **Content** (publications, events) lives in Markdown under `src/content/` and is validated by
+- **Content** (publications, photos, about, archives) lives in Markdown under `src/content/` and is validated by
   `content.config.ts`. The page templates render it.
 - **UI language** is separate from **content language**. A Thai publication keeps its Thai title
   and abstract; the *surrounding UI* (buttons, labels, headings) switches language with the site.
@@ -131,10 +133,15 @@ Where each field appears on the page (`src/components/PublicationCard.astro`):
 Pages render via `getCollection('publications')`, filtered by `language`, sorted by `year`
 descending (`sortByYearDesc`).
 
-### 3.2 Events / photo galleries
+### 3.2 Photo galleries (the `/photos` section)
 
-**Files:** `src/content/events/<name>.md` — one per event. The Markdown **body is the English
-description**; the Thai translation lives in the `descriptionTh` frontmatter field.
+The site has a **gallery of photographs contributed by individuals** — each person gets their own
+album folder and subpage under `/photos/`. The module was renamed from "events" to "photos"
+(collection, routes, components and dictionary all use `photos` now).
+
+**Files:** `src/content/photos/<name>.md` — one per person/album. The Markdown **body is the
+English description**; the Thai translation lives in the `descriptionTh` frontmatter field.
+`date` is optional (person galleries may not have one).
 
 **Photos:** `public/pictures/<album>/` — all files with image extensions
 (`jpg jpeg png webp gif avif svg`) are picked up automatically at build time by
@@ -142,28 +149,50 @@ description**; the Thai translation lives in the `descriptionTh` frontmatter fie
 
 ```markdown
 ---
-title: "Sacred Landscapes Fieldwork"
-date: 2024-02-12
-location: "Chiang Mai & Lamphun Provinces, Thailand"
-album: "album1"                       # folder name under public/pictures/
-cover: "photo-01.jpg"                 # optional; defaults to the first photo
-descriptionTh: >                      # optional Thai description
-  บันทึกภาคสนามเชิงชาติพันธุ์วรรณนา…
-tags: ["fieldwork", "religion", "pilgrimage"]
+title: "Anong Prasert"               # the person's name (card title + page heading)
+date: 2024-02-12                     # optional
+location: "Chiang Mai, Thailand"     # optional
+album: "album1"                      # folder name under public/pictures/
+cover: "photo-01.jpg"                # optional; defaults to the first photo
+descriptionTh: |                     # optional Thai description
+  ภาพถ่ายโดยอานงค์ ประเสริฐ…
+tags: ["fieldwork", "religion"]
 ---
 
 English description in Markdown. Shown on the English page; on the Thai page it is
 replaced by `descriptionTh` when present.
 ```
 
-Rendering rules on `/events/<slug>` (`src/components/pages/EventGalleryPage.astro`):
+Rendering rules on `/photos/<slug>` (`src/components/pages/PhotoAlbumPage.astro`):
 
-1. Header: `title`, formatted `date`, `location`, photo count.
+1. Header: `title`, formatted `date` (if present), `location`, photo count.
 2. Description: Thai page → `descriptionTh` if present, otherwise falls back to the English body.
    English page → Markdown body.
 3. Photo grid + lightbox: all photos from `public/pictures/<album>/`.
+4. Each album page ships `ImageGallery` JSON-LD (was `Event` before the rename).
 
-### 3.3 About-page biography blocks
+### 3.3 Relevant Archives (`/publications/archives`)
+
+Publications **without a downloadable PDF**, listed so viewers can read the titles and search for
+the articles themselves. One Markdown file per work:
+
+```markdown
+---
+title: "Hmong Diaspora and the Politics of Return"
+authors:
+  - "Niran Chanthana"
+year: 2019
+journal: "Asian Ethnicity"      # optional
+language: "en"                  # "en" | "th"
+doi: "10.1080/…"               # optional
+---
+```
+
+Each entry renders title, authors, year/journal and a **"Search the article"** button linking to
+Google Scholar (`scholar.google.com/scholar?q=<title>`). Sorted by year descending. The
+publications hub shows a "Relevant Archives" card linking here.
+
+### 3.4 About-page biography blocks
 
 **Files:** `src/content/about/<nn>-<slug>.md` — one Markdown file per biography block, rendered
 on the About page in `order` ascending. Add more files to add more paragraphs; no code changes.
@@ -240,8 +269,8 @@ i18n: {
 },
 ```
 
-- **English** (default locale) → root URLs: `/about`, `/publications/english`, `/events/album1`
-- **Thai** → prefixed: `/th/about`, `/th/publications/english`, `/th/events/album1`
+- **English** (default locale) → root URLs: `/about`, `/publications/english`, `/photos/album1`
+- **Thai** → prefixed: `/th/about`, `/th/publications/english`, `/th/photos/album1`
 
 > **Rule (Astro constraint):** with `prefixDefaultLocale: false` the *file structure must mirror
 > the URL structure*. English page files live at `src/pages/` root and Thai page files under
@@ -320,7 +349,7 @@ Thai visitor lands on the English page. Search for every `href=` when adding mar
   Thai pages. It links to the *same page in the other language* via
   `otherLocaleUrl(lang, pathname)` (`src/i18n/index.ts`), which strips the `/th/` prefix and
   rebuilds the URL with `getRelativeLocaleUrl` from `astro:i18n`. Works for deep links too
-  (`/events/album1` ⇄ `/th/events/album1`).
+  (`/photos/album1` ⇄ `/th/photos/album1`).
 - **Active nav highlighting** compares the *neutral path* (`neutralPath(lang, pathname)`), so the
   same link is highlighted on both `/about` and `/th/about`.
 - **Head metadata** (`src/layouts/Layout.astro`): `html lang`, canonical (per locale), and
@@ -364,14 +393,20 @@ still shows English button text).
 The card, sort order, citation, abstract toggle, and download button all appear automatically on
 both language sites (UI text comes from the dictionary).
 
-### Add an event / photo gallery (2 steps)
+### Add a photo album / person gallery (2 steps)
 
 1. Create `public/pictures/<album>/` and drop photos in it.
-2. Create `src/content/events/<name>.md` with `album`, `date`, and (for the Thai page) a
-   `descriptionTh`.
+2. Create `src/content/photos/<name>.md` with `album`, `title` (the person's name), and (for the
+   Thai page) a `descriptionTh`. `date`/`location` are optional.
 
-A card appears on `/events` and `/th/events`; the child page `/events/<name>` and
-`/th/events/<name>` is generated with the photo grid + lightbox.
+A card appears on `/photos` and `/th/photos`; the child page `/photos/<name>` and
+`/th/photos/<name>` is generated with the photo grid + lightbox.
+
+### Add an archive entry (Relevant Archives)
+
+Create `src/content/archives/<year>-<slug>.md` with `title`, `year`, optional `authors`,
+`journal`, `language` and `doi` — see §3.3. It appears on `/publications/archives` (and the Thai
+page) sorted by year, with a Google Scholar search link.
 
 ### Add or change a UI string
 
@@ -420,7 +455,7 @@ If the owner's name changes, also update:
    (`PublicationLangPage`'s `backTarget`).
 6. **Inline scripts with `define:vars` must be `is:inline`** and cannot use TypeScript type
    annotations (e.g. `PublicationList.astro`, `PhotoGallery.astro`, `ContactPage.astro`).
-7. **Event bodies are English.** To show Thai text on `/th/events/…`, add `descriptionTh`
+7. **Photo-album bodies are English.** To show Thai text on `/th/photos/…`, add `descriptionTh`
    (rendered as plain text with line breaks preserved; Markdown is not rendered there).
 8. **Thai year display** uses Buddhist Era (`latestNote` adds 543 to the CE `year` in the Thai
    dictionary only) — keep CE years in the Markdown frontmatter.
@@ -446,7 +481,7 @@ Manual spot checks after a change:
 
 - `/` and `/th/` render the hero in the right language.
 - The nav switcher (`ไทย` / `English`) maps deep links correctly
-  (`/publications/thai` ⇄ `/th/publications/thai`, `/events/album1` ⇄ `/th/events/album1`).
+  (`/publications/thai` ⇄ `/th/publications/thai`, `/photos/album1` ⇄ `/th/photos/album1`).
 - The active nav item is highlighted on both locales.
 - `dist/sitemap-0.xml` contains `<xhtml:link rel="alternate" hreflang="en|th">` pairs.
 - A long abstract (> 300 chars) shows the "more… / show less" toggle; a short one doesn't.

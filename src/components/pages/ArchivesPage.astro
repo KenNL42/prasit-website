@@ -1,0 +1,107 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../Icon.astro';
+import { getCollection } from 'astro:content';
+import { getDictionary, type Locale } from '../../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getDictionary(lang);
+const prefix = lang === 'th' ? '/th' : '';
+
+const entries = (await getCollection('archives')).sort((a, b) => b.data.year - a.data.year);
+
+const metaDescription =
+  lang === 'th'
+    ? 'รายการผลงานตีพิมพ์ที่ไม่มีไฟล์ PDF สำหรับดาวน์โหลด — ผู้เข้าชมสามารถค้นหาบทความได้จากชื่อเรื่อง'
+    : 'Publications without a downloadable PDF — read the titles and search for the articles yourself.';
+
+// schema.org ItemList of the archived works.
+const archivesLd = [
+  {
+    '@type': 'ItemList',
+    name: t.publications.archivesTitle,
+    itemListElement: entries.map((entry, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'ScholarlyArticle',
+        name: entry.data.title,
+        author: entry.data.authors.map((name) => ({ '@type': 'Person', name })),
+        datePublished: String(entry.data.year),
+        inLanguage: entry.data.language === 'th' ? 'th' : 'en',
+        ...(entry.data.journal
+          ? { isPartOf: { '@type': 'Periodical', name: entry.data.journal } }
+          : {}),
+        ...(entry.data.doi ? { doi: entry.data.doi } : {}),
+      },
+    })),
+  },
+];
+
+/** Google Scholar search URL for a title — lets visitors find the article themselves. */
+const scholarSearch = (title: string) =>
+  `https://scholar.google.com/scholar?q=${encodeURIComponent(title)}`;
+---
+
+<Layout title={t.publications.archivesTitle} description={metaDescription} lang={lang} jsonLd={archivesLd}>
+  <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="mb-8">
+      <ol class="flex items-center gap-2 text-sm text-ink-soft">
+        <li><a href={`${prefix}/publications`} class="transition-colors hover:text-navy">{t.publications.breadcrumb}</a></li>
+        <li aria-hidden="true"><Icon name="chevron-right" class="h-3.5 w-3.5" /></li>
+        <li class="text-ink">{t.publications.archivesTitle}</li>
+      </ol>
+    </nav>
+
+    <div class="max-w-3xl">
+      <h1 class="font-serif text-4xl font-semibold text-ink">{t.publications.archivesTitle}</h1>
+      <p class="mt-4 text-[15px] leading-relaxed text-ink-soft">{t.publications.archivesText}</p>
+    </div>
+
+    {
+      entries.length > 0 ? (
+        <ul class="mt-10 space-y-4">
+          {entries.map((entry) => (
+            <li
+              lang={entry.data.language === 'th' ? 'th' : 'en'}
+              class="flex flex-col gap-3 rounded-xl border border-line bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div>
+                <p class="font-serif text-lg font-semibold leading-snug text-ink">{entry.data.title}</p>
+                {
+                  entry.data.authors.length > 0 && (
+                    <p class="mt-1 text-sm text-ink-soft">{entry.data.authors.join(' · ')}</p>
+                  )
+                }
+                <p class="mt-1 text-sm text-ink-soft">
+                  {entry.data.year}
+                  {entry.data.journal && <span class="italic"> · {entry.data.journal}</span>}
+                </p>
+              </div>
+              <a
+                href={scholarSearch(entry.data.title)}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex w-fit shrink-0 items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-medium text-navy transition-colors hover:border-navy hover:text-navy-light"
+              >
+                {lang === 'th' ? 'ค้นหาบทความ' : 'Search the article'}
+                <Icon name="external" class="h-3.5 w-3.5" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div class="mt-10 rounded-xl border border-dashed border-line bg-paper-dark p-12 text-center text-sm text-ink-soft">
+          {lang === 'th'
+            ? 'ยังไม่มีรายการ กรุณาเพิ่มไฟล์ Markdown ใน src/content/archives/'
+            : 'No entries yet. Add Markdown files under src/content/archives/ to list them here.'}
+        </div>
+      )
+    }
+  </div>
+</Layout>

@@ -12,7 +12,7 @@ const en = {
     home: 'Home',
     about: 'About',
     publications: 'Publications',
-    events: 'Fieldwork & Events',
+    photos: 'Photos',
     contact: 'Contact',
     cta: 'Get in touch',
     switchTo: 'Switch to Thai',
@@ -27,7 +27,7 @@ const en = {
     entries: (n: number) => `${n} entr${n === 1 ? 'y' : 'ies'}`,
     photos: (n: number) => `${n} photo${n === 1 ? '' : 's'}`,
     viewGallery: 'View gallery',
-    backToEvents: 'Back to all events',
+    backToPhotos: 'Back to all photos',
     noPhotos:
       'No photos have been added to this album yet. Place images inside the album folder (public/pictures/…) to display them here.',
   },
@@ -41,18 +41,11 @@ const en = {
     Other: 'Other',
   },
   home: {
-    eyebrow: 'Professor of Anthropology',
     intro:
       'An anthropologist of indegeneous study — with a particular focus on how landscapes, culture and collective remembrance shape community life in northern Thailand. My work appears in both English and Thai, and this site gathers my publications, fieldwork galleries, and research notes in one place.',
     browsePublications: 'Browse publications',
     viewGalleries: 'View fieldwork galleries',
     interestsLabel: 'Research interests',
-    selectedWork: 'Selected work',
-    recentPublications: 'Recent publications',
-    allPublications: 'All publications',
-    inTheField: 'In the field',
-    eventsTitle: 'Fieldwork & events',
-    allGalleries: 'All galleries',
     ctaTitle: 'Interested in collaboration or fieldwork exchange?',
     ctaText:
       'I welcome correspondence from students, colleagues and institutions working on indigenity  and the anthropology of Hmong.',
@@ -65,7 +58,6 @@ const en = {
     ],
   },
   about: {
-    eyebrow: 'About',
     title: 'Biography',
     positions: 'Academic positions',
     positionsList: [
@@ -81,11 +73,7 @@ const en = {
     researchInterests: 'Research interests',
   },
   publications: {
-    eyebrow: 'Publications',
     title: 'Research publications',
-    intro:
-      'My published work spans English- and Thai-language venues. Each entry lists the abstract and a downloadable PDF where available.',
-    latestNote: (year: number) => ` The most recent addition is from ${year}.`,
     englishCardTitle: 'Publications in English',
     englishCardText: 'Journal articles, book chapters and reviews for international readership —',
     thaiCardTitle: 'Publications in Thai',
@@ -95,28 +83,24 @@ const en = {
     thaiBadge: 'Thai',
     breadcrumb: 'Publications',
     enTitle: 'Publications in English',
-    enIntro:
-      'Journal articles, book chapters and reviews written for an international readership.',
     thTitle: 'Publications in Thai',
-    thIntro:
-      'Journal articles and essays written for readers in Thailand — students, scholars and heritage practitioners — bringing anthropological knowledge to the society we study.',
     backToEn: 'View English publications',
     backToTh: 'View Thai publications',
+    archivesTitle: 'Relevant Archives',
+    archivesText:
+      'Publications without a downloadable PDF. You can read the titles and search for the articles yourself.',
+    viewArchives: 'Browse the archives',
   },
-  events: {
-    eyebrow: 'In the field',
-    title: 'Fieldwork & events',
+  photos: {
+    title: 'Photos',
     intro:
-      'Photo galleries documenting fieldwork trips, conferences, seminars and community engagements. Each event has its own page; select a card to browse the photographs.',
-    breadcrumb: 'Fieldwork & events',
+      'A gallery of photographs contributed by individuals. Each person has their own album; select a card to browse the pictures.',
+    breadcrumb: 'Photos',
     empty:
-      'No events yet. Add a Markdown file under src/content/events/ and drop photos into public/pictures/ to create the first gallery.',
+      'No albums yet. Add a Markdown file under src/content/photos/ and drop photos into public/pictures/ to create the first gallery.',
   },
   contact: {
-    eyebrow: 'Contact',
     title: 'Get in touch',
-    intro:
-      'For correspondence about research collaboration, graduate supervision, invited talks or media inquiries, the quickest way to reach me is by email. I usually respond within a few working days.',
     messageHeading: 'Send a message',
     name: 'Name',
     email: 'Email',
@@ -143,7 +127,7 @@ const th: Dictionary = {
     home: 'หน้าแรก',
     about: 'เกี่ยวกับ',
     publications: 'สิ่งพิมพ์',
-    events: 'ภาคสนามและกิจกรรม',
+    photos: 'ภาพถ่าย',
     contact: 'ติดต่อ',
     cta: 'ติดต่อฉัน',
     switchTo: 'เปลี่ยนเป็นภาษาไทย',
@@ -158,7 +142,7 @@ const th: Dictionary = {
     entries: (n) => `${n} รายการ`,
     photos: (n) => `${n} ภาพ`,
     viewGallery: 'ชมภาพถ่าย',
-    backToEvents: 'กลับไปยังกิจกรรมทั้งหมด',
+    backToPhotos: 'กลับไปยังภาพทั้งหมด',
     noPhotos:
       'ยังไม่มีภาพในอัลบั้มนี้ กรุณาใส่ภาพลงในโฟลเดอร์ (public/pictures/…) เพื่อแสดงผล',
   },
@@ -172,18 +156,11 @@ const th: Dictionary = {
     Other: 'อื่น ๆ',
   },
   home: {
-    eyebrow: 'ผู้ช่วยศาสตราจารย์ด้านมานุษยวิทยา',
     intro:
       'ผมเป็นนักมานุษยวิทยาที่ศึกษาชนพื้นเมือง ......................',
     browsePublications: 'ดูสิ่งพิมพ์',
     viewGalleries: 'ชมภาพภาคสนาม',
     interestsLabel: 'ความสนใจวิจัย',
-    selectedWork: 'ผลงานคัดสรร',
-    recentPublications: 'สิ่งพิมพ์ล่าสุด',
-    allPublications: 'สิ่งพิมพ์ทั้งหมด',
-    inTheField: 'ในภาคสนาม',
-    eventsTitle: 'ภาคสนามและกิจกรรม',
-    allGalleries: 'ภาพทั้งหมด',
     ctaTitle: 'สนใจร่วมมือวิจัยหรือแลกเปลี่ยนภาคสนามหรือไม่?',
     ctaText:
       'ผมยินดีรับการติดต่อจากนักศึกษา เพื่อนร่วมงาน และสถาบันที่ทำงานด้านศาสนา พิธีกรรม มรดกวัฒนธรรม และมานุษยวิทยาแห่งเอเชียตะวันออกเฉียงใต้',
@@ -198,7 +175,6 @@ const th: Dictionary = {
     ],
   },
   about: {
-    eyebrow: 'เกี่ยวกับ',
     title: 'ประวัติย่อ',
     positions: 'ตำแหน่งทางวิชาการ',
     positionsList: [
@@ -215,11 +191,7 @@ const th: Dictionary = {
     researchInterests: 'ความสนใจวิจัย',
   },
   publications: {
-    eyebrow: 'สิ่งพิมพ์',
     title: 'สิ่งพิมพ์วิจัย',
-    intro:
-      'ผลงานตีพิมพ์ของผมครอบคลุมวารสารทั้งภาษาอังกฤษและภาษาไทย แต่ละรายการแสดงบทคัดย่อและไฟล์ PDF ที่ดาวน์โหลดได้ (ถ้ามี)',
-    latestNote: (year) => ` ผลงานล่าสุดคือจากปี พ.ศ. ${year + 543}.`,
     englishCardTitle: 'สิ่งพิมพ์ภาษาอังกฤษ',
     englishCardText: 'บทความวารสาร บทความในหนังสือ และบทวิจารณ์สำหรับผู้อ่านต่างประเทศ —',
     thaiCardTitle: 'สิ่งพิมพ์ภาษาไทย',
@@ -229,27 +201,24 @@ const th: Dictionary = {
     thaiBadge: 'ภาษาไทย',
     breadcrumb: 'สิ่งพิมพ์',
     enTitle: 'สิ่งพิมพ์ภาษาอังกฤษ',
-    enIntro: 'บทความวารสาร บทความในหนังสือ และบทวิจารณ์ที่เขียนสำหรับผู้อ่านต่างประเทศ',
     thTitle: 'สิ่งพิมพ์ภาษาไทย',
-    thIntro:
-      'งานเขียนภาษาไทยมุ่งสู่ผู้อ่านในประเทศ ทั้งนักศึกษา นักวิชาการ และผู้ปฏิบัติงานด้านวัฒนธรรม เพื่อให้ความรู้ทางมานุษยวิทยาเข้าถึงสังคมที่เราศึกษา',
     backToEn: 'ดูสิ่งพิมพ์ภาษาอังกฤษ',
     backToTh: 'ดูสิ่งพิมพ์ภาษาไทย',
+    archivesTitle: 'คลังเอกสารอ้างอิง',
+    archivesText:
+      'รายการผลงานตีพิมพ์ที่ไม่มีไฟล์ PDF สำหรับดาวน์โหลด ผู้เข้าชมสามารถค้นหาบทความได้จากชื่อเรื่องด้วยตนเอง',
+    viewArchives: 'ดูคลังเอกสารอ้างอิง',
   },
-  events: {
-    eyebrow: 'ในภาคสนาม',
-    title: 'ภาคสนามและกิจกรรม',
+  photos: {
+    title: 'ภาพถ่าย',
     intro:
-      'คลังภาพถ่ายบันทึกการทำงานภาคสนาม การประชุมวิชาการ สัมมนา และกิจกรรมร่วมกับชุมชน แต่ละกิจกรรมมีหน้าเพจของตัวเอง เลือกการ์ดเพื่อชมภาพถ่าย',
-    breadcrumb: 'ภาคสนามและกิจกรรม',
+      'คลังภาพถ่ายจากบุคคลต่าง ๆ แต่ละบุคคลมีอัลบั้มของตนเอง เลือกการ์ดเพื่อชมภาพ',
+    breadcrumb: 'ภาพถ่าย',
     empty:
-      'ยังไม่มีกิจกรรม กรุณาเพิ่มไฟล์ Markdown ใน src/content/events/ และใส่ภาพใน public/pictures/ เพื่อสร้างแกลเลอรีแรก',
+      'ยังไม่มีอัลบั้ม กรุณาเพิ่มไฟล์ Markdown ใน src/content/photos/ และใส่ภาพใน public/pictures/ เพื่อสร้างแกลเลอรีแรก',
   },
   contact: {
-    eyebrow: 'ติดต่อ',
     title: 'ติดต่อเรา',
-    intro:
-      'สำหรับการติดต่อเรื่องความร่วมมือวิจัย การดูแลวิทยานิพนธ์ การบรรยายรับเชิญ หรือสื่อมวลชน วิธีที่เร็วที่สุดคืออีเมล โดยทั่วไปผมตอบกลับภายในไม่กี่วันทำการ',
     messageHeading: 'ส่งข้อความ',
     name: 'ชื่อ',
     email: 'อีเมล',

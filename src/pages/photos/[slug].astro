@@ -1,0 +1,17 @@
+---
+import PhotoAlbumPage from '../../components/pages/PhotoAlbumPage.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const albums = await getCollection('photos');
+  return albums.map((album) => ({ params: { slug: album.id }, props: { album } }));
+}
+
+interface Props {
+  album: CollectionEntry<'photos'>;
+}
+
+const { album } = Astro.props;
+---
+
+<PhotoAlbumPage lang="en" album={album} />

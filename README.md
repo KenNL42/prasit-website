@@ -71,7 +71,7 @@ the navigation bar jumps between the same page in the other language; every page
 - Site identity (`src/site.config.ts`) is language-neutral, with a Thai `affiliationTh` line.
 - Publication content is already language-specific (English vs Thai Markdown files), and the site
   UI around it switches: on `/th/…` you get Thai labels, badges, buttons and the Thai description
-  of each event (`descriptionTh` in `src/content/events/*.md`).
+  of each album (`descriptionTh` in `src/content/photos/*.md`).
 - Routing follows Astro's i18n rule: with `prefixDefaultLocale: false`, the file structure must
   mirror the URL structure — English page files at `src/pages/` root, Thai page files under
   `src/pages/th/`. Both are thin wrappers around shared components in `src/components/pages/`.
@@ -90,8 +90,10 @@ src/
     publications/
       en/*.md             ← one Markdown file per English publication
       th/*.md             ← one Markdown file per Thai publication
-    events/
-      *.md                ← one Markdown file per event/gallery
+    photos/
+      *.md                ← one Markdown file per person/gallery
+    archives/
+      *.md                ← PDF-less publications (Relevant Archives)
   content.config.ts       ← content schemas (validation rules)
   site.config.ts          ← site-wide settings: name, email, profiles, interests
   i18n/
@@ -146,7 +148,7 @@ automatically. Entries are sorted by year (newest first), and a search box filte
 
 1. **Create an album folder** under `public/pictures/`, e.g. `public/pictures/album3/`, and drop
    photos in it (`jpg`, `png`, `webp`, `gif`, `avif`, `svg` are supported).
-2. **Create a Markdown file** under `src/content/events/`:
+2. **Create a Markdown file** under `src/content/photos/`:
 
 ```markdown
 ---
@@ -161,7 +163,7 @@ tags: ["fieldwork", "upland communities"]
 Optional description of the event, in Markdown.
 ```
 
-Each event gets its own child page (`/events/album3`) with a responsive photo grid and a
+Each person gets their own child page (`/photos/album3`) with a responsive photo grid and a
 lightbox viewer (keyboard accessible: arrows navigate, Esc closes).
 
 ---

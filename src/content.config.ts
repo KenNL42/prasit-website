@@ -46,20 +46,22 @@ const publications = defineCollection({
 });
 
 /**
- * Event / fieldwork gallery entries. One Markdown file per event:
+ * Photo gallery entries — one Markdown file per person/album:
  *
- *   src/content/events/album1.md
+ *   src/content/photos/album1.md
  *
- * `album` is the folder name inside `public/pictures/` that holds the
- * photos (jpg, png, webp, gif, avif, svg). Photos are picked up
- * automatically — no need to list them by hand.
+ * `album` is the folder name inside `public/pictures/` that holds that
+ * person's photos (jpg, png, webp, gif, avif, svg). Photos are picked up
+ * automatically — no need to list them by hand. Each entry becomes a
+ * subpage under /photos/.
  */
-const events = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/events' }),
+const photos = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/photos' }),
   schema: z.object({
+    /** The person's name (used as the card title and subpage heading). */
     title: z.string(),
-    /** Display date of the event. */
-    date: z.coerce.date(),
+    /** Optional date associated with the gallery. */
+    date: z.coerce.date().optional(),
     location: z.string().optional(),
     /** Folder name under public/pictures/ containing the photos. */
     album: z.string(),
@@ -68,6 +70,25 @@ const events = defineCollection({
     /** Optional Thai translation of the description (shown on /th/ pages). */
     descriptionTh: z.string().optional(),
     tags: z.array(z.string()).default([]),
+  }),
+});
+
+/**
+ * Relevant Archives — publications with NO downloadable PDF. One Markdown
+ * file per work, listed on /publications/archives so viewers can read the
+ * titles and search for the articles themselves.
+ */
+const archives = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/archives' }),
+  schema: z.object({
+    title: z.string(),
+    year: z.number(),
+    authors: z.array(z.string()).default([]),
+    /** Journal / book / venue name. */
+    journal: z.string().optional(),
+    /** "en" or "th" — display language hint. */
+    language: z.enum(['en', 'th']).default('en'),
+    doi: z.string().optional(),
   }),
 });
 
@@ -107,4 +128,4 @@ const about = defineCollection({
   }),
 });
 
-export const collections = { publications, events, about };
+export const collections = { publications, photos, about, archives };
