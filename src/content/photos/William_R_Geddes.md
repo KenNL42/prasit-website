@@ -2,7 +2,7 @@
 title: "Anong Prasert"
 date: 2024-02-12
 location: "Chiang Mai & Lamphun Provinces, Thailand"
-album: "album1"
+album: "William R. Geddes"
 descriptionTh: >
   ภาพถ่ายภาคสนามโดยอานงค์ ประเสริฐ บันทึกการเดินทางไปตามเส้นทางจาริกแสวงบุญและเทศกาลประจำวัด
   ในจังหวัดเชียงใหม่และลำพูน ภาพเหล่านี้บันทึกการเตรียมงานเทศกาล ผู้ประกอบพิธีกรรม

@@ -42,7 +42,7 @@ const en = {
   },
   home: {
     intro:
-      'An anthropologist of indegeneous study — with a particular focus on how landscapes, culture and collective remembrance shape community life in northern Thailand. My work appears in both English and Thai, and this site gathers my publications, fieldwork galleries, and research notes in one place.',
+      'An anthropologist of ethnicity and indigenous studies — with a particular focus on how state government, regionalization and globalization shape ethnic and indigenous life in northern Thailand. My work appears in both English and Thai, and this site gathers my publications, photos, and relevant archives in one place.',
     browsePublications: 'Browse publications',
     viewGalleries: 'View fieldwork galleries',
     interestsLabel: 'Research interests',
@@ -94,8 +94,9 @@ const en = {
   photos: {
     title: 'Photos',
     intro:
-      'A gallery of photographs contributed by individuals. Each person has their own album; select a card to browse the pictures.',
-    breadcrumb: 'Photos',
+      'Collection of photos taken by me and others, including links to relevant sources of interesting photos.',
+    note:
+      'Note: Please give credit to the photographer, by referring to his/her name, when you use it.',
     empty:
       'No albums yet. Add a Markdown file under src/content/photos/ and drop photos into public/pictures/ to create the first gallery.',
   },
@@ -157,7 +158,7 @@ const th: Dictionary = {
   },
   home: {
     intro:
-      'ผมเป็นนักมานุษยวิทยาที่ศึกษาชนพื้นเมือง ......................',
+      'นักมานุษยวิทยาด้านชาติพันธุ์สัมพันธ์และชนพื้นเมืองศึกษา เน้นอิทธิพลของรัฐชาติ ความเป็นภูมิภาคและกระแสโลกาภิวัตน์ที่ส่งผลต่อกลุ่มชาติพันธุ์และชนพื้นเมืองในภาคเหนือของประเทศไทย ข้อมูลในนี้มีทั้งภาษาไทยและอังกฤษ เน้นการรวบรวมงานตีพิมพ์ของผม ภาพถ่ายและเอกสารอื่นที่เกี่ยวข้อง',
     browsePublications: 'ดูสิ่งพิมพ์',
     viewGalleries: 'ชมภาพภาคสนาม',
     interestsLabel: 'ความสนใจวิจัย',
@@ -212,8 +213,9 @@ const th: Dictionary = {
   photos: {
     title: 'ภาพถ่าย',
     intro:
-      'คลังภาพถ่ายจากบุคคลต่าง ๆ แต่ละบุคคลมีอัลบั้มของตนเอง เลือกการ์ดเพื่อชมภาพ',
-    breadcrumb: 'ภาพถ่าย',
+      'รวบรวมภาพถ่ายที่ถ่ายโดยผมเองและคนอื่น ๆ รวมถึงเว็บไซต์ที่มีภาพถ่ายที่น่าสนใจ',
+    note:
+      'หมายเหตุ: กรุณาให้เกียรติด้วยการอ้างถึงชื่อคนถ่ายภาพ หากท่านนำไปใช้หรือเผยแพร่',
     empty:
       'ยังไม่มีอัลบั้ม กรุณาเพิ่มไฟล์ Markdown ใน src/content/photos/ และใส่ภาพใน public/pictures/ เพื่อสร้างแกลเลอรีแรก',
   },

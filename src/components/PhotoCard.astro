@@ -54,36 +54,9 @@ const formattedDate = album.data.date
   </div>
 
   <div class="flex flex-1 flex-col p-5">
-    <div class="flex flex-wrap items-center gap-2 text-xs text-ink-soft">
-      {
-        formattedDate && (
-          <span class="inline-flex items-center gap-1">
-            <Icon name="calendar" class="h-3.5 w-3.5 text-navy" />
-            <time datetime={album.data.date!.toISOString()}>{formattedDate}</time>
-          </span>
-        )
-      }
-      {
-        album.data.location && (
-          <span class="inline-flex items-center gap-1">
-            <Icon name="location" class="h-3.5 w-3.5 text-navy" />
-            {album.data.location}
-          </span>
-        )
-      }
-    </div>
-    <h3 class="mt-2 font-serif text-lg font-semibold text-ink transition-colors group-hover:text-navy">
+    <h3 class="font-serif text-lg font-semibold text-ink transition-colors group-hover:text-navy">
       {album.data.title}
     </h3>
-    {
-      album.data.tags.length > 0 && (
-        <p class="mt-2 flex flex-wrap gap-1.5">
-          {album.data.tags.map((tag) => (
-            <span class="rounded-full bg-paper-dark px-2.5 py-0.5 text-[11px] text-ink-soft">{tag}</span>
-          ))}
-        </p>
-      )
-    }
     <p class="mt-auto flex items-center gap-1.5 pt-4 text-sm font-medium text-navy">
       {t.common.viewGallery}
       <Icon name="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
