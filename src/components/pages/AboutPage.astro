@@ -2,7 +2,6 @@
 import { getAbsoluteLocaleUrl } from 'astro:i18n';
 import { marked } from 'marked';
 import Layout from '../../layouts/Layout.astro';
-import Icon from '../Icon.astro';
 import { getCollection, render } from 'astro:content';
 import { getDictionary, type Locale } from '../../i18n';
 import { personLd } from '../../lib/seo';
@@ -154,22 +153,5 @@ const aboutLd = [
         </div>
       </aside>
     </div>
-
-    <!-- Research interests -->
-    <section class="mt-16 border-t border-line pt-12">
-      <h2 class="font-serif text-2xl font-semibold text-ink">{t.about.researchInterests}</h2>
-      <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          t.home.interests.map((interest, i) => (
-            <div class="flex items-start gap-3 rounded-xl border border-line bg-white p-5 shadow-sm">
-              <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-paper-dark text-navy">
-                <Icon name={i % 2 === 0 ? 'globe' : 'university'} class="h-4 w-4" />
-              </span>
-              <p class="text-sm font-medium text-ink">{interest}</p>
-            </div>
-          ))
-        }
-      </div>
-    </section>
   </div>
 </Layout>

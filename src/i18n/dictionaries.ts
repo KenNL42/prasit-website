@@ -19,7 +19,6 @@ const en = {
     publications: 'Publications',
     photos: 'Photos',
     contact: 'Contact',
-    cta: 'Get in touch',
     switchTo: 'Switch to Thai',
   },
   common: {
@@ -55,17 +54,11 @@ const en = {
     intro:
       'An anthropologist of ethnicity and indigenous studies — with a particular focus on how state government, regionalization and globalization shape ethnic and indigenous life in northern Thailand. My work appears in both English and Thai, and this site gathers my publications, photos, and relevant archives in one place.',
     browsePublications: 'Browse publications',
-    viewGalleries: 'View fieldwork galleries',
+    viewGalleries: 'View photos',
     ctaTitle: 'Interested in collaboration or fieldwork exchange?',
     ctaText:
       'I welcome correspondence from students, colleagues and institutions working on indigenity  and the anthropology of Hmong.',
     getInTouch: 'Get in touch',
-    interests: [
-      'Indegenious',
-      'Hmong',
-      'Religious',
-      'Ethnography of Northern Thailand',
-    ],
   },
   about: {
     title: 'Biography',
@@ -80,7 +73,6 @@ const en = {
       { degree: 'M.A. in Population and Social Research', place: 'Mahidol University, Thailand', year: '1988' },
       { degree: 'B.A. in Political Science', place: 'Ramkhamhaeng University, Thailand', year: '1985' },
     ],
-    researchInterests: 'Research interests',
   },
   publications: {
     title: 'Research publications',
@@ -140,7 +132,6 @@ const th: Dictionary = {
     publications: 'สิ่งพิมพ์',
     photos: 'ภาพถ่าย',
     contact: 'ติดต่อ',
-    cta: 'ติดต่อฉัน',
     switchTo: 'เปลี่ยนเป็นภาษาไทย',
   },
   common: {
@@ -176,19 +167,11 @@ const th: Dictionary = {
     intro:
       'นักมานุษยวิทยาด้านชาติพันธุ์สัมพันธ์และชนพื้นเมืองศึกษา เน้นอิทธิพลของรัฐชาติ ความเป็นภูมิภาคและกระแสโลกาภิวัตน์ที่ส่งผลต่อกลุ่มชาติพันธุ์และชนพื้นเมืองในภาคเหนือของประเทศไทย ข้อมูลในนี้มีทั้งภาษาไทยและอังกฤษ เน้นการรวบรวมงานตีพิมพ์ของผม ภาพถ่ายและเอกสารอื่นที่เกี่ยวข้อง',
     browsePublications: 'ดูสิ่งพิมพ์',
-    viewGalleries: 'ชมภาพภาคสนาม',
+    viewGalleries: 'ชมภาพถ่าย',
     ctaTitle: 'สนใจร่วมมือวิจัยหรือแลกเปลี่ยนภาคสนามหรือไม่?',
     ctaText:
       'ผมยินดีรับการติดต่อจากนักศึกษา เพื่อนร่วมงาน และสถาบันที่ทำงานด้านศาสนา พิธีกรรม มรดกวัฒนธรรม และมานุษยวิทยาแห่งเอเชียตะวันออกเฉียงใต้',
     getInTouch: 'ติดต่อ',
-    interests: [
-      'ศาสนาและพิธีกรรม',
-      'ความทรงจำและมรดกวัฒนธรรม',
-      'วัตถุวัฒนธรรม',
-      'ชาติพันธุ์วรรณนาแห่งเอเชียตะวันออกเฉียงใต้',
-      'พหุนิยมทางศาสนา',
-      'มานุษยวิทยาพิพิธภัณฑ์',
-    ],
   },
   about: {
     title: 'ประวัติย่อ',
@@ -204,7 +187,6 @@ const th: Dictionary = {
       { degree: 'ปริญญาโท สาขาวิชาวิจัยประชากรและสังคม', place: 'มหาวิทยาลัยมหิดล', year: 'พ.ศ. 2531' },
       { degree: 'ปริญญาตรี สาขารัฐศาสตร์', place: 'มหาวิทยาลัยรามคำแหง', year: 'พ.ศ. 2528' },
     ],
-    researchInterests: 'ความสนใจวิจัย',
   },
   publications: {
     title: 'สิ่งพิมพ์วิจัย',
