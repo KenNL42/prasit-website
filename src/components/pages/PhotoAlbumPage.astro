@@ -69,38 +69,16 @@ const galleryLd = [
     <!-- Header -->
     <header class="max-w-3xl">
       <h1 class="font-serif text-4xl font-semibold leading-tight text-ink">{album.data.title}</h1>
-      <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-ink-soft">
-        {
-          formattedDate && (
-            <span class="inline-flex items-center gap-2">
-              <Icon name="calendar" class="h-4 w-4 text-navy" />
-              <time datetime={album.data.date!.toISOString()}>{formattedDate}</time>
-            </span>
-          )
-        }
-        {
-          album.data.location && (
-            <span class="inline-flex items-center gap-2">
-              <Icon name="location" class="h-4 w-4 text-navy" />
-              {album.data.location}
-            </span>
-          )
-        }
-        <span class="inline-flex items-center gap-2">
-          <Icon name="university" class="h-4 w-4 text-navy" />
-          {t.common.photos(photos.length)}
-        </span>
-      </div>
     </header>
 
     <!-- Description -->
     {
       lang === 'th' && hasThaiDescription ? (
-        <div class="mt-6 max-w-3xl whitespace-pre-line text-[15px] leading-relaxed text-ink-soft">
+        <div class="mt-6 whitespace-pre-line text-[15px] leading-relaxed text-ink-soft">
           {descriptionTh}
         </div>
       ) : hasEnglishDescription ? (
-        <div class="prose-content mt-6 max-w-3xl">
+        <div class="prose-content mt-6">
           <Content />
         </div>
       ) : null
