@@ -36,7 +36,7 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 ## Project layout (this site)
 
 - **Content (Markdown):** `src/content/publications/en|th/*.md` (one file per publication,
-  abstract in the body), `src/content/photos/*.md` (one file per person/photo album), `src/content/archives/*.md` (PDF-less publications listed under 'Relevant Archives'), and
+  abstract in the body), `src/content/photos/*.md` (one file per person/photo album), `src/content/archives/bibliography.md` (ONE file: the whole Relevant Archives citation list, rendered as Markdown), and
   `src/content/about/*.md` (About-page biography blocks, ordered via `order` frontmatter; each
   block may carry an optional `image` + `caption`/`captionTh`, a `textTh` translation, and
   `imageOnly: true` to render a standalone centered figure instead of a text-and-image row).

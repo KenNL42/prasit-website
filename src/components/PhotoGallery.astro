@@ -143,8 +143,11 @@ const emptyMessage =
   });
 
   lightbox?.addEventListener('click', (event) => {
+    // NOTE: use Element, not HTMLElement — clicks on the button icons land
+    // on SVG elements (SVGPathElement is not an HTMLElement), and the guard
+    // previously swallowed those clicks, breaking next/back/close.
     const target = event.target;
-    if (!(target instanceof HTMLElement)) return;
+    if (!(target instanceof Element)) return;
     if (target.closest('[data-lightbox-close]') || target === lightbox) close();
     if (target.closest('[data-lightbox-prev]')) show(currentIndex - 1);
     if (target.closest('[data-lightbox-next]')) show(currentIndex + 1);

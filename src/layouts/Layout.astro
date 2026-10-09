@@ -39,7 +39,15 @@ const alternateUrls = locales.map((locale) => ({
   url: getAbsoluteLocaleUrl(locale, neutral === '/' ? undefined : neutral),
 }));
 
-const fullTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
+// Localized identity: full name (first + last) and full name + title.
+const displayName = lang === 'th' ? SITE.nameTh : SITE.name;
+const displayTitle = lang === 'th' ? SITE.titleTh : SITE.title;
+
+// Home page: "Full Name — Title"; other pages: "Page — Full Name".
+const fullTitle = title === SITE.name || title === SITE.nameTh
+  ? `${displayName} — ${displayTitle}`
+  : `${title} — ${displayName}`;
+
 const ogImage = new URL('/og-image.png', SITE.url).toString();
 const ogLocale = lang === 'th' ? 'th_TH' : 'en_US';
 
@@ -47,10 +55,10 @@ const ogLocale = lang === 'th' ? 'th_TH' : 'en_US';
 const siteGraph = [
   {
     '@type': 'WebSite',
-    name: SITE.name,
+    name: displayName,
     url: SITE.url,
     description: SITE.description,
-    inLanguage: 'en',
+    inLanguage: lang === 'th' ? 'th' : 'en',
   },
   {
     '@type': 'Organization',
@@ -68,7 +76,7 @@ const siteGraph = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <meta name="author" content={SITE.name} />
+    <meta name="author" content={`${displayName}, ${displayTitle}`} />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#1e3a5f" />
     <meta name="generator" content={Astro.generator} />
@@ -83,7 +91,7 @@ const siteGraph = [
 
     <!-- Open Graph -->
     <meta property="og:type" content={type} />
-    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:site_name" content={displayName} />
     <meta property="og:locale" content={ogLocale} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />

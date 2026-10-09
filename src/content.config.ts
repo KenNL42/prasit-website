@@ -74,22 +74,17 @@ const photos = defineCollection({
 });
 
 /**
- * Relevant Archives — publications with NO downloadable PDF. One Markdown
- * file per work, listed on /publications/archives so viewers can read the
- * titles and search for the articles themselves.
+ * Relevant Archives — publications with NO downloadable PDF.
+ *
+ * This is a SINGLE markdown file whose body is the whole bibliography /
+ * citation list (src/content/archives/bibliography.md). Paste your
+ * citations there as a Markdown list — no need to manage one file per
+ * work. The body is rendered as-is on /publications/archives (both
+ * languages share the same content).
  */
 const archives = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/archives' }),
-  schema: z.object({
-    title: z.string(),
-    year: z.number(),
-    authors: z.array(z.string()).default([]),
-    /** Journal / book / venue name. */
-    journal: z.string().optional(),
-    /** "en" or "th" — display language hint. */
-    language: z.enum(['en', 'th']).default('en'),
-    doi: z.string().optional(),
-  }),
+  // No schema: the file is free-form Markdown (any frontmatter is allowed).
 });
 
 /**

@@ -1,7 +1,8 @@
 ---
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
 import Layout from '../../layouts/Layout.astro';
 import Icon from '../Icon.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import { getDictionary, type Locale } from '../../i18n';
 
 interface Props {
@@ -12,39 +13,24 @@ const { lang } = Astro.props;
 const t = getDictionary(lang);
 const prefix = lang === 'th' ? '/th' : '';
 
-const entries = (await getCollection('archives')).sort((a, b) => b.data.year - a.data.year);
+// The whole bibliography lives in ONE markdown file
+// (src/content/archives/bibliography.md) — render its body as-is.
+const [entry] = await getCollection('archives');
+const { Content } = entry ? await render(entry) : { Content: undefined };
 
 const metaDescription =
   lang === 'th'
     ? 'รายการผลงานตีพิมพ์ที่ไม่มีไฟล์ PDF สำหรับดาวน์โหลด — ผู้เข้าชมสามารถค้นหาบทความได้จากชื่อเรื่อง'
     : 'Publications without a downloadable PDF — read the titles and search for the articles yourself.';
 
-// schema.org ItemList of the archived works.
+// schema.org WebPage node for the archives page.
 const archivesLd = [
   {
-    '@type': 'ItemList',
+    '@type': 'WebPage',
     name: t.publications.archivesTitle,
-    itemListElement: entries.map((entry, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      item: {
-        '@type': 'ScholarlyArticle',
-        name: entry.data.title,
-        author: entry.data.authors.map((name) => ({ '@type': 'Person', name })),
-        datePublished: String(entry.data.year),
-        inLanguage: entry.data.language === 'th' ? 'th' : 'en',
-        ...(entry.data.journal
-          ? { isPartOf: { '@type': 'Periodical', name: entry.data.journal } }
-          : {}),
-        ...(entry.data.doi ? { doi: entry.data.doi } : {}),
-      },
-    })),
+    url: getAbsoluteLocaleUrl(lang, '/publications/archives'),
   },
 ];
-
-/** Google Scholar search URL for a title — lets visitors find the article themselves. */
-const scholarSearch = (title: string) =>
-  `https://scholar.google.com/scholar?q=${encodeURIComponent(title)}`;
 ---
 
 <Layout title={t.publications.archivesTitle} description={metaDescription} lang={lang} jsonLd={archivesLd}>
@@ -64,42 +50,15 @@ const scholarSearch = (title: string) =>
     </div>
 
     {
-      entries.length > 0 ? (
-        <ul class="mt-10 space-y-4">
-          {entries.map((entry) => (
-            <li
-              lang={entry.data.language === 'th' ? 'th' : 'en'}
-              class="flex flex-col gap-3 rounded-xl border border-line bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between"
-            >
-              <div>
-                <p class="font-serif text-lg font-semibold leading-snug text-ink">{entry.data.title}</p>
-                {
-                  entry.data.authors.length > 0 && (
-                    <p class="mt-1 text-sm text-ink-soft">{entry.data.authors.join(' · ')}</p>
-                  )
-                }
-                <p class="mt-1 text-sm text-ink-soft">
-                  {entry.data.year}
-                  {entry.data.journal && <span class="italic"> · {entry.data.journal}</span>}
-                </p>
-              </div>
-              <a
-                href={scholarSearch(entry.data.title)}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex w-fit shrink-0 items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-medium text-navy transition-colors hover:border-navy hover:text-navy-light"
-              >
-                {lang === 'th' ? 'ค้นหาบทความ' : 'Search the article'}
-                <Icon name="external" class="h-3.5 w-3.5" />
-              </a>
-            </li>
-          ))}
-        </ul>
+      entry && Content ? (
+        <div class="prose-content mt-10 max-w-4xl text-[15px]">
+          <Content />
+        </div>
       ) : (
         <div class="mt-10 rounded-xl border border-dashed border-line bg-paper-dark p-12 text-center text-sm text-ink-soft">
           {lang === 'th'
-            ? 'ยังไม่มีรายการ กรุณาเพิ่มไฟล์ Markdown ใน src/content/archives/'
-            : 'No entries yet. Add Markdown files under src/content/archives/ to list them here.'}
+            ? 'ยังไม่มีรายการ กรุณาเพิ่มเนื้อหาในไฟล์ src/content/archives/bibliography.md'
+            : 'No entries yet. Add your bibliography to src/content/archives/bibliography.md.'}
         </div>
       )
     }

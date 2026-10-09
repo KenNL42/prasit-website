@@ -50,6 +50,6 @@ export const SITE = {
     'Religious Pluralism',
     'Museum Anthropology',
   ],
-} as const;
+};
 
 export type SiteConfig = typeof SITE;

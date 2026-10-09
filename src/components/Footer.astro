@@ -50,7 +50,9 @@ const links = [
       </p>
       <p class="mt-3 flex items-start gap-2 text-sm text-ink-soft">
         <Icon name="location" class="mt-0.5 h-4 w-4 shrink-0 text-navy" />
-        <span>{address.join(' · ')}</span>
+        <span lang={lang === 'th' ? 'th' : 'en'}>
+          {address.map((line) => <span class="block">{line}</span>)}
+        </span>
       </p>
     </div>
   </div>

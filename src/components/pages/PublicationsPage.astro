@@ -15,7 +15,6 @@ const prefix = lang === 'th' ? '/th' : '';
 const publications = await getCollection('publications');
 const enCount = publications.filter((p) => p.data.language === 'en').length;
 const thCount = publications.filter((p) => p.data.language === 'th').length;
-const archiveCount = (await getCollection('archives')).length;
 
 const metaDescription =
   lang === 'th'
@@ -81,7 +80,6 @@ const metaDescription =
           </h2>
           <p class="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">
             {t.publications.archivesText}
-            {archiveCount > 0 && ` ${t.common.entries(archiveCount)}.`}
           </p>
         </div>
         <a

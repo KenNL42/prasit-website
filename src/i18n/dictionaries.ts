@@ -3,9 +3,14 @@
  *
  * `en` defines the canonical structure (typed via `typeof en`); `th` must
  * cover the same keys — the compiler enforces this. Content that is itself
- * language-specific (publication abstracts, event photo captions) lives in
- * the content collections, not here.
+ * language-specific (publication abstracts, photo captions) lives in the
+ * content collections, not here.
+ *
+ * Identity fields (name, affiliation, description) are pulled from
+ * `site.config.ts` so pages can read everything through `t.home.*` while
+ * the config stays the single source of truth.
  */
+import { SITE } from '../site.config';
 
 const en = {
   nav: {
@@ -41,11 +46,16 @@ const en = {
     Other: 'Other',
   },
   home: {
+    // Identity fields — sourced from site.config.ts (single source of truth).
+    name: SITE.name,
+    nameAndTitle: SITE.nameAndTitle,
+    affiliation: SITE.affiliation,
+    description: SITE.description,
+    portraitLabel: 'portrait',
     intro:
       'An anthropologist of ethnicity and indigenous studies — with a particular focus on how state government, regionalization and globalization shape ethnic and indigenous life in northern Thailand. My work appears in both English and Thai, and this site gathers my publications, photos, and relevant archives in one place.',
     browsePublications: 'Browse publications',
     viewGalleries: 'View fieldwork galleries',
-    interestsLabel: 'Research interests',
     ctaTitle: 'Interested in collaboration or fieldwork exchange?',
     ctaText:
       'I welcome correspondence from students, colleagues and institutions working on indigenity  and the anthropology of Hmong.',
@@ -157,11 +167,16 @@ const th: Dictionary = {
     Other: 'อื่น ๆ',
   },
   home: {
+    // Identity fields — Thai variants from site.config.ts.
+    name: SITE.nameTh,
+    nameAndTitle: SITE.nameAndTitleTh,
+    affiliation: SITE.affiliationTh,
+    description: SITE.descriptionTh,
+    portraitLabel: 'ภาพถ่ายบุคคล',
     intro:
       'นักมานุษยวิทยาด้านชาติพันธุ์สัมพันธ์และชนพื้นเมืองศึกษา เน้นอิทธิพลของรัฐชาติ ความเป็นภูมิภาคและกระแสโลกาภิวัตน์ที่ส่งผลต่อกลุ่มชาติพันธุ์และชนพื้นเมืองในภาคเหนือของประเทศไทย ข้อมูลในนี้มีทั้งภาษาไทยและอังกฤษ เน้นการรวบรวมงานตีพิมพ์ของผม ภาพถ่ายและเอกสารอื่นที่เกี่ยวข้อง',
     browsePublications: 'ดูสิ่งพิมพ์',
     viewGalleries: 'ชมภาพภาคสนาม',
-    interestsLabel: 'ความสนใจวิจัย',
     ctaTitle: 'สนใจร่วมมือวิจัยหรือแลกเปลี่ยนภาคสนามหรือไม่?',
     ctaText:
       'ผมยินดีรับการติดต่อจากนักศึกษา เพื่อนร่วมงาน และสถาบันที่ทำงานด้านศาสนา พิธีกรรม มรดกวัฒนธรรม และมานุษยวิทยาแห่งเอเชียตะวันออกเฉียงใต้',

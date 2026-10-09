@@ -16,13 +16,6 @@ const t = getDictionary(lang);
 const prefix = lang === 'th' ? '/th' : '';
 const cover = coverPhotoUrl(album.data.album, album.data.cover);
 const photoCount = listAlbumPhotos(album.data.album).length;
-const formattedDate = album.data.date
-  ? album.data.date.toLocaleDateString(lang === 'th' ? 'th-TH' : 'en-GB', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  : undefined;
 ---
 
 <a

@@ -1,7 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Icon from '../Icon.astro';
-import { SITE } from '../../site.config';
 import { personLd } from '../../lib/seo';
 import { getDictionary, type Locale } from '../../i18n';
 
@@ -13,17 +12,12 @@ const { lang } = Astro.props;
 const t = getDictionary(lang);
 const prefix = lang === 'th' ? '/th' : '';
 
-const description =
-  lang === 'th'
-    ? SITE.descriptionTh
-    : SITE.description;
-
 // schema.org Person — helps search engines and Google Scholar-style
 // crawlers associate the site with the author's academic identity.
 const personLdNode = [personLd()];
 ---
 
-<Layout title={lang === 'th' ? SITE.nameTh : SITE.name} description={description} lang={lang} jsonLd={personLdNode}>
+<Layout title={t.home.name} description={t.home.description} lang={lang} jsonLd={personLdNode}>
   <!-- Hero -->
   <section class="relative overflow-hidden">
     <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-steel/10 blur-3xl" aria-hidden="true"></div>
@@ -32,9 +26,9 @@ const personLdNode = [personLd()];
     <div class="mx-auto grid max-w-6xl gap-12 px-4 pb-16 pt-14 sm:px-6 md:grid-cols-[1.4fr_1fr] md:items-center md:pt-20">
       <div>
         <h1 class="font-serif text-4xl font-semibold leading-tight text-ink sm:text-5xl">
-          {lang === 'th' ? SITE.nameAndTitleTh : SITE.nameAndTitle}
+          {t.home.nameAndTitle}
         </h1>
-        <p class="mt-3 text-base text-ink-soft">{lang === 'th' ? SITE.affiliationTh : SITE.affiliation}</p>
+        <p class="mt-3 text-base text-ink-soft">{t.home.affiliation}</p>
         <p class="mt-6 leading-relaxed text-ink-soft">{t.home.intro}</p>
         <div class="mt-8 flex flex-wrap gap-3">
           <a
@@ -58,26 +52,10 @@ const personLdNode = [personLd()];
         <img
           class="rounded-xl border border-line bg-white shadow-sm"
           src="/portrait.jpg"
-          alt={`${lang === 'th' ? SITE.nameTh : SITE.name} — ${lang === 'th' ? 'ภาพถ่ายบุคคล' : 'portrait'}`}
+          alt={`${t.home.name} — ${t.home.portraitLabel}`}
           width="320"
           height="400"
         />
-      </div>
-    </div>
-  </section>
-
-  <!-- Research interests -->
-  <section class="border-y border-line bg-paper-dark">
-    <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-      <div class="flex flex-wrap items-center gap-2.5">
-        <span class="mr-2 text-xs font-semibold uppercase tracking-widest text-ink-soft">{t.home.interestsLabel}</span>
-        {
-          t.home.interests.map((interest) => (
-            <span class="rounded-full border border-line bg-white px-4 py-1.5 text-sm text-ink-soft">
-              {interest}
-            </span>
-          ))
-        }
       </div>
     </div>
   </section>

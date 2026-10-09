@@ -174,23 +174,19 @@ Rendering rules on `/photos/<slug>` (`src/components/pages/PhotoAlbumPage.astro`
 ### 3.3 Relevant Archives (`/publications/archives`)
 
 Publications **without a downloadable PDF**, listed so viewers can read the titles and search for
-the articles themselves. One Markdown file per work:
+the articles themselves. The bibliography lives in **one single Markdown file** —
+`src/content/archives/bibliography.md` — paste your whole citation list there as a Markdown list
+(no per-work files to manage):
 
 ```markdown
----
-title: "Hmong Diaspora and the Politics of Return"
-authors:
-  - "Niran Chanthana"
-year: 2019
-journal: "Asian Ethnicity"      # optional
-language: "en"                  # "en" | "th"
-doi: "10.1080/…"               # optional
----
+<!-- src/content/archives/bibliography.md -->
+- Leepreecha, P. (2023). "Hmong Ritual Practice and Social Change in Northern Thailand." *Journal of the Siam Society*, 111(1), 45–72.
+- ลีปรีชา, ป. (2564). "เครือญาติและความทรงจำ…" *วารสารสังคมศาสตร์…*, 33(2), 1–24.
 ```
 
-Each entry renders title, authors, year/journal and a **"Search the article"** button linking to
-Google Scholar (`scholar.google.com/scholar?q=<title>`). Sorted by year descending. The
-publications hub shows a "Relevant Archives" card linking here.
+The page renders the file's Markdown body as-is (both languages share the same content; only the
+surrounding UI text is localized). The publications hub shows a "Relevant Archives" card linking
+here.
 
 ### 3.4 About-page biography blocks
 
