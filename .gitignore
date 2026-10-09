@@ -24,8 +24,14 @@ pnpm-debug.log*
 .idea/
 
 # generated placeholder PDFs and images (see scripts/generate-placeholders.mjs)
-public/publications_english/*.pdf
-public/publications_thai/*.pdf
+# Note: real publication PDFs in these folders ARE tracked — only the
+# placeholder file names below are ignored.
+public/publications_english/sacred-landscapes-north-thailand.pdf
+public/publications_english/material-culture-politics-belonging.pdf
+public/publications_english/fieldwork-ethics-post-conflict.pdf
+public/publications_english/soundscapes-temple-festivals.pdf
+public/publications_thai/phithikam-khwam-songjam.pdf
+public/publications_thai/chatiphan-wannakam-sathapattayakam.pdf
 public/pictures/*/photo-*.svg
 
 .vscode/
