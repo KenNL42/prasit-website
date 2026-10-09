@@ -6,7 +6,7 @@
 
 export const SITE = {
   /** Base URL used for sitemap + canonical links. Keep the trailing slash off. */
-  url: 'https://yourname.example.edu',
+  url: 'https://kennl42.github.io',
   /** Short name shown in the navigation bar. */
   name: 'Prasit Leepreecha',
   /** Thai version of the name (used on /th/ pages). */
