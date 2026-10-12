@@ -5,8 +5,8 @@ authors:
   - "Prasit Leepreecha"
   - "Urai Yangcheepsutjarit"
 year: 2017
-type: "Journal Article"
 journal: "Asian Ethnicity"
+type: "Journal Article"
 volume: "18"
 issue: "4"
 pages: "543-562"
@@ -14,6 +14,7 @@ language: "en"
 pdf: "Baird, Ian, Prasit Leepreecha and Urai Yangcheepsujarit 2017 Who should be considered Indigenous_online.pdf"
 doi: "10.1080/14631369.2016.1268044"
 tags: ["ethnic groups", "indigenous peoples", "indigeneity", "Thailand"]
+citation: "2017 “Who should be considered ‘Indigenous’? A survey of ethnic groups in northern Thailand,” Asian Ethnicity 18(4): 543-562."
 ---
 
 On 22 May 2014, the Thai military conducted a coup d’état and discarded the previous constitution. In April 2015, a new draft constitution was prepared. Although eventually rejected by the military, it represented an exciting moment for

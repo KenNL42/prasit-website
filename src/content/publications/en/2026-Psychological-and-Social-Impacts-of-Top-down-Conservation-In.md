@@ -1,9 +1,12 @@
 ---
-title: "Psychological and Social Impacts of Top-down Conservation Initiatives on Indigenous Communities: Lessons from the Announcement of two Royal Decrees"
+title: "Psychological and Social Impacts of Top-down Conservation Initiatives on Indigenous Communities: Lessons from the Announcement of two Royal Decrees in Thailand"
 authors:
   - "Prasit Leepreecha"
 year: 2026
-type: "Book Chapter"
+journal: "Human Ecology"
+type: "Journal Article"
+volume: "54"
+issue: "1"
 language: "en"
 pdf: "Haenssgen, Marco J. et al 2025 Psychological and Social Impacts_Indigenous Communties_Two Royal Decrees.pdf"
 citation: "2026 Psychological and Social Impacts of Top-down Conservation Initiatives on Indigenous Communities: Lessons from the Announcement of two Royal Decrees in Thailand. Human Ecology, 54(1)."

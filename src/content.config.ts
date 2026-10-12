@@ -5,8 +5,8 @@ import { glob } from 'astro/loaders';
 /**
  * Publication entries. One Markdown file per publication:
  *
- *   src/content/publications/en/2024-sacred-landscapes.md   → English
- *   src/content/publications/th/2566-phithikam.md           → Thai
+ *   src/content/publications/en/2025-voices-of-the-voiceless.md   → English
+ *   src/content/publications/th/2541-hmong-and-drug.md            → Thai
  *
  * The PDF filename stored in `pdf` is resolved against
  * `public/publications_english/` (language: "en") or
@@ -33,7 +33,7 @@ const publications = defineCollection({
     /** "en" or "th" — decides which PDF folder is used and the display language. */
     language: z.enum(['en', 'th']),
     /**
-     * PDF file name inside the language folder (e.g. "sacred-landscapes.pdf").
+     * PDF file name inside the language folder (e.g. "voices-of-the-voiceless.pdf").
      * A value starting with "/" is treated as an absolute path instead.
      * Omit if there is no downloadable file.
      */

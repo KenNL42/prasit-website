@@ -3,7 +3,8 @@ title: "Heroes of the Plain of Jars: Hmong Monuments and Social Memory in Laos a
 authors:
   - "Prasit Leepreecha"
 year: 2020
-type: "Book Chapter"
+journal: "Journal of Mekong Societies"
+type: "Journal Article"
 volume: "16"
 issue: "3"
 pages: "44-78"

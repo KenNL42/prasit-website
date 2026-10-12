@@ -3,7 +3,8 @@ title: "Becoming Indigenous Peoples in Thailand"
 authors:
   - "Prasit Leepreecha"
 year: 2019
-type: "Book Chapter"
+journal: "Journal of Southeast Asian Studies"
+type: "Journal Article"
 volume: "50"
 issue: "1"
 pages: "32-50"

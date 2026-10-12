@@ -3,7 +3,8 @@ title: "Hmong Across Borders or Borders Across Hmong? Social and Political Influ
 authors:
   - "Prasit Leepreecha"
 year: 2014
-type: "Book Chapter"
+journal: "Hmong Studies Journal"
+type: "Journal Article"
 volume: "15"
 issue: "2"
 pages: "1-12"

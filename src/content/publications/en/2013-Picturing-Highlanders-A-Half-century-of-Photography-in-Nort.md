@@ -1,5 +1,5 @@
 ---
-title: "Picturing Highlanders: A Half-century of Photography"
+title: "Picturing Highlanders: A Half-century of Photography in Northern Thailand"
 authors:
   - "Prasit Leepreecha"
 year: 2013

@@ -3,7 +3,8 @@ title: "Constructing Symbolic Value in Marketing Silver Crafts of Iu Mien Entrep
 authors:
   - "Prasit Leepreecha"
 year: 2025
-type: "Book Chapter"
+journal: "Economic Anthropology"
+type: "Journal Article"
 language: "en"
 pdf: "Yangcheepsujarit, Urai and Prasit Leepreecha 2025 Constructing Symbolic Value in Marketing Silver Crafts of Iu Mien Entrepreneurs in Thailand.pdf"
 citation: "2025. “Constructing Symbolic Value in Marketing Silver Crafts of Iu Mien Entrepreneurs in Thailand,” Economic Anthropology, (2025). E70011"

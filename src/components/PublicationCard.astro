@@ -32,7 +32,7 @@ const langTag = pub.data.language === 'th' ? 'th' : 'en';
     <span class="rounded-full bg-paper-dark px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-navy">
       {t.typeLabels[pub.data.type] ?? pub.data.type}
     </span>
-    <span class="text-sm text-ink-soft">{pub.data.year}</span>
+    <span class="text-sm text-ink-soft">{pub.data.language === 'th' && lang === 'th' ? pub.data.year + 543 : pub.data.year}</span>
     {
       pub.data.language === 'th' && (
         <span class="rounded-full bg-navy px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-paper">

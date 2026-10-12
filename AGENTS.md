@@ -33,7 +33,7 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 - `npm run generate:placeholders` — create sample PDFs/images (never overwrites existing files)
 - `npm run generate:og` — (re)generate OG share image + apple-touch icon (auto-runs via `prebuild`)
 - `npm run convert:bibliography` — regenerate the Relevant Archives bibliography from `resources/ผลงานวิชาการ.docx` (auto-runs via `prebuild`)
-- `python scripts/ingest_publications.py` — bulk-ingest publication/Thai-book PDFs from `resources/`: match citations, extract abstracts (text + OCR for scanned English), copy PDFs to `public/`, render book covers (`--english-only`, `--thai-only`, `--books-only` flags; `--review-only` renders Thai page-1 images to `scripts/abstract-review/` for manual abstract entry)
+- `python scripts/ingest_publications.py` — bulk-ingest publication/Thai-book PDFs from `resources/`: match citations to the bibliography, extract abstracts (text + OCR for scanned English), convert Buddhist→Gregorian years for Thai works, copy PDFs to `public/`, render book covers (`--english-only`, `--thai-only`, `--books-only` flags; `--review-only` renders Thai page-1 images to `scripts/abstract-review/` for manual abstract entry)
 
 ## Project layout (this site)
 
@@ -99,14 +99,15 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 12. **Generated vs committed assets:** `npm run generate:placeholders` output is git-ignored;
     `public/og-image.png` and `public/favicon-180.png` are committed. If the owner's name
     changes, update `INITIALS` in `scripts/generate-og-image.mjs` and `public/favicon.svg`.
-13. **Thai year display** (Buddhist Era) is handled only in the `th` dictionary's
-    `latestNote` (`year + 543`); keep Gregorian years in the Markdown frontmatter.
+13. **Thai year display** (Buddhist Era): keep **Gregorian years in the Markdown frontmatter**
+    for all publications (incl. Thai works — the bibliography's Buddhist years are converted
+    by `scripts/ingest_publications.py`). Display converts to Buddhist era on Thai pages only
+    for Thai publications (`PublicationCard`: `pub.data.language === 'th' && lang === 'th'`).
 
 ## Verification
 
 After changing components or pages, run `npm run check` and `npm run build`. Expected: 0 errors,
-1 benign hint (`AbstractToggle` Props interface), 18 pages (9 English at root + 9 Thai under
-`/th/`).
+3 benign hints, 20 pages (10 English at root + 10 Thai under `/th/`).
 
 ## Maintenance guide
 

@@ -49,6 +49,23 @@ def parse_bibliography():
             lang_sections['th'] = s
         elif s.startswith('บทความและหนังสือภาษาอังกฤษ'):
             lang_sections['en'] = s
+    # journal/vol/pages pattern: "Journal Name 12(3): 45-67." — works for
+    # English and Thai journal names, and for citations where the trailing
+    # comma of the title sits inside the closing quote ("title,” Journal").
+    JOURNAL_RE = re.compile(r'([\u0e00-\u0e7fA-Z][^,]{0,90}?)\s*,?\s*(\d+)\((\d+)\):\s*([\d\-–]+)')
+    # a chapter citation: "…” in Book Title, Editor (ed.), pp. 1-2."
+    CHAPTER_RE = re.compile(r'\s+in\s+(?=.*\(e?ds?\.\))')
+    # entries whose journal lacks a "vol(issue): pages" pattern
+    JOURNAL_OVERRIDES = {
+        'The Impact of Conservation and Land Use Transitions of the Livelihoods of Indigenous Peoples: A Narrative Review of the Northern Thai Highlands': 'Forest Policy and Economics',
+        'Constructing Symbolic Value in Marketing Silver Crafts of Iu Mien Entrepreneurs in Thailand': 'Economic Anthropology',
+        'Psychological and Social Impacts of Top-down Conservation Initiatives on Indigenous Communities: Lessons from the Announcement of two Royal Decrees in Thailand': 'Human Ecology',
+        'ประวัติศาสตร์ อัตลักษณ์และพื้นที่ทางสังคมของชาวม้งในประเทศจีน': 'สังคมศาสตร์',
+    }
+    # titles that are books, not chapters
+    BOOK_TYPES = {
+        'เทพารักษ์ล้านนา: จากหอผีสู่รูปปั้นศาลเจ้าและอนุสาวรีย์': 'Book',
+    }
     entries = {}
     for lang, sec in lang_sections.items():
         for line in sec.split('\n'):
@@ -65,35 +82,55 @@ def parse_bibliography():
             sub = m.group(2)
             rest = m.group(3)
             journal = volume = issue = pages = None
-            # journal/vol/pages pattern: "Journal Name 12(3): 45-67." or "Journal Name, 12(3): 45-67."
-            mj = re.search(r',\s*([A-Z][^,]{2,}?)\s*,?\s*(\d+)\((\d+)\):\s*([\d\-–]+)', rest)
             # quoted title
             q = re.match(r'^“(.*?)”[,]?\s*(.*)$', rest, re.S)
             if q:
                 title, after = q.group(1), q.group(2)
                 title = title.rstrip(' ,')
             else:
-                # unquoted: title up to the journal comma (or " in " for chapters)
+                # unquoted: split title from the journal ("title, Journal 1(2): 3-4.")
+                mj = JOURNAL_RE.search(rest)
                 if mj:
-                    title = rest[: mj.start()].strip()
+                    title = rest[: mj.start()].strip().rstrip(' ,')
                     after = rest[mj.start():]
                 else:
-                    mi = re.search(r'\s+in\s+', rest)
+                    mi = CHAPTER_RE.search(rest)
                     if mi:
                         title = rest[: mi.start()].strip()
                         after = rest[mi.start():]
                     else:
-                        m2 = re.match(r'^(.*?)[,]\s*(.*)$', rest)
-                        title, after = (m2.group(1).strip(), m2.group(2)) if m2 else (rest, '')
+                        # "Title. Journal, 54(1)." — no pages pattern (e.g. "Human Ecology, 54(1).")
+                        mj3 = re.search(r'\.\s*([\u0e00-\u0e7fA-Z][^,]{2,}?)\s*,?\s*(\d+)\(([\d\-–]+)\)\.?\s*$', rest)
+                        if mj3:
+                            title = rest[: mj3.start()].strip()
+                            after = rest[mj3.start():].lstrip('. ')
+                            journal = mj3.group(1).strip()
+                            volume, issue = mj3.group(2), mj3.group(3)
+                        else:
+                            m2 = re.match(r'^(.*?)[,]\s*(.*)$', rest)
+                            title, after = (m2.group(1).strip(), m2.group(2)) if m2 else (rest, '')
+            mj = JOURNAL_RE.search(after)
             if mj:
                 journal, volume, issue, pages = mj.group(1).strip(), mj.group(2), mj.group(3), mj.group(4)
             else:
                 mj2 = re.search(r'\b(\d+)\((\d+)\):\s*([\d\-–]+)', after)
                 if mj2:
                     volume, issue, pages = mj2.group(1), mj2.group(2), mj2.group(3)
+            if journal is None and title in JOURNAL_OVERRIDES:
+                journal = JOURNAL_OVERRIDES[title]
+            # strip a trailing "City: Publisher." tail from monograph titles
+            title = re.sub(r'\.\s*[\u0e00-\u0e7fA-Z][^,]{0,30}?:\s*[^,]+\.?\s*$', '', title).strip()
+            pub_type = 'Book Chapter'
+            for k, v in BOOK_TYPES.items():
+                if title.startswith(k):
+                    pub_type = v
+                    break
+            if pub_type == 'Book Chapter' and journal:
+                pub_type = 'Journal Article'
             entries.setdefault(lang, []).append({
                 'year': year, 'sub': sub, 'title': title, 'rest': after, 'full': text,
                 'journal': journal, 'volume': volume, 'issue': issue, 'pages': pages,
+                'type': pub_type,
             })
     return entries
 
@@ -232,20 +269,44 @@ def main():
         ingest_books()
 
 
+def longest_common_substring(a, b):
+    """Length of the longest common substring (Thai text has no spaces)."""
+    n, m = len(a), len(b)
+    if n == 0 or m == 0:
+        return 0
+    prev = [0] * (m + 1)
+    best = 0
+    for i in range(1, n + 1):
+        cur = [0] * (m + 1)
+        for j in range(1, m + 1):
+            if a[i - 1] == b[j - 1]:
+                cur[j] = prev[j - 1] + 1
+                if cur[j] > best:
+                    best = cur[j]
+        prev = cur
+    return best
+
+
 def match_entry(entries, pdf_name):
     """Best-effort match a PDF filename to a bibliography entry."""
-    name = pdf_name.lower()
+    name = pdf_name.lower().replace(' ', '')
     best = None
     best_score = 0
     for e in entries:
-        words = re.findall(r'[a-z0-9\u0e00-\u0e7f]+', e['title'].lower())
-        score = sum(1 for w in words if len(w) > 3 and w in name)
+        title = e['title'].lower()
+        score = 0
+        # English: word overlap
+        score += sum(1 for w in re.findall(r'[a-z0-9]+', title) if len(w) > 3 and w in name)
+        # Thai (no spaces): longest common substring
+        lcs = longest_common_substring(title.replace(' ', ''), name)
+        if lcs >= 6:
+            score += lcs // 3
         if e['year'] in name:
-            score += 2  # year match bonus
+            score += 2  # year match bonus (never enough on its own)
         if score > best_score:
             best_score = score
             best = e
-    if best_score >= 2:
+    if best_score >= 3:
         return best, best_score
     return None, 0
 
@@ -312,9 +373,7 @@ year: {year}
 """
         if journal:
             md += f'journal: "{journal}"\n'
-            md += f'type: "Journal Article"\n'
-        else:
-            md += f'type: "Book Chapter"\n'
+        md += f'type: "{entry.get("type", "Journal Article" if journal else "Book Chapter")}"\n'
         if volume:
             md += f'volume: "{volume}"\n'
         if issue:
@@ -364,20 +423,22 @@ def ingest_thai(entries):
         base = slugify(os.path.splitext(f)[0])
         imgs = render_review_images(src, os.path.join(review_dir, base))
         title = entry['title']
-        year = entry['year']
+        year = str(int(entry['year']) - 543)  # Buddhist era -> Gregorian in frontmatter
         citation = entry['full']
-        m2 = re.search(r'\b(\d+)\((\d+)\):\s*([\d\-]+)', entry['rest'])
-        volume = m2.group(1) if m2 else None
-        issue = m2.group(2) if m2 else None
-        pages = m2.group(3) if m2 else None
+        journal = entry.get('journal')
+        volume = entry.get('volume')
+        issue = entry.get('issue')
+        pages = entry.get('pages')
         slug = slugify(f"{year}-{title[:60]}")
         md = f"""---
 title: "{title}"
 authors:
   - "ประสิทธิ์ ลีปรีชา"
 year: {year}
-type: "Journal Article"
 """
+        if journal:
+            md += f'journal: "{journal}"\n'
+        md += f'type: "{entry.get("type", "Journal Article" if journal else "Book Chapter")}"\n'
         if volume:
             md += f'volume: "{volume}"\n'
         if issue:
