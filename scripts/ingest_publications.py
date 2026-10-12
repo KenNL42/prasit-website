@@ -325,9 +325,9 @@ def ingest_english(entries):
     # these three already have curated md files (with abstracts) — skip here,
     # they are updated by update_curated()
     curated = {
-        '_10prasit-2017-Who should be considered Indigenous.pdf',
-        '_4prasit-2009-Modern Education and Impact on Ethnic Minorities.pdf',
-        '_20prasit-2025-Voices of the Voiceless Cold War and the Hmong in Thailand.pdf',
+        '2017-Who should be considered Indigenous.pdf',
+        '2009-Modern Education and Impact on Ethnic Minorities.pdf',
+        '2025-Voices of the Voiceless Cold War and the Hmong in Thailand.pdf',
     }
     seen = set()
     for f in sorted(os.listdir(EN_SRC)):
@@ -407,8 +407,8 @@ def ingest_thai(entries):
     os.makedirs(review_dir, exist_ok=True)
     # these two already have curated md files with abstracts — skip md, still copy the PDF
     curated = {
-        '_1prasit-2541-Hmong and drug.pdf',
-        '_2prasit-2545-family and border.pdf',
+        '2541-Hmong and drug.pdf',
+        '2545-family and border.pdf',
     }
     for f in sorted(os.listdir(TH_SRC)):
         if not f.lower().endswith('.pdf'):
