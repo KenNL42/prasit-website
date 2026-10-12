@@ -123,4 +123,28 @@ const about = defineCollection({
   }),
 });
 
-export const collections = { publications, photos, about, archives };
+/**
+ * Thai Books — books (authored/edited) with PDFs and cover images.
+ *
+ *   src/content/thai_books/<slug>.md   → one file per book
+ *
+ * The PDF lives in public/books/<pdf> and the cover image (rendered from
+ * the book's first page) in public/books/covers/<cover>. Years are the
+ * Thai Buddhist era as printed (e.g. 2568) — these are Thai-only works.
+ */
+const thaiBooks = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/thai_books' }),
+  schema: z.object({
+    title: z.string(),
+    /** List of authors/editors. */
+    authors: z.array(z.string()).default([]),
+    /** Buddhist era year printed on the book (e.g. 2568). */
+    year: z.number(),
+    /** PDF file name inside public/books/. */
+    pdf: z.string(),
+    /** Cover image file name inside public/books/covers/. */
+    cover: z.string(),
+  }),
+});
+
+export const collections = { publications, photos, about, archives, thaiBooks };

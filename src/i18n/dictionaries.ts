@@ -92,6 +92,10 @@ const en = {
     archivesText:
       'Publications without a downloadable PDF. You can read the titles and search for the articles yourself.',
     viewArchives: 'Browse the archives',
+    booksTitle: 'Books in Thai',
+    booksCardText: 'Authored and edited books published in Thailand —',
+    viewBooks: 'Browse the books',
+    booksBreadcrumb: 'Books',
   },
   photos: {
     title: 'Photos',
@@ -206,6 +210,10 @@ const th: Dictionary = {
     archivesText:
       'รายการผลงานตีพิมพ์ที่ไม่มีไฟล์ PDF สำหรับดาวน์โหลด ผู้เข้าชมสามารถค้นหาบทความได้จากชื่อเรื่องด้วยตนเอง',
     viewArchives: 'ดูคลังเอกสารอ้างอิง',
+    booksTitle: 'หนังสือภาษาไทย',
+    booksCardText: 'หนังสือที่แต่งและบรรณาธิการ ตีพิมพ์ในประเทศไทย —',
+    viewBooks: 'ดูหนังสือทั้งหมด',
+    booksBreadcrumb: 'หนังสือ',
   },
   photos: {
     title: 'ภาพถ่าย',

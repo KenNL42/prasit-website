@@ -2,12 +2,12 @@
 title: "Voices of the Voiceless"
 authors:
   - "Prasit Leepreecha"
-year: 2005
+year: 2025
 type: "Book Chapter"
 journal: "Cold War Asia: Unlearning Narratives, Making New Histories"
-pages: "91-111"
+pages: "91-113"
 language: "en"
-pdf: "Leepreecha, Prasit 2005 Voices of the Voiceless_Cold War and the Hmong in Thailand.pdf"
+pdf: "Leepreecha, Prasit 2025 Voices of the Voiceless_Cold War and the Hmong in Thailand 03.pdf"
 tags: ["Cold War", "Hmong", "post-conflict"]
 ---
 

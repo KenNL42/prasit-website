@@ -15,6 +15,7 @@ const prefix = lang === 'th' ? '/th' : '';
 const publications = await getCollection('publications');
 const enCount = publications.filter((p) => p.data.language === 'en').length;
 const thCount = publications.filter((p) => p.data.language === 'th').length;
+const books = await getCollection('thaiBooks');
 
 const metaDescription =
   lang === 'th'
@@ -69,6 +70,28 @@ const metaDescription =
         </p>
       </a>
     </div>
+
+    <!-- Thai Books -->
+    <section class="mt-8 rounded-2xl border border-line bg-white p-8 shadow-sm">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 class="flex items-center gap-2 font-serif text-2xl font-semibold text-ink">
+            <Icon name="book" class="h-5 w-5 text-navy" />
+            {t.publications.booksTitle}
+          </h2>
+          <p class="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">
+            {t.publications.booksCardText} {t.common.entries(books.length)}.
+          </p>
+        </div>
+        <a
+          href={`${prefix}/publications/books`}
+          class="inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full bg-navy px-5 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-navy-light"
+        >
+          {t.publications.viewBooks}
+          <Icon name="arrow-right" class="h-4 w-4" />
+        </a>
+      </div>
+    </section>
 
     <!-- Relevant Archives -->
     <section class="mt-8 rounded-2xl border border-line bg-paper-dark p-8">

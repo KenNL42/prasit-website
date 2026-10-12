@@ -113,6 +113,16 @@ scripts/
 
 ## Adding a publication
 
+> **Bulk import from PDFs:** the one-off script `python scripts/ingest_publications.py` reads the
+> PDFs in `resources/English_publications/`, `resources/Thai_publications/` and
+> `resources/Thai_books/`, matches each to its citation in the bibliography, extracts the
+> abstract (from the PDF text, or via OCR for scanned English PDFs), writes the Markdown files
+> and copies the PDFs into `public/`. Thai PDFs are scanned images, so their abstracts are left
+> for manual review: run `python scripts/ingest_publications.py --review-only` to render
+> page-1 images into `scripts/abstract-review/index.html` and paste each บทคัดย่อ into the
+> matching `src/content/publications/th/*.md` body. Book covers are rendered automatically into
+> `public/books/covers/`.
+
 1. **Drop the PDF** into `public/publications_english/` (English) or
    `public/publications_thai/` (Thai).
 2. **Create a Markdown file** under `src/content/publications/en/` or `src/content/publications/th/`:
@@ -144,6 +154,30 @@ automatically. Entries are sorted by year (newest first), and a search box filte
 > **Thai support:** `language: "th"` renders the page with `lang="th"` and Thai-capable fonts,
 > and resolves the PDF against `public/publications_thai/`. Thai titles, abstracts and tags all
 > work natively.
+
+---
+
+## Thai Books (the "Books in Thai" page)
+
+Books live in `resources/Thai_books/` (PDFs) and are served from `public/books/` with rendered
+cover images in `public/books/covers/`. Each book is a Markdown file under
+`src/content/thai_books/`:
+
+```markdown
+---
+title: "เทพารักษ์ล้านนา: จากหอผีสู่รูปปั้นศาลเจ้าและอนุสาวรีย์"
+authors:
+  - "ประสิทธิ์ ลีปรีชา"
+year: 2560            # Buddhist era as printed on the book
+pdf: "ประสิทธิ์ ลีปรีชา 2560 เทพารักษ์ล้านนา_จากหอผีสู่รูปปั้นศาลเจ้าและอนุสาวรีย์.pdf"
+cover: "ประสิทธิ์-ลีปรีชา-2560-เทพารักษ์ล้านนา_จากหอผีสู่รูปปั้นศาลเจ้าและอนุสาวรีย์.jpg"
+---
+```
+
+The page (`/publications/books`, `/th/publications/books`) shows each book as a card with its
+cover image (the book's first page) and title; clicking opens the PDF. `npm run
+convert:bibliography` does not touch books — use `python scripts/ingest_publications.py
+--books-only` to regenerate covers and files from `resources/Thai_books/`.
 
 ---
 

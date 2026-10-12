@@ -35,3 +35,5 @@ public/publications_thai/chatiphan-wannakam-sathapattayakam.pdf
 public/pictures/*/photo-*.svg
 
 .vscode/
+# generated abstract-review images (python scripts/ingest_publications.py --review-only)
+scripts/abstract-review/

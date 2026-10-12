@@ -33,6 +33,7 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 - `npm run generate:placeholders` — create sample PDFs/images (never overwrites existing files)
 - `npm run generate:og` — (re)generate OG share image + apple-touch icon (auto-runs via `prebuild`)
 - `npm run convert:bibliography` — regenerate the Relevant Archives bibliography from `resources/ผลงานวิชาการ.docx` (auto-runs via `prebuild`)
+- `python scripts/ingest_publications.py` — bulk-ingest publication/Thai-book PDFs from `resources/`: match citations, extract abstracts (text + OCR for scanned English), copy PDFs to `public/`, render book covers (`--english-only`, `--thai-only`, `--books-only` flags; `--review-only` renders Thai page-1 images to `scripts/abstract-review/` for manual abstract entry)
 
 ## Project layout (this site)
 
@@ -45,7 +46,7 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
   YAML literal style `|` — folded `>` merges list items onto one line.
 - **Content schemas:** `src/content.config.ts`. Uses the modern content-layer API —
   `loader: glob(...)` — required in Astro 7 (bare `type: 'content'` collections are skipped).
-- **Static files:** PDFs in `public/publications_english/` and `public/publications_thai/`; event
+- **Static files:** PDFs in `public/publications_english/` and `public/publications_thai/`; Thai book PDFs in `public/books/` with covers in `public/books/covers/` (book pages at `/publications/books`); event
   photos in `public/pictures/<album>/`. Photos are enumerated at build time via
   `src/lib/albums.ts`.
 - **Site-wide settings:** `src/site.config.ts` — identity in both languages: `name`/`nameTh`,
