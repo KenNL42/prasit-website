@@ -94,6 +94,29 @@
   font-weight: 600;
 }
 
+/* Headings in rendered Markdown (e.g. the archives bibliography). */
+.prose-content h2 {
+  margin-top: 2rem;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  border-bottom: 1px solid var(--color-line);
+  padding-bottom: 0.4rem;
+}
+
+.prose-content h2:first-child {
+  margin-top: 0;
+}
+
+.prose-content h3 {
+  margin-top: 1.5rem;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
 /* Abstracts: collapsed state clamps to 3 lines; expanded state shows all. */
 .abstract-collapsed {
   display: -webkit-box;
