@@ -37,3 +37,7 @@ public/pictures/*/photo-*.svg
 .vscode/
 # generated abstract-review images (python scripts/ingest_publications.py --review-only)
 scripts/abstract-review/
+
+# python
+__pycache__/
+*.pyc
