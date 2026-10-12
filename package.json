@@ -8,16 +8,18 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "prebuild": "node scripts/generate-og-image.mjs",
+    "prebuild": "node scripts/generate-og-image.mjs && node scripts/convert-bibliography.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "generate:placeholders": "node scripts/generate-placeholders.mjs",
     "generate:og": "node scripts/generate-og-image.mjs",
+    "convert:bibliography": "node scripts/convert-bibliography.mjs",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
     "@tailwindcss/vite": "^4.3.3",
+    "adm-zip": "^0.6.1",
     "astro": "^7.3.2",
     "marked": "^18.0.13",
     "tailwindcss": "^4.3.3"

@@ -1,10 +1,7 @@
 <!--
-  Relevant Archives — full academic works bibliography.
-  Source: resources/ผลงานวิชาการ (docx + pdf), extracted and formatted as
-  Markdown. Format: two language sections, author groups, entries prefixed
-  by year (Buddhist era for Thai, Gregorian for English; ก/ข/ค or a/b/c
-  distinguish multiple works in the same year). Edit this file to add or
-  change entries — the page renders it as-is on /publications/archives.
+  Auto-generated from resources/ผลงานวิชาการ.docx by
+  scripts/convert-bibliography.mjs — do not edit by hand.
+  Edit the Word file and rebuild (or run npm run convert:bibliography).
 -->
 
 ## ผลงานวิชาการ

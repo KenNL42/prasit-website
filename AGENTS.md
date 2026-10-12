@@ -32,6 +32,7 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 - `npm run preview` — serve the production build locally
 - `npm run generate:placeholders` — create sample PDFs/images (never overwrites existing files)
 - `npm run generate:og` — (re)generate OG share image + apple-touch icon (auto-runs via `prebuild`)
+- `npm run convert:bibliography` — regenerate the Relevant Archives bibliography from `resources/ผลงานวิชาการ.docx` (auto-runs via `prebuild`)
 
 ## Project layout (this site)
 

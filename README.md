@@ -102,7 +102,10 @@ src/
   components/
     pages/                ← shared page bodies rendered in both languages
   layouts/ components/ lib/ pages/ styles/
+resources/
+  ผลงานวิชาการ.docx       ← master bibliography (Relevant Archives source of truth)
 scripts/
+  convert-bibliography.mjs   ← converts resources/ผลงานวิชาการ.docx → src/content/archives/bibliography.md (auto-runs on build)
   generate-placeholders.mjs  ← creates sample PDFs/images (safe to re-run)
 ```
 
@@ -165,6 +168,46 @@ Optional description of the event, in Markdown.
 
 Each person gets their own child page (`/photos/album3`) with a responsive photo grid and a
 lightbox viewer (keyboard accessible: arrows navigate, Esc closes).
+
+---
+
+## Relevant Archives — updating the bibliography from the Word file
+
+The **Relevant Archives** page (`/publications/archives`, `/th/publications/archives`) shows your
+full academic works bibliography. Its source of truth is the **Word document**
+`resources/ผลงานวิชาการ.docx`; the Markdown it renders
+(`src/content/archives/bibliography.md`) is **generated automatically** — on every build
+(`npm run build`, via `prebuild`) or manually with `npm run convert:bibliography`.
+
+### How to update it
+
+1. **Edit `resources/ผลงานวิชาการ.docx`** in Word, following the format rules below.
+2. **Rebuild or convert:** `npm run build` (auto-converts) or `npm run convert:bibliography`.
+3. Commit the changed `.docx` **and** the regenerated `bibliography.md`.
+
+> Use the **Word file**, not the PDF, as the master copy: Word text extracts cleanly for both
+> Thai and English, whereas this PDF's Thai text is not machine-readable. (Keep the PDF as a
+> published copy if you like — it is ignored by the converter.)
+
+### Format rules the Word file must follow
+
+The converter recognises the structure automatically:
+
+- **Section headers** on their own line, exactly:
+  `บทความและหนังสือภาษาไทย` and `บทความและหนังสือภาษาอังกฤษ`
+  (an optional `ผลงานวิชาการ` title line is also accepted).
+- **Solo works:** the author line (`ประสิทธิ์ ลีปรีชา` / `Prasit Leepreecha`) directly after the
+  section header, then each entry.
+- **Each entry starts with a 4-digit year** on the same line as the citation —
+  e.g. `2568ก  กลยุทธ์การเปลี่ยนศาสนา…` (Buddhist era, with ก/ข/ค for several works in one
+  year) or `2020a  “…`, `2020. “…` (Gregorian, a/b for several works).
+- **Co-authored works:** put the author names on their own line, then their entries below it.
+- **Separate author groups with a blank line.** Long citations may wrap over several lines —
+  continuation lines are joined into the entry automatically.
+- Keep entries in chronological order (newest first) within each group.
+
+That's it — the converter turns this into the same format the site already shows (sections,
+bold author groups, year-prefixed bullets).
 
 ---
 
