@@ -325,9 +325,9 @@ def ingest_english(entries):
     # these three already have curated md files (with abstracts) — skip here,
     # they are updated by update_curated()
     curated = {
-        'Baird, Ian, Prasit Leepreecha and Urai Yangcheepsujarit 2017 Who should be considered Indigenous_online.pdf',
-        'Buadaeng, Kwanchewan and Prasit Leepreecha 2009 Modern Education and Impact on Ethnic Minorities 02.pdf',
-        'Leepreecha, Prasit 2025 Voices of the Voiceless_Cold War and the Hmong in Thailand 03.pdf',
+        '_10prasit-2017-Who should be considered Indigenous.pdf',
+        '_4prasit-2009-Modern Education and Impact on Ethnic Minorities.pdf',
+        '_20prasit-2025-Voices of the Voiceless Cold War and the Hmong in Thailand.pdf',
     }
     seen = set()
     for f in sorted(os.listdir(EN_SRC)):
@@ -371,7 +371,7 @@ def ingest_english(entries):
         volume = entry.get('volume')
         issue = entry.get('issue')
         pages = entry.get('pages')
-        slug = slugify(f"{year}-{title[:60]}")
+        slug = os.path.splitext(f)[0]
         md = f"""---
 title: "{title}"
 authors:
@@ -407,8 +407,8 @@ def ingest_thai(entries):
     os.makedirs(review_dir, exist_ok=True)
     # these two already have curated md files with abstracts — skip md, still copy the PDF
     curated = {
-        'ประสิทธิ์ ลีปรีชา 2541 กลุ่มชาติพันธุ์ม้งกับปัญหายาเสพติด_สังคมศาสตร์.pdf',
-        'ประสิทธิ์ ลีปรีชา 2547 เครือญาติข้ามพรมแดนรัฐชาติ_กรณีกลุ่มชาติพันธุ์ม้ง.pdf',
+        '_1prasit-2541-Hmong and drug.pdf',
+        '_2prasit-2545-family and border.pdf',
     }
     for f in sorted(os.listdir(TH_SRC)):
         if not f.lower().endswith('.pdf'):
@@ -436,7 +436,7 @@ def ingest_thai(entries):
         volume = entry.get('volume')
         issue = entry.get('issue')
         pages = entry.get('pages')
-        slug = slugify(f"{year}-{title[:60]}")
+        slug = os.path.splitext(f)[0]
         md = f"""---
 title: "{title}"
 authors:
@@ -475,7 +475,7 @@ def ingest_books():
             continue
         src = os.path.join(BOOK_SRC, f)
         name = os.path.splitext(f)[0]
-        base = slugify(name)
+        base = name  # md + cover share the PDF's base name (traceable)
         # cover = first page rendered to jpg
         doc = pymupdf.open(src)
         pix = doc[0].get_pixmap(dpi=120)

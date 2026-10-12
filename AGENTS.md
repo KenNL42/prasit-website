@@ -46,7 +46,7 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
   YAML literal style `|` — folded `>` merges list items onto one line.
 - **Content schemas:** `src/content.config.ts`. Uses the modern content-layer API —
   `loader: glob(...)` — required in Astro 7 (bare `type: 'content'` collections are skipped).
-- **Static files:** PDFs in `public/publications_english/` and `public/publications_thai/`; Thai book PDFs in `public/books/` with covers in `public/books/covers/` (book pages at `/publications/books`); event
+- **Static files:** PDFs in `public/publications_english/` and `public/publications_thai/`; Thai book PDFs in `public/books/` with covers in `public/books/covers/` (book pages at `/publications/books`). **PDF/`pdf:` field/Markdown filename share the same base name** — `_<n>prasit-<year>-<short title>` (e.g. `_3prasit-2550-ระบบการศึกษาและภาษาในกระบวนการสร้างรัฐชาติไทย.pdf` ↔ the `.md` of the same name); renames go through `scripts/rename_publications.py`; event
   photos in `public/pictures/<album>/`. Photos are enumerated at build time via
   `src/lib/albums.ts`.
 - **Site-wide settings:** `src/site.config.ts` — identity in both languages: `name`/`nameTh`,
