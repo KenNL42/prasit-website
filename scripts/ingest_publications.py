@@ -288,7 +288,12 @@ def longest_common_substring(a, b):
 
 
 def match_entry(entries, pdf_name):
-    """Best-effort match a PDF filename to a bibliography entry."""
+    """Best-effort match a PDF filename to a bibliography entry.
+
+    Filenames are "<author> <year> <short title>". The year plus any
+    title overlap is the strongest signal; bare LCS is unreliable because
+    "ชาติพันธุ์" appears in nearly every Thai title.
+    """
     name = pdf_name.lower().replace(' ', '')
     best = None
     best_score = 0
@@ -302,7 +307,9 @@ def match_entry(entries, pdf_name):
         if lcs >= 6:
             score += lcs // 3
         if e['year'] in name:
-            score += 2  # year match bonus (never enough on its own)
+            score += 2  # year match bonus
+            if lcs >= 6 or any(len(w) > 3 for w in re.findall(r'[a-z0-9]+', title)):
+                score += 10  # year + title overlap = strong signal
         if score > best_score:
             best_score = score
             best = e
