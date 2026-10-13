@@ -75,7 +75,7 @@ const en = {
     ],
   },
   publications: {
-    title: 'Research publications',
+    title: 'Publications',
     englishCardTitle: 'Publications in English',
     englishCardText: 'Journal articles, book chapters and reviews for international readership —',
     thaiCardTitle: 'Publications in Thai',
@@ -195,9 +195,9 @@ const th: Dictionary = {
   publications: {
     title: 'สิ่งพิมพ์วิจัย',
     englishCardTitle: 'สิ่งพิมพ์ภาษาอังกฤษ',
-    englishCardText: 'บทความวารสาร บทความในหนังสือ และบทวิจารณ์สำหรับผู้อ่านต่างประเทศ —',
+    englishCardText: 'บทความวารสาร บทความในหนังสือ สำหรับผู้อ่านต่างประเทศ —',
     thaiCardTitle: 'สิ่งพิมพ์ภาษาไทย',
-    thaiCardText: 'บทความและงานเขียนภาษาไทยสำหรับผู้อ่านในประเทศ —',
+    thaiCardText: 'บทความวารสาร บทความในหนังสือ สำหรับผู้อ่านในประเทศ —',
     english: 'ภาษาอังกฤษ',
     thai: 'ภาษาไทย',
     thaiBadge: 'ภาษาไทย',

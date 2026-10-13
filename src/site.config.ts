@@ -41,15 +41,6 @@ export const SITE = {
     ResearchGate: 'https://www.researchgate.net',
     Academia: 'https://www.academia.edu',
   },
-  /** Research interests shown as tags on the home / about pages. */
-  interests: [
-    'Religion and Ritual',
-    'Memory and Heritage',
-    'Material Culture',
-    'Ethnography of Mainland Southeast Asia',
-    'Religious Pluralism',
-    'Museum Anthropology',
-  ],
 };
 
 export type SiteConfig = typeof SITE;
