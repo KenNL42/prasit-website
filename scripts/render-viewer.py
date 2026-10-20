@@ -60,7 +60,7 @@ def main():
                 continue
             p = os.path.join(content_dir, f)
             fm = parse_frontmatter(open(p, encoding='utf-8').read())
-            entry_id = f[:-3].replace(' ', '-')  # md base name, space -> dash (matches the /view/<slug> route)
+            entry_id = f[:-3].replace(' ', '-').lower()  # md base name, dash + lowercase (matches Astro's [slug])
             pdf_name = fm.get('pdf')
             if not pdf_name:
                 continue

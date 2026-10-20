@@ -31,7 +31,7 @@ export function pdfUrl(pub: Publication): string | undefined {
  * prefix), which also names the public/pdf-pages/<slug> image folder.
  */
 export function viewerUrl(pub: Publication | CollectionEntry<'thaiBooks'>): string {
-  const slug = pub.id.split('/').pop()!.replace(/\s+/g, '-');
+  const slug = pub.id.split('/').pop()!.replace(/\s+/g, '-').toLowerCase();
   return `/view/${encodeURIComponent(slug)}`;
 }
 
