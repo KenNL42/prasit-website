@@ -11,4 +11,5 @@ pages: "32-50"
 language: "en"
 pdf: "2019-Becoming Indigenous Peoples in Thailand.pdf"
 citation: "2019 “Becoming Indigenous Peoples in Thailand,” Journal of Southeast Asian Studies 50(1): 32-50."
+downloadable: true
 ---

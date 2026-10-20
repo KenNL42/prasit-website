@@ -44,3 +44,6 @@ __pycache__/
 
 # google sheets service account (secret)
 scripts/service-account-key.json
+
+# python virtual environment
+.venv/

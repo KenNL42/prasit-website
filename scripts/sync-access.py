@@ -68,19 +68,11 @@ def read_urls():
 
 
 def fetch_csv(url):
+    import csv
     import urllib.request
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     data = urllib.request.urlopen(req, timeout=30).read().decode('utf-8', errors='replace')
-    rows = []
-    for line in data.lstrip('\ufeff').splitlines():
-        cells = []
-        for cell in line.split(','):
-            cell = cell.strip()
-            if len(cell) >= 2 and cell[0] == '"' and cell[-1] == '"':
-                cell = cell[1:-1].replace('""', '"')
-            cells.append(cell)
-        rows.append(cells)
-    return rows
+    return [row for row in csv.reader(data.lstrip('\ufeff').splitlines()) if any(c.strip() for c in row)]
 
 
 def truthy(v):
@@ -92,7 +84,9 @@ def is_false(v):
 
 
 def norm_title(t):
-    return re.sub(r'[\s,.:;"\'()\[\]!?\-–—]+', '', t).lower()
+    # strip punctuation incl. curly quotes, so a sheet row typed without
+    # the trailing ” still matches the md title
+    return re.sub(r'[\s,.:;"\u201c\u201d\'()\[\]!?\-–—]+', '', t).lower()
 
 
 def update_frontmatter(path, key, val):

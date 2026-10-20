@@ -10,6 +10,7 @@ language: "en"
 pdf: "2025-Voices of the Voiceless Cold War and the Hmong in Thailand.pdf"
 tags: ["Cold War", "Hmong", "post-conflict"]
 citation: "2025 “Voices of the Voiceless: The Cold War and the Hmong in Northern Thailand, 1965-82,” in Cold War Asia: Unlearning Narratives, Making New Histories, Masuda Hajimu (ed.), pp. 91-113. University of North Carolina Press."
+downloadable: true
 ---
 
 Today, the Hmong, one of the largest highland ethnic minorities in Thailand, might be looked on as an object of exotic tourism, evoking images of peaceful and smiling Hmong women wearing colorful dresses. In Cold War Thailand, from the late 1960s to the early 1980s, however, they were considered the most dangerous enemy - the "Red Meo" (Hmong) - that supposedly posed a serious threat to national security.

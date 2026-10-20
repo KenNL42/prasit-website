@@ -15,6 +15,7 @@ pdf: "2017-Who should be considered Indigenous.pdf"
 doi: "10.1080/14631369.2016.1268044"
 tags: ["ethnic groups", "indigenous peoples", "indigeneity", "Thailand"]
 citation: "2017 “Who should be considered ‘Indigenous’? A survey of ethnic groups in northern Thailand,” Asian Ethnicity 18(4): 543-562."
+downloadable: true
 ---
 
 On 22 May 2014, the Thai military conducted a coup d’état and discarded the previous constitution. In April 2015, a new draft constitution was prepared. Although eventually rejected by the military, it represented an exciting moment for

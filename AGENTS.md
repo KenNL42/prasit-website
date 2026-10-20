@@ -29,6 +29,7 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 - `npm run dev` — start the dev server (http://localhost:4321)
 - `npm run build` — production build into `dist/` (runs `prebuild` → regenerates OG assets)
 - `npm run check` — run `astro check` for type diagnostics
+- Python tooling uses the repo venv (`.venv/`, gitignored) via `scripts/py.mjs` — recreate with `python -m venv .venv` + `.venv/Scripts/pip install -r requirements.txt` (`requirements-ocr.txt` adds the optional OCR stack)
 - `npm run preview` — serve the production build locally
 - `npm run generate:placeholders` — create sample PDFs/images (never overwrites existing files)
 - `npm run generate:og` — (re)generate OG share image + apple-touch icon (auto-runs via `prebuild`)

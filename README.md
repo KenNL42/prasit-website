@@ -42,6 +42,27 @@ changes, update the `INITIALS` constant at the top of `scripts/generate-og-image
 ## Requirements
 
 - **Node.js ≥ 22.12** (check with `node --version`)
+- **Python 3.10+** (check with `python --version`) — used by the PDF/sheet tooling
+
+### Python virtual environment (one-time setup)
+
+```bash
+# Windows
+python -m venv .venv
+.venv\Scripts\pip install -r requirements.txt
+
+# macOS / Linux
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+
+# Optional — OCR for scanned English PDFs (abstract extraction only):
+# .venv\Scripts\pip install -r requirements-ocr.txt
+```
+
+The npm scripts (`prebuild`, `sync:access`, `render:viewer`) automatically use the `.venv`
+python when it exists (`scripts/py.mjs`), so `npm run build` works with or without an activated
+venv. The venv is gitignored; `requirements.txt` pins every dependency so a fresh machine can
+recreate it with the two commands above.
 
 ## Install & run
 

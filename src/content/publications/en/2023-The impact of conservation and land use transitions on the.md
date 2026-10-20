@@ -8,4 +8,5 @@ type: "Journal Article"
 language: "en"
 pdf: "2023-The impact of conservation and land use transitions on the.pdf"
 citation: "2023 The Impact of Conservation and Land Use Transitions of the Livelihoods of Indigenous Peoples: A Narrative Review of the Northern Thai Highlands, Forest Policy and Economics 157: 1-16."
+downloadable: true
 ---

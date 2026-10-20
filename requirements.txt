@@ -1,0 +1,11 @@
+# Core Python dependencies for the site tooling (render-viewer, sync-access).
+# Install into a virtual environment:
+#   python -m venv .venv
+#   .venv/Scripts/pip install -r requirements.txt      (Windows)
+#   .venv/bin/pip install -r requirements.txt          (macOS / Linux)
+#
+# Optional — OCR for scanned English PDFs (scripts/ingest_publications.py):
+#   .venv/Scripts/pip install -r requirements-ocr.txt
+pymupdf==1.28.2
+gspread==6.2.1
+google-auth==2.62.0
