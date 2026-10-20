@@ -111,6 +111,35 @@ scripts/
 
 ---
 
+## Controlling download access (view-only entries)
+
+For copyright reasons some works can be shown but **not downloaded**. The tracker is a
+**Google Sheet**; the site reads the flags it syncs from it.
+
+**How it works**
+
+- Each entry's Markdown frontmatter can carry `downloadable: false` (default `true`).
+- When `downloadable: false`:
+  - `npm run render:viewer` (auto-runs in `prebuild`) renders the PDF's pages to images in
+    `public/pdf-pages/<id>/` and **removes the PDF from `public/`** — the file is never served,
+    so it cannot be downloaded; the card shows a **"Read online"** button linking to the
+    `/view/<id>` reader (Thai: `/th/view/<id>`).
+  - The master PDF stays in `resources/` untouched.
+
+**Updating from the sheet**
+
+1. Make a Google Sheet with one row per publication/book:
+   `File | Title | Language | Year | Viewable | Downloadable | Note`
+   (`File` = the `pdf:` file name, e.g. `2550-ระบบการศึกษาและภาษาในกระบวนการสร้างรัฐชาติไทย.pdf`).
+   Put `N`/`ไม่`/`0` in **Downloadable** for view-only works; leave blank or `Y` otherwise.
+2. File → Share → **Publish to web** → choose **Comma-separated values (.csv)** and copy the link
+   into `scripts/access-sheet-url.txt`.
+3. Run `npm run sync:access` — it downloads the sheet and writes `viewable:`/`downloadable:`
+   into the matching frontmatter. Commit the result (the build then serves view-only entries
+   through the image reader).
+
+---
+
 ## Adding a publication
 
 > **Bulk import from PDFs:** the one-off script `python scripts/ingest_publications.py` reads the

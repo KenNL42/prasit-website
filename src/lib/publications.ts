@@ -12,12 +12,27 @@ export const PDF_FOLDERS: Record<'en' | 'th', string> = {
  * Resolve the downloadable PDF URL for a publication.
  * `pdf` is a bare file name resolved against the language folder;
  * a value starting with "/" is treated as an absolute path.
+ *
+ * Returns undefined when the entry is view-only (`downloadable: false`):
+ * its PDF is not served from public/, only the /view/<id> page images are.
  */
 export function pdfUrl(pub: Publication): string | undefined {
-  const { pdf, language } = pub.data;
+  const { pdf, language, downloadable } = pub.data;
+  if (downloadable === false) return undefined;
   if (!pdf) return undefined;
   if (pdf.startsWith('/')) return pdf;
   return `/${PDF_FOLDERS[language]}/${pdf}`;
+}
+
+/**
+ * The online reader URL for a view-only entry (downloadable: false),
+ * e.g. "/view/2550-ระบบการศึกษาและภาษาในกระบวนการสร้างรัฐชาติไทย".
+ * The slug is the Markdown file's base name (id without the en/th folder
+ * prefix), which also names the public/pdf-pages/<slug> image folder.
+ */
+export function viewerUrl(pub: Publication | CollectionEntry<'thaiBooks'>): string {
+  const slug = pub.id.split('/').pop()!.replace(/\s+/g, '-');
+  return `/view/${encodeURIComponent(slug)}`;
 }
 
 /** Build a short citation string from the frontmatter fields. */

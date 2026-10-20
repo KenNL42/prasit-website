@@ -1,0 +1,32 @@
+---
+import ViewerPage from '../../../components/pages/ViewerPage.astro';
+import { getCollection } from 'astro:content';
+
+interface Props {
+  id: string;
+  title: string;
+  back: string;
+}
+
+export async function getStaticPaths() {
+  const pubs = await getCollection('publications');
+  const books = await getCollection('thaiBooks');
+  const entries = [
+    ...pubs
+      .filter((p) => p.data.downloadable === false)
+      .map((p) => ({
+        id: p.id.split('/').pop().replace(/\s+/g, '-'),
+        title: p.data.title,
+        back: p.data.language === 'th' ? '/publications/thai' : '/publications/english',
+      })),
+    ...books
+      .filter((b) => b.data.downloadable === false)
+      .map((b) => ({ id: b.id.split('/').pop().replace(/\s+/g, '-'), title: b.data.title, back: '/publications/books' })),
+  ];
+  return entries.map((e) => ({ params: { slug: e.id }, props: e }));
+}
+
+const { id, title, back } = Astro.props;
+---
+
+<ViewerPage lang="th" id={id} title={title} back={back} />

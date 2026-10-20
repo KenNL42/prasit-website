@@ -8,12 +8,14 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "prebuild": "node scripts/generate-og-image.mjs && node scripts/convert-bibliography.mjs",
+    "prebuild": "node scripts/generate-og-image.mjs && node scripts/convert-bibliography.mjs && python scripts/render-viewer.py",
     "preview": "astro preview",
     "check": "astro check",
     "generate:placeholders": "node scripts/generate-placeholders.mjs",
     "generate:og": "node scripts/generate-og-image.mjs",
     "convert:bibliography": "node scripts/convert-bibliography.mjs",
+    "sync:access": "python scripts/sync-access.py",
+    "render:viewer": "python scripts/render-viewer.py",
     "astro": "astro"
   },
   "dependencies": {

@@ -96,6 +96,9 @@ const en = {
     booksCardText: 'Authored and edited books published in Thailand —',
     viewBooks: 'Browse the books',
     booksBreadcrumb: 'Books',
+    readOnline: 'Read online',
+    viewOnlyNote: 'View online only — not available for download.',
+    viewerEmpty: 'No scanned pages were found for this entry.',
   },
   photos: {
     title: 'Photos',
@@ -214,6 +217,9 @@ const th: Dictionary = {
     booksCardText: 'หนังสือที่แต่งและบรรณาธิการ ตีพิมพ์ในประเทศไทย —',
     viewBooks: 'ดูหนังสือทั้งหมด',
     booksBreadcrumb: 'หนังสือ',
+    readOnline: 'อ่านออนไลน์',
+    viewOnlyNote: 'อ่านได้ทางออนไลน์เท่านั้น — ไม่สามารถดาวน์โหลดได้',
+    viewerEmpty: 'ไม่พบภาพหน้าของเอกสารนี้',
   },
   photos: {
     title: 'ภาพถ่าย',

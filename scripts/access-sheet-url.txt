@@ -1,0 +1,13 @@
+# Paste the "published to web" CSV export URL of your access tracker Google
+# Sheet on this line (one line). The sheet has one row per publication/book:
+#
+#   File | Title | Language | Year | Viewable | Downloadable | Note
+#
+# `File` must match the `pdf:` file name in the Markdown frontmatter
+# (e.g. 2550-ระบบการศึกษาและภาษาในกระบวนการสร้างรัฐชาติไทย.pdf).
+# Put "N" (or ไม่/0/false) in Downloadable to make the entry view-only.
+#
+# To publish: File > Share > Publish to web > choose "Comma-separated
+# values (.csv)" and copy the link, then run:  npm run sync:access
+#
+# https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/export?format=csv

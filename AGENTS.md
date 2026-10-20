@@ -34,6 +34,8 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 - `npm run generate:og` — (re)generate OG share image + apple-touch icon (auto-runs via `prebuild`)
 - `npm run convert:bibliography` — regenerate the Relevant Archives bibliography from `resources/ผลงานวิชาการ.docx` (auto-runs via `prebuild`)
 - `python scripts/ingest_publications.py` — bulk-ingest publication/Thai-book PDFs from `resources/`: match citations to the bibliography, extract abstracts (text + OCR for scanned English), convert Buddhist→Gregorian years for Thai works, copy PDFs to `public/`, render book covers (`--english-only`, `--thai-only`, `--books-only` flags; `--review-only` renders Thai page-1 images to `scripts/abstract-review/` for manual abstract entry)
+- `npm run sync:access` — pull the Google Sheets access tracker (CSV URL in `scripts/access-sheet-url.txt`) and write `viewable:`/`downloadable:` into the publication/book frontmatter
+- `python scripts/render-viewer.py` (auto-runs in `prebuild`) — for every entry with `downloadable: false`, render the PDF pages to `public/pdf-pages/<id>/` images and remove the PDF from `public/` (master stays in `resources/`); the card then links to the `/view/<id>` reader instead of a download
 
 ## Project layout (this site)
 

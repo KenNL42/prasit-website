@@ -42,6 +42,17 @@ const publications = defineCollection({
     tags: z.array(z.string()).default([]),
     /** Optional pre-formatted citation line (overrides the auto-generated one). */
     citation: z.string().optional(),
+    /**
+     * Whether the PDF may be downloaded. Default true. When false the PDF is
+     * not served from public/ at all — its pages are rendered to images
+     * (scripts/render-viewer.py) and the card links to the /view/<id> reader.
+     */
+    downloadable: z.boolean().default(true),
+    /**
+     * Whether the entry is shown at all (reserved for future use; the
+     * Google Sheets tracker also records this column). Default true.
+     */
+    viewable: z.boolean().default(true),
   }),
 });
 
@@ -144,6 +155,13 @@ const thaiBooks = defineCollection({
     pdf: z.string(),
     /** Cover image file name inside public/books/covers/. */
     cover: z.string(),
+    /**
+     * Whether the PDF may be downloaded. Default true. When false the PDF
+     * is not served and its pages are shown in the /view/<id> reader.
+     */
+    downloadable: z.boolean().default(true),
+    /** Whether the book is shown at all (reserved; tracked in the sheet). */
+    viewable: z.boolean().default(true),
   }),
 });
 
