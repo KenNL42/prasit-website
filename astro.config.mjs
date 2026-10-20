@@ -29,9 +29,13 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     server: {
-      watch: {
-        usePolling: true, // Enables polling-based file tracking
-      },
+      // NOTE: do NOT set `watch.usePolling` here — polling scans the whole
+      // project tree (node_modules + the large public/ PDFs) and makes the
+      // dev server spin the CPU without ever coming up. Native fs events are
+      // used instead (works on Windows/macOS/Linux). Only if you develop
+      // inside WSL1/Docker/network shares and native watching genuinely
+      // fails, re-enable it with `usePolling: true, interval: 300` and add
+      // `ignored: ['**/public/**']` so the heavy PDFs are not polled.
     },
   },
 });
