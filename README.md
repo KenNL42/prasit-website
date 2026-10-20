@@ -64,6 +64,12 @@ python when it exists (`scripts/py.mjs`), so `npm run build` works with or witho
 venv. The venv is gitignored; `requirements.txt` pins every dependency so a fresh machine can
 recreate it with the two commands above.
 
+> **Linux "externally-managed-environment" error?** That is PEP 668 — the OS owns the system
+> Python, so pip refuses to write into it. Use a venv (above) instead of `pip install` on the
+> system python. The only `apt` package you need is `sudo apt install python3-venv` (if
+> `python3 -m venv .venv` reports *ensurepip is not available*). Python **≥ 3.10** is required
+> (Ubuntu 22.04+ ships 3.10+).
+
 ## Install & run
 
 ```bash
