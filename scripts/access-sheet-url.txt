@@ -1,15 +1,20 @@
-# Paste the "published to web" CSV export URL of your access tracker Google
-# Sheet on this line (one line). The sheet has one row per publication/book:
+# Google Sheets access tracker — one published CSV export URL per tab,
+# labeled with the collection it controls:
+#   thai    -> src/content/publications/th   (tab "thai publication")
+#   english -> src/content/publications/en  (tab "english publication")
+#   books   -> src/content/thai_books       (tab "thai book")
 #
-#   File | Title | Language | Year | Viewable | Downloadable | Note
+# Each tab has the columns:  Title | Downloadable
+# (Title matches the Markdown `title:`; FALSE = view-only, TRUE/blank = downloadable.)
 #
-# `File` must match the `pdf:` file name in the Markdown frontmatter
-# (e.g. 2550-ระบบการศึกษาและภาษาในกระบวนการสร้างรัฐชาติไทย.pdf).
-# Put "N" (or ไม่/0/false) in Downloadable to make the entry view-only.
+# To (re)publish: File > Share > Publish to web > select the sheet +
+# "Comma-separated values (.csv)" and copy the link with its ?gid=... .
+# Then run:  npm run sync:access
 #
-# To publish: File > Share > Publish to web > choose "Comma-separated
-# values (.csv)" and copy the link, then run:  npm run sync:access
-#
-# https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/export?format=csv
+# NOTE: your tabs are currently all empty templates — paste the rows from
+# scripts/sheet-rows-to-add/*.csv into the matching tabs. If your three
+# tabs are ordered differently than below, swap the labels.
 
-https://docs.google.com/spreadsheets/d/e/2PACX-1vSd1sMi22wr6HXc3DcW59fSaCsQaCzCiHtdEUa57-5Dfe3JoYdkqW6-JXo9jcbnjaLzJSZfu_75JjP5/pub?output=csv
+thai = https://docs.google.com/spreadsheets/d/e/2PACX-1vSd1sMi22wr6HXc3DcW59fSaCsQaCzCiHtdEUa57-5Dfe3JoYdkqW6-JXo9jcbnjaLzJSZfu_75JjP5/pub?gid=0&single=true&output=csv
+english = https://docs.google.com/spreadsheets/d/e/2PACX-1vSd1sMi22wr6HXc3DcW59fSaCsQaCzCiHtdEUa57-5Dfe3JoYdkqW6-JXo9jcbnjaLzJSZfu_75JjP5/pub?gid=1516978958&single=true&output=csv
+books = https://docs.google.com/spreadsheets/d/e/2PACX-1vSd1sMi22wr6HXc3DcW59fSaCsQaCzCiHtdEUa57-5Dfe3JoYdkqW6-JXo9jcbnjaLzJSZfu_75JjP5/pub?gid=921090075&single=true&output=csv

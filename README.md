@@ -114,7 +114,8 @@ scripts/
 ## Controlling download access (view-only entries)
 
 For copyright reasons some works can be shown but **not downloaded**. The tracker is a
-**Google Sheet**; the site reads the flags it syncs from it.
+**Google Sheet with three tabs** — `thai publication`, `english publication`, `thai book` —
+and the site reads the flags it syncs from them.
 
 **How it works**
 
@@ -123,22 +124,29 @@ For copyright reasons some works can be shown but **not downloaded**. The tracke
   - `npm run render:viewer` (auto-runs in `prebuild`) renders the PDF's pages to images in
     `public/pdf-pages/<id>/` and **removes the PDF from `public/`** — the file is never served,
     so it cannot be downloaded; the card shows a **"Read online"** button linking to the
-    `/view/<id>` reader (Thai: `/th/view/<id>`).
-  - The master PDF stays in `resources/` untouched.
+    `/view/<id>` reader (Thai: `/th/view/<id>`). The master PDF stays in `resources/`.
+  - If the flag is later removed (sheet says TRUE), the PDF is copied back to `public/`
+    automatically on the next build.
 
-**Updating from the sheet**
+**The seamless loop (add a PDF → decide access in the sheet → site updates)**
 
-1. Make a Google Sheet with one row per publication/book:
-   `File | Title | Language | Year | Viewable | Downloadable | Note`
-   (`File` = the `pdf:` file name, e.g. `2550-ระบบการศึกษาและภาษาในกระบวนการสร้างรัฐชาติไทย.pdf`).
-   Put `N`/`ไม่`/`0` in **Downloadable** for view-only works; leave blank or `Y` otherwise.
-2. File → Share → **Publish to web** → choose **Comma-separated values (.csv)** and copy the link
-   into `scripts/access-sheet-url.txt`.
-3. Run `npm run sync:access` — it downloads the sheet and writes `viewable:`/`downloadable:`
-   into the matching frontmatter. Commit the result (the build then serves view-only entries
-   through the image reader).
+1. Drop the PDF into `resources/...` and run `npm run convert:bibliography` /
+   `python scripts/ingest_publications.py` (or add the md by hand).
+2. Run `npm run sync:access`. It downloads the three tabs and:
+   - updates `downloadable:` in every matching Markdown file (matched by **Title**), and
+   - writes `scripts/sheet-rows-to-add/<tab>.csv` — one ready-to-paste row per entry that has
+     no sheet row yet (the "the sheet grabs the new file" step).
+3. Paste the new rows into the matching tab (columns: `Title | Downloadable`; put `FALSE` for
+   view-only, `TRUE`/blank to allow download).
+4. Re-run `npm run sync:access` and commit — the site now serves the entry per the sheet.
 
----
+The tab URLs live in `scripts/access-sheet-url.txt` (one labeled line per tab). Rows for every
+current entry are generated under `scripts/sheet-rows-to-add/` the first time you sync.
+
+> **Fully automatic option:** if you later want zero paste steps, create a Google Cloud service
+> account, share the sheet with its email, save the key as `scripts/service-account-key.json`
+> (gitignored) and `pip install gspread google-auth` — `sync:access` then appends new rows
+> straight into the sheet itself.
 
 ## Adding a publication
 

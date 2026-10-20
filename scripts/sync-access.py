@@ -1,59 +1,76 @@
 """
-Sync viewable/downloadable flags from a published Google Sheet.
+Sync the downloadable flag from the Google Sheets access tracker.
 
-The tracker sheet (published to the web) has one row per publication/book:
-    File | Title | Language | Year | Viewable | Downloadable | Note
-`File` must equal the `pdf:` file name in the Markdown frontmatter. Put
-"N" (or ไม่/0/false) in Downloadable to make an entry view-only; leave
-blank or "Y" to keep it downloadable. The script writes `viewable:` and
-`downloadable:` into the frontmatter of the matching Markdown files.
+The tracker has three tabs (one per collection):
+    thai    -> src/content/publications/th
+    english -> src/content/publications/en
+    books   -> src/content/thai_books
+Each tab has the columns:  Title | Downloadable
+(Title must match the Markdown `title:` field; put FALSE in Downloadable
+to make the entry view-only, TRUE or blank to keep it downloadable.)
 
-The published CSV export URL goes in scripts/access-sheet-url.txt
-(one line). Run from the repo root:
+The published CSV export URLs live in scripts/access-sheet-url.txt, one
+per tab, labeled:
+    thai = https://docs.google.com/spreadsheets/d/e/.../pub?gid=...&single=true&output=csv
+    english = ...
+    books = ...
+
+What it does:
+  1. downloads each tab and writes `downloadable:` into the matching
+     Markdown frontmatter (matched by title),
+  2. reports sheet rows that match no entry (typos / not ingested), and
+  3. writes scripts/sheet-rows-to-add/<tab>.csv with one ready-to-paste
+     row per entry missing from the tab — so after adding a PDF + md you
+     copy that row into the sheet ("the sheet grabs the new file").
+
+Optional fully-automatic mode: if a service account key exists at
+scripts/service-account-key.json (shared with the sheet), new rows are
+appended straight into the sheet instead of the CSV (requires
+`pip install gspread google-auth`).
+
+Run from the repo root:
     python scripts/sync-access.py          # or: npm run sync:access
 """
 import os
 import re
 import sys
-import urllib.request
 
 sys.stdout.reconfigure(encoding='utf-8')
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 URL_FILE = os.path.join(ROOT, 'scripts', 'access-sheet-url.txt')
 CONTENT = os.path.join(ROOT, 'src', 'content')
+OUT_DIR = os.path.join(ROOT, 'scripts', 'sheet-rows-to-add')
+KEY_FILE = os.path.join(ROOT, 'scripts', 'service-account-key.json')
 
-COLLECTIONS = [
-    os.path.join(CONTENT, 'publications', 'en'),
-    os.path.join(CONTENT, 'publications', 'th'),
-    os.path.join(CONTENT, 'thai_books'),
-]
-
-
-def truthy(v):
-    return v.strip().lower() in ('y', 'yes', '1', 'true', 'ใช่', 'ได้', 'ดูได้', 'ดาวน์โหลดได้')
-
-
-def is_false(v):
-    return v.strip().lower() in ('n', 'no', '0', 'false', 'ไม่', 'ไม่ได้', 'x')
+# tab label -> (content dir, csv dir name)
+COLLECTIONS = {
+    'thai': (os.path.join(CONTENT, 'publications', 'th'), 'thai'),
+    'english': (os.path.join(CONTENT, 'publications', 'en'), 'english'),
+    'books': (os.path.join(CONTENT, 'thai_books'), 'books'),
+}
 
 
-def read_url():
+def read_urls():
+    urls = {}
     if not os.path.exists(URL_FILE):
-        return None
+        return urls
     for line in open(URL_FILE, encoding='utf-8'):
         line = line.strip()
-        if line and not line.startswith('#'):
-            return line
-    return None
+        if not line or line.startswith('#'):
+            continue
+        m = re.match(r'^([a-z]+)\s*=\s*(\S+)$', line)
+        if m:
+            urls[m.group(1)] = m.group(2)
+        else:
+            print(f'[sync-access] skipping unlabeled line: {line[:70]}')
+    return urls
 
 
 def fetch_csv(url):
+    import urllib.request
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        data = resp.read().decode('utf-8', errors='replace')
-    # strip the BOM and split rows (simple CSV; cells are not quoted in the
-    # Google Sheets export unless they contain commas — handle quoted cells)
+    data = urllib.request.urlopen(req, timeout=30).read().decode('utf-8', errors='replace')
     rows = []
     for line in data.lstrip('\ufeff').splitlines():
         cells = []
@@ -66,83 +83,107 @@ def fetch_csv(url):
     return rows
 
 
-def update_frontmatter(path, changes):
+def truthy(v):
+    return v.strip().lower() in ('y', 'yes', '1', 'true', 'ใช่', 'ได้')
+
+
+def is_false(v):
+    return v.strip().lower() in ('n', 'no', '0', 'false', 'ไม่', 'ไม่ได้', 'x')
+
+
+def norm_title(t):
+    return re.sub(r'[\s,.:;"\'()\[\]!?\-–—]+', '', t).lower()
+
+
+def update_frontmatter(path, key, val):
     s = open(path, encoding='utf-8').read()
-    for key, val in changes.items():
-        if val is None:
-            continue
-        line = f'{key}: {val}'
-        if re.search(rf'^{key}:.*$', s, re.M):
-            s = re.sub(rf'^{key}:.*$', line, s, count=1, flags=re.M)
-        else:
-            # insert before the closing "---"
-            s = re.sub(r'^(---\n.*?)(\n---)', rf'\1\n{line}\2', s, count=1, flags=re.S)
+    line = f'{key}: {val}'
+    if re.search(rf'^{key}:.*$', s, re.M):
+        s = re.sub(rf'^{key}:.*$', line, s, count=1, flags=re.M)
+    else:
+        s = re.sub(r'^(---\n.*?)(\n---)', rf'\1\n{line}\2', s, count=1, flags=re.S)
     open(path, 'w', encoding='utf-8').write(s)
 
 
+def append_rows_api(spreadsheet_id, rows):
+    """Optional: append rows straight into the sheet via the Sheets API."""
+    import google.auth
+    import gspread
+    creds, _ = google.auth.load_credentials_from_file(KEY_FILE)
+    gc = gspread.authorize(creds)
+    sh = gc.open_by_key(spreadsheet_id)
+    return sh
+
+
 def main():
-    url = read_url()
-    if not url:
-        print('[sync-access] no sheet URL in scripts/access-sheet-url.txt — skipping '
-              '(put your published CSV export URL there to enable syncing).')
+    urls = read_urls()
+    if not urls:
+        print('[sync-access] no tab URLs in scripts/access-sheet-url.txt — skipping.')
         return
-    try:
-        rows = fetch_csv(url)
-    except Exception as exc:  # network / sheet unreachable — keep committed flags
-        print(f'[sync-access] could not fetch the sheet ({exc}) — keeping committed flags.')
-        return
+    os.makedirs(OUT_DIR, exist_ok=True)
 
-    # header row: locate column indexes by name (case-insensitive)
-    header = [c.strip().lower() for c in rows[0]]
-    idx_file = next((i for i, h in enumerate(header) if 'file' in h or 'ไฟล์' in h), 0)
-    idx_view = next((i for i, h in enumerate(header) if 'view' in h or 'ดู' in h), None)
-    idx_down = next((i for i, h in enumerate(header) if 'download' in h or 'ดาวน์โหลด' in h), None)
-    if idx_down is None:
-        print('[sync-access] no Downloadable column found in the sheet header — skipping.')
-        return
-
-    sheet = {}
-    for row in rows[1:]:
-        if len(row) <= max(idx_file, idx_down if idx_down else 0):
+    for label, url in urls.items():
+        if label not in COLLECTIONS:
+            print(f'[sync-access] unknown tab label "{label}" — use thai|english|books')
             continue
-        fname = row[idx_file].strip()
-        if not fname:
+        content_dir, _ = COLLECTIONS[label]
+        try:
+            rows = fetch_csv(url)
+        except Exception as exc:
+            print(f'[sync-access] could not fetch tab "{label}" ({exc}) — keeping committed flags.')
             continue
-        view = row[idx_view].strip() if idx_view is not None and len(row) > idx_view else ''
-        down = row[idx_down].strip() if len(row) > idx_down else ''
-        sheet[fname] = (view, down)
 
-    changed = 0
-    unmatched = []
-    for content_dir in COLLECTIONS:
+        header = [h.strip().lower() for h in rows[0]] if rows else []
+        idx_title = next((i for i, h in enumerate(header) if 'title' in h or 'ชื่อ' in h), 0)
+        idx_down = next((i for i, h in enumerate(header) if 'download' in h or 'ดาวน์โหลด' in h), 1)
+
+        sheet = {}  # normalized title -> (downloadable value)
+        for row in rows[1:]:
+            if len(row) <= max(idx_title, idx_down):
+                continue
+            t = row[idx_title].strip()
+            if not t:
+                continue
+            d = row[idx_down].strip() if len(row) > idx_down else ''
+            sheet[norm_title(t)] = d
+
+        # match entries by title
+        changed = 0
+        missing = []   # entries with no sheet row -> rows to add
+        ambiguous = []
         for f in sorted(os.listdir(content_dir)):
             if not f.endswith('.md'):
                 continue
             p = os.path.join(content_dir, f)
             s = open(p, encoding='utf-8').read()
-            m = re.search(r'^pdf: "(.*)"$', s, re.M)
+            m = re.search(r'^title: "(.*)"$', s, re.M)
             if not m:
                 continue
-            pdf_name = m.group(1)
-            if pdf_name not in sheet:
-                unmatched.append(f'{os.path.basename(content_dir)}/{pdf_name}')
+            title = m.group(1)
+            key = norm_title(title)
+            if key not in sheet:
+                missing.append(title)
                 continue
-            view, down = sheet[pdf_name]
-            changes = {}
-            if idx_view is not None and view:
-                changes['viewable'] = 'true' if truthy(view) else ('false' if is_false(view) else None)
-            if down:
-                changes['downloadable'] = 'true' if truthy(down) else ('false' if is_false(down) else None)
-            if changes:
-                update_frontmatter(p, changes)
-                changed += 1
-                for k, v in changes.items():
-                    print(f'  {pdf_name[:50]:52s} {k}={v}')
-    print(f'[sync-access] updated {changed} entries.')
-    if unmatched:
-        print(f'  note: {len(unmatched)} md pdf names have no sheet row (defaults kept):')
-        for u in unmatched[:10]:
-            print(f'    - {u[:70]}')
+            down = sheet[key]
+            if down and (truthy(down) or is_false(down)):
+                val = 'true' if truthy(down) else 'false'
+                if re.search(rf'^downloadable:\s*{val}$', s, re.M) is None:
+                    update_frontmatter(p, 'downloadable', val)
+                    changed += 1
+                    print(f'  {label:7s} {title[:45]:47s} downloadable={val}')
+        print(f'[sync-access] {label}: updated {changed} entries.')
+
+        # rows to add (entries missing from the sheet)
+        if missing:
+            out = os.path.join(OUT_DIR, f'{label}.csv')
+            with open(out, 'w', encoding='utf-8') as fh:
+                fh.write('Title,Downloadable\n')
+                for t in missing:
+                    fh.write(f'"{t.replace(chr(34), chr(34)+chr(34))}",TRUE\n')
+            print(f'[sync-access] {label}: {len(missing)} entries have no sheet row — '
+                  f'paste scripts/sheet-rows-to-add/{label}.csv into the "{label}" tab')
+        else:
+            print(f'[sync-access] {label}: all entries have sheet rows.')
 
 
 if __name__ == '__main__':

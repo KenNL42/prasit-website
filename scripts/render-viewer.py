@@ -49,25 +49,36 @@ def is_false(val):
 
 
 def main():
+    import shutil
     import pymupdf
     rendered = 0
     removed = 0
+    restored = 0
     for kind, lang, content_dir, res_dir, pub_dir in COLLECTIONS:
         for f in sorted(os.listdir(content_dir)):
             if not f.endswith('.md'):
                 continue
             p = os.path.join(content_dir, f)
             fm = parse_frontmatter(open(p, encoding='utf-8').read())
-            if not is_false(fm.get('downloadable')):
-                continue  # downloadable (default) — leave the PDF as is
             entry_id = f[:-3].replace(' ', '-')  # md base name, space -> dash (matches the /view/<slug> route)
             pdf_name = fm.get('pdf')
             if not pdf_name:
-                print(f'  !! {entry_id}: downloadable=false but no pdf field')
+                continue
+            master = os.path.join(res_dir, pdf_name)
+            pub_copy = os.path.join(pub_dir, pdf_name)
+            out_dir = os.path.join(PUB, 'pdf-pages', entry_id)
+            if not is_false(fm.get('downloadable')):
+                # downloadable (default): make sure the PDF is served again and
+                # drop any stale reader pages
+                if os.path.exists(master) and not os.path.exists(pub_copy):
+                    shutil.copy2(master, pub_copy)
+                    print(f'  {kind:12s} restored public/{os.path.basename(pub_dir)}/{pdf_name[:50]}')
+                    restored += 1
+                if os.path.isdir(out_dir):
+                    shutil.rmtree(out_dir)
+                    print(f'  {kind:12s} removed stale reader pages for {entry_id[:45]}')
                 continue
             # 1) render page images from the resources master
-            master = os.path.join(res_dir, pdf_name)
-            out_dir = os.path.join(PUB, 'pdf-pages', entry_id)
             if os.path.exists(master):
                 if os.path.isdir(out_dir) and os.listdir(out_dir):
                     print(f'  {kind:12s} {entry_id[:45]:47s} pages already rendered')
@@ -83,12 +94,11 @@ def main():
             else:
                 print(f'  !! master pdf not found in resources/: {pdf_name}')
             # 2) ensure the PDF is NOT served from public/
-            pub_copy = os.path.join(pub_dir, pdf_name)
             if os.path.exists(pub_copy):
                 os.remove(pub_copy)
                 print(f'  {kind:12s} removed public/{os.path.basename(pub_dir)}/{pdf_name[:50]}')
                 removed += 1
-    print(f'[render-viewer] done: {rendered} pages rendered, {removed} pdfs removed from public/')
+    print(f'[render-viewer] done: {rendered} pages rendered, {removed} pdfs removed from public/, {restored} pdfs restored.')
 
 
 if __name__ == '__main__':

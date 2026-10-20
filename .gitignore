@@ -41,3 +41,6 @@ scripts/abstract-review/
 # python
 __pycache__/
 *.pyc
+
+# google sheets service account (secret)
+scripts/service-account-key.json
