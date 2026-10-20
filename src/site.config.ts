@@ -11,8 +11,8 @@ export const SITE = {
   name: 'Prasit Leepreecha',
   /** Thai version of the name (used on /th/ pages). */
   nameTh: 'ประสิทธิ์ ลีปรีชา',
-  nameAndTitle: 'Prasit Leepreecha, PhD',
-  nameAndTitleTh: 'รองศาสตราจารย์ ประสิทธิ์ ลีปรีชา',
+  nameAndTitle: 'Prasit Leepreecha',
+  nameAndTitleTh: 'ประสิทธิ์ ลีปรีชา',
   /** Full professional title (shown on the home page hero). */
   title: 'Associate Professor of Anthropology',
   /** Thai version of the professional title (used on /th/ pages). */

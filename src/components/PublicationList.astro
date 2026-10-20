@@ -13,7 +13,7 @@ interface Props {
   lang?: Locale;
 }
 
-const { publications, showAbstract = false, lang = 'en' } = Astro.props;
+const { publications, showAbstract = true, lang = 'en' } = Astro.props;
 const t = getDictionary(lang);
 const sorted = sortByYearDesc(publications);
 const showingAllText = t.common.showingAll(sorted.length);

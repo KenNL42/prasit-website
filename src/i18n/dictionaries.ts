@@ -48,6 +48,8 @@ const en = {
     // Identity fields — sourced from site.config.ts (single source of truth).
     name: SITE.name,
     nameAndTitle: SITE.nameAndTitle,
+    hmongName: 'TsavTxhiaj Lis',
+    job: 'Associate Professor',
     affiliation: SITE.affiliation,
     description: SITE.description,
     portraitLabel: 'portrait',
@@ -64,8 +66,10 @@ const en = {
     title: 'Biography',
     positions: 'Academic positions',
     positionsList: [
-      { role: 'Assistant Professor of Anthropology', place: 'Chiang Mai University', period: '2015 - present' },
-      { role: 'Sociology Researcher', place: 'Chiang Mai University', period: '1988 - 2015(?)' },
+      { role: 'Associate Professor', place: 'Chiang Mai University', period: '2022 - present' },
+      { role: 'Assistant Professor', place: 'Chiang Mai University', period: '2018 - 2022' },
+      { role: 'Lecturer', place: 'Chiang Mai University', period: '2012 - 2018' },
+      { role: 'Researcher', place: 'Chiang Mai University', period: '1991 - 2012' },
     ],
     education: 'Education',
     educationList: [
@@ -88,12 +92,12 @@ const en = {
     thTitle: 'Publications in Thai',
     backToEn: 'View English publications',
     backToTh: 'View Thai publications',
-    archivesTitle: 'Relevant Archives',
+    archivesTitle: 'List of Publications',
     archivesText:
       'Publications without a downloadable PDF. You can read the titles and search for the articles yourself.',
     viewArchives: 'Browse the archives',
     booksTitle: 'Books in Thai',
-    booksCardText: 'Authored and edited books published in Thailand —',
+    booksCardText: 'Authored and edited books published in Thailand',
     viewBooks: 'Browse the books',
     booksBreadcrumb: 'Books',
     readOnline: 'Read online',
@@ -168,6 +172,8 @@ const th: Dictionary = {
     // Identity fields — Thai variants from site.config.ts.
     name: SITE.nameTh,
     nameAndTitle: SITE.nameAndTitleTh,
+    hmongName: 'TsavTxhiaj Lis',
+    job: 'รองศาสตราจารย์',
     affiliation: SITE.affiliationTh,
     description: SITE.descriptionTh,
     portraitLabel: 'ภาพถ่ายบุคคล',
@@ -177,16 +183,17 @@ const th: Dictionary = {
     viewGalleries: 'ชมภาพถ่าย',
     ctaTitle: 'สนใจร่วมมือวิจัยหรือแลกเปลี่ยนภาคสนามหรือไม่?',
     ctaText:
-      'ผมยินดีรับการติดต่อจากนักศึกษา เพื่อนร่วมงาน และสถาบันที่ทำงานด้านศาสนา พิธีกรรม มรดกวัฒนธรรม และมานุษยวิทยาแห่งเอเชียตะวันออกเฉียงใต้',
+      'ยินดีรับการติดต่อจากนักศึกษา เพื่อนร่วมงาน และสถาบันที่ทำงานด้านศาสนา พิธีกรรม มรดกวัฒนธรรม และมานุษยวิทยาแห่งเอเชียตะวันออกเฉียงใต้',
     getInTouch: 'ติดต่อ',
   },
   about: {
     title: 'ประวัติย่อ',
     positions: 'ตำแหน่งทางวิชาการ',
     positionsList: [
-      { role: 'ผู้ช่วยศาสตราจารย์ด้านมานุษยวิทยา', place: 'มหาวิทยาลัยเชียงใหม่', period: 'พ.ศ. 2561 – ปัจจุบัน' },
-      { role: 'อาจารย์ประจำสาขามานุษยวิทยา', place: 'มหาวิทยาลัยเชียงใหม่', period: 'พ.ศ. 2556 – 2561' },
-      { role: 'นักวิจัยหลังปริญญาเอก', place: 'โรงเรียนฝรั่งเศสแห่งปลายบูรพาทิศ (EFEO) กรุงเทพฯ', period: 'พ.ศ. 2555 – 2556' },
+      { role: 'รองศาสตราจารย์', place: 'มหาวิทยาลัยเชียงใหม่', period: 'พ.ศ. 2565 - ปัจจุบัน' },
+      { role: 'ผู้ช่วยศาสตราจารย์', place: 'มหาวิทยาลัยเชียงใหม่', period: 'พ.ศ. 2561 - 2565' },
+      { role: 'อาจารย์', place: 'มหาวิทยาลัยเชียงใหม่', period: 'พ.ศ. 2555 - 2561' },
+      { role: 'นักวิจัย', place: 'มหาวิทยาลัยเชียงใหม่', period: 'พ.ศ. 2534 - 2555' },
     ],
     education: 'การศึกษา',
     educationList: [
@@ -209,12 +216,12 @@ const th: Dictionary = {
     thTitle: 'สิ่งพิมพ์ภาษาไทย',
     backToEn: 'ดูสิ่งพิมพ์ภาษาอังกฤษ',
     backToTh: 'ดูสิ่งพิมพ์ภาษาไทย',
-    archivesTitle: 'คลังเอกสารอ้างอิง',
+    archivesTitle: 'รายชื่อผลงาน',
     archivesText:
       'รายการผลงานตีพิมพ์ที่ไม่มีไฟล์ PDF สำหรับดาวน์โหลด ผู้เข้าชมสามารถค้นหาบทความได้จากชื่อเรื่องด้วยตนเอง',
     viewArchives: 'ดูคลังเอกสารอ้างอิง',
     booksTitle: 'หนังสือภาษาไทย',
-    booksCardText: 'หนังสือที่แต่งและบรรณาธิการ ตีพิมพ์ในประเทศไทย —',
+    booksCardText: 'หนังสือที่แต่งและบรรณาธิการ ตีพิมพ์ในประเทศไทย',
     viewBooks: 'ดูหนังสือทั้งหมด',
     booksBreadcrumb: 'หนังสือ',
     readOnline: 'อ่านออนไลน์',

@@ -11,3 +11,5 @@
 # values (.csv)" and copy the link, then run:  npm run sync:access
 #
 # https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/export?format=csv
+
+https://docs.google.com/spreadsheets/d/e/2PACX-1vSd1sMi22wr6HXc3DcW59fSaCsQaCzCiHtdEUa57-5Dfe3JoYdkqW6-JXo9jcbnjaLzJSZfu_75JjP5/pub?output=csv
