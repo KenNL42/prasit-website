@@ -165,7 +165,9 @@ and the site reads the flags it syncs from them.
      no sheet row yet (the "the sheet grabs the new file" step).
 3. Paste the new rows into the matching tab (columns: `Title | Downloadable`; put `FALSE` for
    view-only, `TRUE`/blank to allow download).
-4. Re-run `npm run sync:access` and commit — the site now serves the entry per the sheet.
+4. That's it — `sync:access` **also runs automatically in `prebuild`**, so after you push (or
+   re-run the deploy workflow), the deployed site picks up the flags directly from the sheet.
+   (Locally, `npm run sync:access` still works for previewing before a push.)
 
 The tab URLs live in `scripts/access-sheet-url.txt` (one labeled line per tab). Rows for every
 current entry are generated under `scripts/sheet-rows-to-add/` the first time you sync.

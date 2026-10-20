@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "prebuild": "node scripts/generate-og-image.mjs && node scripts/convert-bibliography.mjs && node scripts/py.mjs scripts/render-viewer.py",
+    "prebuild": "node scripts/generate-og-image.mjs && node scripts/convert-bibliography.mjs && node scripts/py.mjs scripts/sync-access.py && node scripts/py.mjs scripts/render-viewer.py",
     "preview": "astro preview",
     "check": "astro check",
     "generate:placeholders": "node scripts/generate-placeholders.mjs",
