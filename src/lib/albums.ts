@@ -1,5 +1,6 @@
 import { readdirSync } from 'node:fs';
 import { extname, join } from 'node:path';
+import { withBase } from './url';
 
 const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif', '.svg']);
 
@@ -19,9 +20,10 @@ export function listAlbumPhotos(album: string): string[] {
   }
 }
 
-/** Public URL for a photo inside an album folder. */
+/** Public URL for a photo inside an album folder (base-aware: used in
+ * both <img src> and the lightbox's inlined photo array). */
 export function photoUrl(album: string, fileName: string): string {
-  return `/pictures/${album}/${encodeURIComponent(fileName)}`;
+  return withBase(`/pictures/${album}/${encodeURIComponent(fileName)}`);
 }
 
 /** All public URLs of an album, sorted. */
