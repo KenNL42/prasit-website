@@ -36,10 +36,8 @@ export const SITE = {
   addressTh: ['คณะสังคมศาสตร์ มหาวิทยาลัยเชียงใหม่', '239 ถนนห้วยแก้ว ตำบลสุเทพ อำเภอเมือง', 'เชียงใหม่ 50200 ประเทศไทย'],
   /** Academic profiles (label → URL). Empty entries are hidden automatically. */
   profiles: {
-    'Google Scholar': 'https://scholar.google.com',
-    ORCID: 'https://orcid.org',
-    ResearchGate: 'https://www.researchgate.net',
-    Academia: 'https://www.academia.edu',
+    'Google Scholar': 'https://scholar.google.com/citations?user=39Smk0YAAAAJ',
+    Academia: 'https://independent.academia.edu/PrasitLeepreecha',
   },
 };
 

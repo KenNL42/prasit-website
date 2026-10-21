@@ -1,5 +1,10 @@
+---
+language: th
+title: "ผลงานวิชาการ"
+---
+
 <!--
-  Auto-generated from resources/ผลงานวิชาการ.docx by
+  Auto-generated from resources/relevant_publication_archives_Thai.docx by
   scripts/convert-bibliography.mjs — do not edit by hand.
   Edit the Word file and rebuild (or run npm run convert:bibliography).
 -->
