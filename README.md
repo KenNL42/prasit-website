@@ -130,9 +130,10 @@ src/
     pages/                ← shared page bodies rendered in both languages
   layouts/ components/ lib/ pages/ styles/
 resources/
-  ผลงานวิชาการ.docx       ← master bibliography (Relevant Archives source of truth)
+  relevant_publication_archives_Thai.docx     ← Thai bibliography (th archives)
+  relevant_publication_archives_english.docx  ← English bibliography (en archives)
 scripts/
-  convert-bibliography.mjs   ← converts resources/ผลงานวิชาการ.docx → src/content/archives/bibliography.md (auto-runs on build)
+  convert-bibliography.mjs   ← converts the two docx files → src/content/archives/{th,en}.md (auto-runs on build)
   generate-placeholders.mjs  ← creates sample PDFs/images (safe to re-run)
 ```
 
@@ -275,15 +276,19 @@ lightbox viewer (keyboard accessible: arrows navigate, Esc closes).
 
 The **Relevant Archives** page (`/publications/archives`, `/th/publications/archives`) shows your
 full academic works bibliography. Its source of truth is the **Word document**
-`resources/ผลงานวิชาการ.docx`; the Markdown it renders
-(`src/content/archives/bibliography.md`) is **generated automatically** — on every build
-(`npm run build`, via `prebuild`) or manually with `npm run convert:bibliography`.
+`resources/relevant_publication_archives_Thai.docx` and
+`resources/relevant_publication_archives_english.docx`; the Markdown they render
+(`src/content/archives/th.md` and `src/content/archives/en.md`) is **generated automatically** —
+on every build (`npm run build`, via `prebuild`) or manually with `npm run convert:bibliography`.
+The Thai page (/th/publications/archives) shows the Thai file; the English page
+(/publications/archives) shows the English file.
 
 ### How to update it
 
-1. **Edit `resources/ผลงานวิชาการ.docx`** in Word, following the format rules below.
+1. **Edit the matching Word file** (`relevant_publication_archives_Thai.docx` or
+   `relevant_publication_archives_english.docx`), following the format rules below.
 2. **Rebuild or convert:** `npm run build` (auto-converts) or `npm run convert:bibliography`.
-3. Commit the changed `.docx` **and** the regenerated `bibliography.md`.
+3. Commit the changed `.docx` **and** the regenerated `src/content/archives/{th,en}.md`.
 
 > Use the **Word file**, not the PDF, as the master copy: Word text extracts cleanly for both
 > Thai and English, whereas this PDF's Thai text is not machine-readable. (Keep the PDF as a

@@ -33,7 +33,7 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 - `npm run preview` — serve the production build locally
 - `npm run generate:placeholders` — create sample PDFs/images (never overwrites existing files)
 - `npm run generate:og` — (re)generate OG share image + apple-touch icon (auto-runs via `prebuild`)
-- `npm run convert:bibliography` — regenerate the Relevant Archives bibliography from `resources/ผลงานวิชาการ.docx` (auto-runs via `prebuild`)
+- `npm run convert:bibliography` — regenerate the per-language Relevant Archives pages from `resources/relevant_publication_archives_{Thai,english}.docx` → `src/content/archives/{th,en}.md` (auto-runs via `prebuild`)
 - `python scripts/ingest_publications.py` — bulk-ingest publication/Thai-book PDFs from `resources/`: match citations to the bibliography, extract abstracts (text + OCR for scanned English), convert Buddhist→Gregorian years for Thai works, copy PDFs to `public/`, render book covers (`--english-only`, `--thai-only`, `--books-only` flags; `--review-only` renders Thai page-1 images to `scripts/abstract-review/` for manual abstract entry)
 - `npm run sync:access` — pull the Google Sheets access tracker (CSV URL in `scripts/access-sheet-url.txt`) and write `viewable:`/`downloadable:` into the publication/book frontmatter (auto-runs in `prebuild`, before `render-viewer`, so the deployed site follows the sheet)
 - `python scripts/render-viewer.py` (auto-runs in `prebuild`) — for every entry with `downloadable: false`, render the PDF pages to `public/pdf-pages/<id>/` images and remove the PDF from `public/` (master stays in `resources/`); the card then links to the `/view/<id>` reader instead of a download
@@ -41,7 +41,7 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 ## Project layout (this site)
 
 - **Content (Markdown):** `src/content/publications/en|th/*.md` (one file per publication,
-  abstract in the body), `src/content/photos/*.md` (one file per person/photo album), `src/content/archives/bibliography.md` (ONE file: the whole Relevant Archives citation list, rendered as Markdown), and
+  abstract in the body), `src/content/photos/*.md` (one file per person/photo album), `src/content/archives/{th,en}.md` (per-language Relevant Archives citation lists, generated from the two Word files; the Thai page renders th.md, the English page en.md), and
   `src/content/about/*.md` (About-page biography blocks, ordered via `order` frontmatter; each
   block may carry an optional `image` + `caption`/`captionTh`, a `textTh` translation, and
   `imageOnly: true` to render a standalone centered figure instead of a text-and-image row).
