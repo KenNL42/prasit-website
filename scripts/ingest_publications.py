@@ -403,8 +403,12 @@ year: {year}
         md += f'language: "en"\npdf: "{f}"\ncitation: "{citation}"\n---\n'
         if abstract:
             md += '\n' + abstract.strip() + '\n'
+
         out = os.path.join(out_dir, slug + '.md')
-        open(out, 'w', encoding='utf-8').write(md)
+        if os.path.exists(out) and '--force' not in sys.argv:
+            print(f'    exists, keeping manual edits: {os.path.basename(out)[:50]}')
+        else:
+            open(out, 'w', encoding='utf-8').write(md)
         # copy the PDF (keep original filename so `pdf:` matches)
         dst = os.path.join(EN_PUB, f)
         if not os.path.exists(dst):
@@ -468,8 +472,12 @@ year: {year}
         md += f'language: "th"\npdf: "{f}"\ncitation: "{citation}"\n---\n'
         # abstract body is intentionally empty — fill it after reviewing
         # scripts/abstract-review/index.html (page-1 images of each article)
+
         out = os.path.join(out_dir, slug + '.md')
-        open(out, 'w', encoding='utf-8').write(md)
+        if os.path.exists(out) and '--force' not in sys.argv:
+            print(f'    exists, keeping manual edits: {os.path.basename(out)[:50]}')
+        else:
+            open(out, 'w', encoding='utf-8').write(md)
         dst = os.path.join(TH_PUB, f)
         if not os.path.exists(dst):
             shutil.copy2(src, dst)
@@ -526,7 +534,12 @@ pdf: "{b['pdf']}"
 cover: "{b['cover']}"
 ---
 """
-        open(os.path.join(cdir, b['slug'] + '.md'), 'w', encoding='utf-8').write(md)
+
+        out = os.path.join(cdir, b['slug'] + '.md')
+        if os.path.exists(out) and '--force' not in sys.argv:
+            print(f'    exists, keeping manual edits: {os.path.basename(out)[:50]}')
+        else:
+            open(out, 'w', encoding='utf-8').write(md)
     print(f'[books] {len(meta)} books ingested (covers in public/books/covers)')
     with open(os.path.join(ROOT, 'scripts', 'books-meta.json'), 'w', encoding='utf-8') as fh:
         json.dump(meta, fh, ensure_ascii=False, indent=2)

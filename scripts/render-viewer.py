@@ -133,6 +133,7 @@ def main():
     removed = 0
     restored = 0
     for kind, lang, content_dir, res_dir, pub_dir in COLLECTIONS:
+        os.makedirs(pub_dir, exist_ok=True)  # public/ folders are generated at build time
         for f in sorted(os.listdir(content_dir)):
             if not f.endswith('.md'):
                 continue
