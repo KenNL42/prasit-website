@@ -154,7 +154,7 @@ npx wrangler pages deploy dist --project-name prasit-website
 Option B — cloud build from this repo (Python is supported):
 
 1. Dashboard → **Workers & Pages → Create → Pages → Connect to Git** →
-   choose the repo and branch `deploy-prod`.
+   choose the repo and branch `deploy-any`.
 2. Build settings: build command `pip install -r requirements.txt && npm run build`,
    output directory `dist`. Add env `PYTHON_VERSION=3.11` if needed.
 3. Domain: Pages project → **Custom domains** → add `yourdomain.com` → create a
@@ -213,8 +213,8 @@ and never overwrites manually-edited files unless you pass `--force`).
 ## 8. Branching
 
 - **`master`** — development; all changes land here.
-- **`deploy-prod`** — the production deploy branch (this guide). It carries the
-  same source as `master` (no GitHub Pages overlay — no base path, no
-  middleware). Deploy `dist/` built from it, or connect it to a cloud build.
+- **`deploy-any`** — the production deploy branch. It carries the same source
+  as `master` (no GitHub Pages overlay — no base path, no middleware). Deploy
+  `dist/` built from it, or connect it to a cloud build (Cloudflare Pages §6B).
 - **`github-deploy`** — legacy staging on GitHub Pages (`kennl42.github.io`).
   Kept for testing only; not the production site.

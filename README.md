@@ -345,7 +345,7 @@ place: `url` in **`src/site.config.ts`** (read by `astro.config.mjs`). Set it
 to your production domain before deploying.
 
 - `master` — development branch.
-- `deploy-prod` — production deploy branch (see HOSTING.md).
+- `deploy-any` — production deploy branch (see HOSTING.md).
 - `github-deploy` — legacy **staging** on GitHub Pages (`kennl42.github.io`),
   kept for testing only.
 
