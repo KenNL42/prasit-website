@@ -125,8 +125,10 @@ npm run preview        # serves dist/ at http://localhost:4321
 ### Vercel (recommended)
 
 ```bash
+npm run deploy                       # = npm run build && npx vercel deploy dist --prod
+# or manually:
 npm run build
-npx vercel deploy dist --prod
+npx vercel deploy dist --prod        # omit --prod for a preview URL
 ```
 
 1. First run: sign in (`npx vercel login`), accept the project prompts.
