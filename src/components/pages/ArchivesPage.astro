@@ -13,9 +13,12 @@ const { lang } = Astro.props;
 const t = getDictionary(lang);
 const prefix = lang === 'th' ? '/th' : '';
 
-// The whole bibliography lives in ONE markdown file
-// (src/content/archives/bibliography.md) — render its body as-is.
-const [entry] = await getCollection('archives');
+// The bibliography is split by language: src/content/archives/th.md feeds
+// the Thai page, src/content/archives/en.md feeds the English page (each
+// carries a `language:` frontmatter, generated from the matching Word
+// file by scripts/convert-bibliography.mjs).
+const entries = await getCollection('archives');
+const entry = entries.find((e) => e.data.language === lang);
 const { Content } = entry ? await render(entry) : { Content: undefined };
 
 const metaDescription =
@@ -57,8 +60,8 @@ const archivesLd = [
       ) : (
         <div class="mt-10 rounded-xl border border-dashed border-line bg-paper-dark p-12 text-center text-sm text-ink-soft">
           {lang === 'th'
-            ? 'ยังไม่มีรายการ กรุณาเพิ่มเนื้อหาในไฟล์ src/content/archives/bibliography.md'
-            : 'No entries yet. Add your bibliography to src/content/archives/bibliography.md.'}
+            ? 'ยังไม่มีรายการ กรุณาเพิ่มเนื้อหาในไฟล์ src/content/archives/th.md'
+            : 'No entries yet. Add your bibliography to src/content/archives/en.md.'}
         </div>
       )
     }

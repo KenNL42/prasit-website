@@ -26,7 +26,7 @@ import argparse
 sys.stdout.reconfigure(encoding='utf-8')
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BIB = os.path.join(ROOT, 'src', 'content', 'archives', 'bibliography.md')
+BIB = os.path.join(ROOT, 'src', 'content', 'archives')  # th.md + en.md (split by language)
 EN_SRC = os.path.join(ROOT, 'resources', 'English_publications')
 TH_SRC = os.path.join(ROOT, 'resources', 'Thai_publications')
 BOOK_SRC = os.path.join(ROOT, 'resources', 'Thai_books')
@@ -41,7 +41,12 @@ REVIEW_DIR = os.path.join(ROOT, 'scripts', 'abstract-review')
 # --------------------------------------------------------------------------
 
 def parse_bibliography():
-    md = open(BIB, encoding='utf-8').read()
+    # the archives are split by language: th.md (Thai) and en.md (English)
+    md = ''
+    for f in ('th.md', 'en.md'):
+        p = os.path.join(ROOT, 'src', 'content', 'archives', f)
+        if os.path.exists(p):
+            md += open(p, encoding='utf-8').read() + '\n'
     sections = re.split(r'^## ', md, flags=re.M)
     lang_sections = {}
     for s in sections:
@@ -49,6 +54,14 @@ def parse_bibliography():
             lang_sections['th'] = s
         elif s.startswith('บทความและหนังสือภาษาอังกฤษ'):
             lang_sections['en'] = s
+    # English works also live in the en.md body (no ภาษาอังกฤษ header there)
+    en_md = open(os.path.join(ROOT, 'src', 'content', 'archives', 'en.md'), encoding='utf-8').read()
+    en_section = en_md.split('---\n', 2)[-1] if '---' in en_md else en_md
+    if 'en' not in lang_sections:
+        lang_sections['en'] = en_section
+    if 'th' not in lang_sections:
+        th_md = open(os.path.join(ROOT, 'src', 'content', 'archives', 'th.md'), encoding='utf-8').read()
+        lang_sections['th'] = th_md.split('---\n', 2)[-1] if '---' in th_md else th_md
     # journal/vol/pages pattern: "Journal Name 12(3): 45-67." — works for
     # English and Thai journal names, and for citations where the trailing
     # comma of the title sits inside the closing quote ("title,” Journal").
