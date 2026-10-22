@@ -6,7 +6,7 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
+    "dev": "node scripts/py.mjs scripts/render-viewer.py && astro dev",
     "build": "astro build",
     "prebuild": "node scripts/generate-og-image.mjs && node scripts/convert-bibliography.mjs && node scripts/py.mjs scripts/sync-access.py && node scripts/py.mjs scripts/render-viewer.py",
     "preview": "astro preview",
