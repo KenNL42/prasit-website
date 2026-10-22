@@ -2,6 +2,7 @@
 title: "The Stateless Tai Lue in Chiang Kham"
 authors:
   - "Prasit Leepreecha"
+  - "Songkran Jantakad"
 year: 2020
 journal: "ASR: CMU Journal of Social Sciences and Humanities"
 type: "Journal Article"

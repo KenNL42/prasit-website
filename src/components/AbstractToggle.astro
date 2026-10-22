@@ -78,16 +78,17 @@ const targetId = `abstract-${id}`;
     const target = document.getElementById(button.dataset.target ?? '');
     if (!target) return;
 
-    const expanded = target.classList.toggle('abstract-collapsed');
-    button.setAttribute('aria-expanded', String(!expanded));
+    // toggle() returns true when the class is present — i.e. the text is collapsed.
+    const collapsed = target.classList.toggle('abstract-collapsed');
+    button.setAttribute('aria-expanded', String(!collapsed));
 
     const label = button.querySelector('[data-label]');
     if (label) {
-      label.textContent = expanded ? (button.dataset.less ?? 'show less') : (button.dataset.more ?? 'more…');
+      label.textContent = collapsed ? (button.dataset.more ?? 'more…') : (button.dataset.less ?? 'show less');
     }
     const chevron = button.querySelector('[data-chevron]');
     if (chevron) {
-      chevron.classList.toggle('rotate-180', !expanded);
+      chevron.classList.toggle('rotate-180', !collapsed);
     }
   });
 </script>
