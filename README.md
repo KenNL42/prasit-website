@@ -320,8 +320,8 @@ bold author groups, year-prefixed bullets).
 
 All site-wide settings live in **`src/site.config.ts`** — name, title, affiliation, email,
 office address, academic profile links and research interests. Edit that one file to update the
-entire site. Also set the `site` URL in `astro.config.mjs` (used for the sitemap and canonical
-links).
+entire site. The production URL (`url`) is also read from there by `astro.config.mjs` (used for
+the sitemap and canonical links).
 
 To use a real profile photo, replace the monogram placeholder card on `src/pages/index.astro`
 with an `<img>` tag.
@@ -330,24 +330,24 @@ with an `<img>` tag.
 
 ## Deployment
 
+> **Full walkthrough — hosts, costs, domain registration, build steps, and the
+> SEO checklist:** read **[HOSTING.md](./HOSTING.md)**.
+
 The build output is fully static:
 
 ```bash
-npm run build   # → dist/
+npm run build   # → dist/   (prebuild syncs the access sheet + restores PDFs)
 ```
 
-Upload `dist/` to any static host. For **GitHub Pages**, add to `astro.config.mjs`:
+Upload `dist/` to any static host (Vercel, Cloudflare Pages, Netlify, Surge, …).
+The site URL (sitemap, canonical, hreflang, OG, JSON-LD) is configured in one
+place: `url` in **`src/site.config.ts`** (read by `astro.config.mjs`). Set it
+to your production domain before deploying.
 
-```js
-export default defineConfig({
-  site: 'https://<user>.github.io',
-  base: '/<repo-name>/',
-  ...
-});
-```
-
-See the [Astro deployment guide](https://docs.astro.build/en/guides/deploy/) for Netlify,
-Vercel, Cloudflare Pages and other platforms.
+- `master` — development branch.
+- `deploy-prod` — production deploy branch (see HOSTING.md).
+- `github-deploy` — legacy **staging** on GitHub Pages (`kennl42.github.io`),
+  kept for testing only.
 
 ---
 

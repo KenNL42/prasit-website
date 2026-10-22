@@ -32,6 +32,8 @@ const en = {
     photos: (n: number) => `${n} photo${n === 1 ? '' : 's'}`,
     viewGallery: 'View gallery',
     backToPhotos: 'Back to all photos',
+    notFound: 'Page not found',
+    notFoundHint: 'The page you are looking for does not exist.',
     noPhotos:
       'No photos have been added to this album yet. Place images inside the album folder (public/pictures/…) to display them here.',
   },
@@ -156,6 +158,8 @@ const th: Dictionary = {
     photos: (n) => `${n} ภาพ`,
     viewGallery: 'ชมภาพถ่าย',
     backToPhotos: 'กลับไปยังภาพทั้งหมด',
+    notFound: 'ไม่พบหน้าที่ค้นหา',
+    notFoundHint: 'หน้าที่คุณกำลังค้นหาไม่มีอยู่ในเว็บไซต์นี้',
     noPhotos:
       'ยังไม่มีภาพในอัลบั้มนี้ กรุณาใส่ภาพลงในโฟลเดอร์ (public/pictures/…) เพื่อแสดงผล',
   },

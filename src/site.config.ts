@@ -5,8 +5,15 @@
 // ---------------------------------------------------------------------------
 
 export const SITE = {
-  /** Base URL used for sitemap + canonical links. Keep the trailing slash off. */
-  url: 'https://kennl42.github.io',
+  /**
+   * Production URL (no trailing slash). This is the single source of truth:
+   * astro.config.mjs reads it for `site`, so sitemap, canonical, hreflang,
+   * Open Graph and JSON-LD all follow this value.
+   *
+   * REPLACE with the domain you register (e.g. https://prasitleepreecha.com)
+   * before the production deploy. See HOSTING.md.
+   */
+  url: 'https://prasitleepreecha.com',
   /** Short name shown in the navigation bar. */
   name: 'Prasit Leepreecha',
   /** Thai version of the name (used on /th/ pages). */
@@ -39,6 +46,13 @@ export const SITE = {
     'Google Scholar': 'https://scholar.google.com/citations?user=39Smk0YAAAAJ',
     Academia: 'https://independent.academia.edu/PrasitLeepreecha',
   },
+  /** Research interests (used in SEO structured data: knowsAbout). */
+  interests: [
+    'Ethnicity',
+    'Indigenous studies',
+    'Ethnic relations',
+    'Anthropology of northern Thailand',
+  ],
 };
 
 export type SiteConfig = typeof SITE;

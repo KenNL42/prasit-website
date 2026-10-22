@@ -1,12 +1,14 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { SITE } from './src/site.config.ts';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // Set the public site URL so the sitemap and canonical URLs are generated correctly.
-  site: 'https://yourname.example.edu',
+  // The public site URL — single source of truth is SITE.url in
+  // src/site.config.ts (used for sitemap, canonical, hreflang, OG).
+  site: SITE.url,
   integrations: [
     sitemap({
       i18n: {
