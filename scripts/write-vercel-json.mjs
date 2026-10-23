@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 const vercelJson = {
-  version: 3,
+  version: 2,
   headers: [
     {
       source: '/pdf-pages/(.*)',
