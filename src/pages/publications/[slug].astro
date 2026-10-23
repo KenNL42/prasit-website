@@ -1,0 +1,16 @@
+---
+import PublicationDetailPage from '../../components/pages/PublicationDetailPage.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const pubs = await getCollection('publications');
+  return pubs.map((p) => ({
+    params: { slug: (p.id.split('/').pop() ?? '').replace(/\s+/g, '-').toLowerCase() },
+    props: { entry: p },
+  }));
+}
+
+const { entry } = Astro.props;
+---
+
+<PublicationDetailPage lang="en" kind="publication" entry={entry} />

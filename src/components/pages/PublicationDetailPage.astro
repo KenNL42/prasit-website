@@ -1,0 +1,213 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../Icon.astro';
+import AbstractToggle from '../AbstractToggle.astro';
+import { render, type CollectionEntry } from 'astro:content';
+import { buildCitation, pdfUrl, viewerUrl } from '../../lib/publications';
+import { getDictionary, type Locale } from '../../i18n';
+import { SITE } from '../../site.config';
+
+interface Props {
+  lang: Locale;
+  kind: 'publication' | 'book';
+  entry: CollectionEntry<'publications'> | CollectionEntry<'thaiBooks'>;
+}
+
+const { lang, kind, entry } = Astro.props;
+const t = getDictionary(lang);
+const prefix = lang === 'th' ? '/th' : '';
+const isBook = kind === 'book';
+const pub = isBook ? undefined : (entry as CollectionEntry<'publications'>);
+const book = isBook ? (entry as CollectionEntry<'thaiBooks'>) : undefined;
+
+const title = isBook ? book!.data.title : pub!.data.title;
+const authors = isBook ? book!.data.authors : pub!.data.authors;
+const year = isBook ? book!.data.year : pub!.data.year;
+const displayedYear = !isBook && pub!.data.language === 'th' && lang === 'th' ? year + 543 : year;
+const langTag = isBook ? 'th' : pub!.data.language;
+const citation = isBook ? `${authors.join(', ')} (${year}). ${title}.` : buildCitation(pub!);
+
+const { Content } = await render(entry);
+
+const abstractBody = isBook ? '' : (pub!.body ?? '').trim();
+const abstractText = abstractBody.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+const description =
+  abstractText.slice(0, 160) || citation.slice(0, 200) || (isBook ? title : title);
+
+const pageUrl = new URL(Astro.url.pathname, SITE.url).toString();
+
+// schema.org ScholarlyArticle / Book — individual page for each work.
+const workLd = isBook
+  ? {
+      '@type': 'Book',
+      name: title,
+      author: authors.map((name) => ({ '@type': 'Person', name })),
+      datePublished: String(year),
+      inLanguage: 'th',
+      url: pageUrl,
+      image: new URL(`/books/covers/${book!.data.cover}`, SITE.url).toString(),
+    }
+  : {
+      '@type': 'ScholarlyArticle',
+      headline: title,
+      author: authors.map((name) => ({ '@type': 'Person', name })),
+      datePublished: String(pub!.data.year),
+      ...(pub!.data.journal ? { publisher: { '@type': 'Organization', name: pub!.data.journal } } : {}),
+      citation,
+      inLanguage: pub!.data.language,
+      url: pageUrl,
+      ...(abstractText ? { abstract: abstractText } : {}),
+      ...(pub!.data.doi ? { sameAs: `https://doi.org/${pub!.data.doi}` } : {}),
+    };
+
+// Downloadable PDF URL (publications) or /books/<pdf> (books).
+const downloadUrl = isBook
+  ? book!.data.downloadable === false
+    ? undefined
+    : `/books/${book!.data.pdf}`
+  : pdfUrl(pub!);
+const readUrl = entry.data.downloadable === false ? viewerUrl(entry as CollectionEntry<'publications'> & CollectionEntry<'thaiBooks'>) : undefined;
+const backHref = isBook
+  ? `${prefix}/publications/books`
+  : `${prefix}/publications/${pub!.data.language === 'th' ? 'thai' : 'english'}`;
+const backLabel = isBook
+  ? t.publications.booksTitle
+  : pub!.data.language === 'th'
+    ? t.publications.thTitle
+    : t.publications.enTitle;
+const typeLabel = isBook ? 'Book' : (t.typeLabels[pub!.data.type] ?? pub!.data.type);
+---
+
+<Layout title={title} description={description} lang={lang} type="article" jsonLd={[workLd]}>
+  <div class="mx-auto max-w-4xl px-4 py-14 sm:px-6">
+    <!-- Breadcrumb -->
+    <nav class="mb-8" aria-label="Breadcrumb">
+      <ol class="flex flex-wrap items-center gap-2 text-sm text-ink-soft">
+        <li>
+          <a href={`${prefix}/publications`} class="transition-colors hover:text-navy">
+            {t.publications.breadcrumb}
+          </a>
+        </li>
+        <li aria-hidden="true"><Icon name="chevron-right" class="h-3.5 w-3.5" /></li>
+        <li>
+          <a href={backHref} class="transition-colors hover:text-navy">
+            {backLabel}
+          </a>
+        </li>
+        <li aria-hidden="true"><Icon name="chevron-right" class="h-3.5 w-3.5" /></li>
+        <li class="truncate text-ink">{title}</li>
+      </ol>
+    </nav>
+
+    <article lang={langTag}>
+      <!-- Type badge + year -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="rounded-full bg-paper-dark px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-navy">
+          {typeLabel}
+        </span>
+        <span class="text-sm text-ink-soft">{displayedYear}</span>
+        {!isBook && pub!.data.language === 'th' && (
+          <span class="rounded-full bg-navy px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-paper">
+            {t.publications.thaiBadge}
+          </span>
+        )}
+      </div>
+
+      <h1 class="mt-4 font-serif text-3xl font-semibold leading-tight text-ink sm:text-4xl">{title}</h1>
+
+      {authors.length > 0 && <p class="mt-3 text-base text-ink-soft">{authors.join(' · ')}</p>}
+
+      {!isBook && pub!.data.journal && (
+        <p class="mt-1.5 text-sm italic text-ink-soft">
+          {pub!.data.journal}
+          {[pub!.data.volume && `Vol. ${pub!.data.volume}`, pub!.data.issue && `No. ${pub!.data.issue}`, pub!.data.pages]
+            .filter(Boolean)
+            .join(', ')}
+        </p>
+      )}
+
+      {isBook && (
+        <div class="mt-6 grid gap-8 sm:grid-cols-[220px_1fr]">
+          <img
+            src={`/books/covers/${book!.data.cover}`}
+            alt={title}
+            class="w-full rounded-xl border border-line bg-white object-cover shadow-sm"
+          />
+          <div>
+            {abstractBody ? (
+              <div class="prose-content">
+                <Content />
+              </div>
+            ) : null}
+          </div>
+        </div>
+      )}
+
+      {/* Abstract (publications) */}
+      {!isBook && abstractBody && (
+        <div class="mt-8">
+          <AbstractToggle id={title.replace(/[^a-zA-Z0-9-]/g, '-')} isLong={abstractText.length > 300} moreLabel={t.common.more} lessLabel={t.common.less}>
+            <Content />
+          </AbstractToggle>
+        </div>
+      )}
+
+      {/* Citation */}
+      <div class="mt-8 rounded-xl border border-line bg-paper-dark/60 p-5">
+        <p class="text-xs font-semibold uppercase tracking-wider text-ink-soft">
+          {t.publications.title}
+        </p>
+        <p class="mt-2 text-[15px] leading-relaxed text-ink">{citation}</p>
+      </div>
+
+      {/* Actions */}
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        {downloadUrl && (
+          <a
+            href={downloadUrl}
+            download
+            class="inline-flex items-center gap-2 rounded-full bg-navy px-6 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-navy-light"
+          >
+            <Icon name="download" class="h-4 w-4" />
+            {t.common.downloadPdf}
+          </a>
+        )}
+        {readUrl && (
+          <a
+            href={readUrl}
+            class="inline-flex items-center gap-2 rounded-full border border-navy/30 px-6 py-2.5 text-sm font-medium text-navy transition-colors hover:bg-navy hover:text-paper"
+          >
+            <Icon name="eye" class="h-4 w-4" />
+            {t.publications.readOnline}
+          </a>
+        )}
+        {!isBook && pub!.data.doi && (
+          <a
+            href={`https://doi.org/${pub!.data.doi}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-sm font-medium text-navy transition-colors hover:text-navy-light"
+          >
+            DOI: {pub!.data.doi}
+            <Icon name="external" class="h-3.5 w-3.5" />
+          </a>
+        )}
+      </div>
+
+      {entry.data.downloadable === false && (
+        <p class="mt-4 text-sm text-ink-soft">{t.publications.viewOnlyNote}</p>
+      )}
+    </article>
+
+    <!-- Back link -->
+    <p class="mt-12">
+      <a
+        href={backHref}
+        class="inline-flex items-center gap-2 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:border-navy hover:text-navy"
+      >
+        <Icon name="chevron-left" class="h-4 w-4" />
+        {backLabel}
+      </a>
+    </p>
+  </div>
+</Layout>

@@ -1,0 +1,16 @@
+---
+import PublicationDetailPage from '../../../../components/pages/PublicationDetailPage.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const books = await getCollection('thaiBooks');
+  return books.map((b) => ({
+    params: { slug: (b.id.split('/').pop() ?? '').replace(/\s+/g, '-').toLowerCase() },
+    props: { entry: b },
+  }));
+}
+
+const { entry } = Astro.props;
+---
+
+<PublicationDetailPage lang="th" kind="book" entry={entry} />

@@ -50,6 +50,11 @@ const fullTitle = title === SITE.name || title === SITE.nameTh
 
 const ogImage = new URL('/og-image.png', SITE.url).toString();
 const ogLocale = lang === 'th' ? 'th_TH' : 'en_US';
+const ogLocaleAlternate = lang === 'th' ? 'en_US' : 'th_TH';
+
+// Set PUBLIC_NOINDEX=true (e.g. the GitHub Pages staging build) to keep
+// staging duplicates out of Google — the production domain stays indexed.
+const noindex = import.meta.env.PUBLIC_NOINDEX === 'true';
 
 /** Always-present structured data: the website itself and the organisation. */
 const siteGraph = [
@@ -77,7 +82,7 @@ const siteGraph = [
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content={`${displayName}, ${displayTitle}`} />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
     <meta name="theme-color" content="#1e3a5f" />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonical} />
@@ -93,6 +98,7 @@ const siteGraph = [
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={displayName} />
     <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlternate} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />

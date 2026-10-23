@@ -4,6 +4,7 @@ import Icon from '../Icon.astro';
 import { getCollection } from 'astro:content';
 import { getDictionary, type Locale } from '../../i18n';
 import { viewerUrl } from '../../lib/publications';
+import { SITE } from '../../site.config';
 
 interface Props {
   lang: Locale;
@@ -19,9 +20,23 @@ const metaDescription =
   lang === 'th'
     ? 'หนังสือที่แต่งและบรรณาธิการ ตีพิมพ์ในประเทศไทย พร้อมไฟล์ PDF'
     : 'Authored and edited books published in Thailand, with cover previews and downloadable PDFs.';
+
+// schema.org Book nodes — one per book, so each work is individually indexed.
+const bookJsonLd = books.map((book) => {
+  const slug = book.id.split('/').pop()!.replace(/\s+/g, '-').toLowerCase();
+  return {
+    '@type': 'Book',
+    name: book.data.title,
+    author: book.data.authors.map((name) => ({ '@type': 'Person', name })),
+    datePublished: String(book.data.year),
+    inLanguage: 'th',
+    url: new URL(`${prefix}/publications/books/${slug}`, SITE.url).toString(),
+    image: new URL(`/books/covers/${book.data.cover}`, SITE.url).toString(),
+  };
+});
 ---
 
-<Layout title={t.publications.booksTitle} description={metaDescription} lang={lang}>
+<Layout title={t.publications.booksTitle} description={metaDescription} lang={lang} jsonLd={bookJsonLd}>
   <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
     <nav class="mb-6 text-sm text-ink-soft" aria-label="Breadcrumb">
       <a href={`${prefix}/publications`} class="hover:text-navy">{t.publications.breadcrumb}</a>
@@ -35,40 +50,40 @@ const metaDescription =
     </div>
 
     <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {books.map((book) => (
-        <a
-          href={book.data.downloadable === false ? viewerUrl(book) : `/books/${book.data.pdf}`}
-          target={book.data.downloadable === false ? undefined : '_blank'}
-          rel={book.data.downloadable === false ? undefined : 'noopener noreferrer'}
-          class="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-sm transition-shadow hover:shadow-md"
-        >
-          <div class="aspect-[3/4] overflow-hidden bg-paper-dark">
-            <img
-              src={`/books/covers/${book.data.cover}`}
-              alt={book.data.title}
-              loading="lazy"
-              class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-            />
-          </div>
-          <div class="flex flex-1 flex-col p-5">
-            <h2 class="font-serif text-lg font-semibold leading-snug text-ink">{book.data.title}</h2>
-            <p class="mt-2 text-xs uppercase tracking-wider text-ink-soft">
-              {book.data.year} · {book.data.authors.join(', ')}
-            </p>
-            {book.data.downloadable === false ? (
-              <p class="mt-auto flex items-center gap-1.5 pt-4 text-sm font-medium text-navy">
-                {t.publications.readOnline}
-                <Icon name="eye" class="h-4 w-4" />
+      {books.map((book) => {
+        const slug = book.id.split('/').pop()!.replace(/\s+/g, '-').toLowerCase();
+        return (
+          <a
+            href={
+              book.data.downloadable === false
+                ? viewerUrl(book)
+                : `/publications/books/${slug}`
+            }
+            target={book.data.downloadable === false ? undefined : '_blank'}
+            rel={book.data.downloadable === false ? undefined : 'noopener noreferrer'}
+            class="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-sm transition-shadow hover:shadow-md"
+          >
+            <div class="aspect-[3/4] overflow-hidden bg-paper-dark">
+              <img
+                src={`/books/covers/${book.data.cover}`}
+                alt={book.data.title}
+                loading="lazy"
+                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+              />
+            </div>
+            <div class="flex flex-1 flex-col p-5">
+              <h2 class="font-serif text-lg font-semibold leading-snug text-ink">{book.data.title}</h2>
+              <p class="mt-2 text-xs uppercase tracking-wider text-ink-soft">
+                {book.data.year} · {book.data.authors.join(', ')}
               </p>
-            ) : (
               <p class="mt-auto flex items-center gap-1.5 pt-4 text-sm font-medium text-navy">
-                {t.common.downloadPdf}
-                <Icon name="download" class="h-4 w-4" />
-              </p>
-            )}
-          </div>
-        </a>
-      ))}
+                  {t.publications.details}
+                  <Icon name="chevron-right" class="h-4 w-4" />
+                </p>
+            </div>
+          </a>
+        );
+      })}
     </div>
   </div>
 </Layout>

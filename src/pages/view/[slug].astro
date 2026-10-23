@@ -15,13 +15,13 @@ export async function getStaticPaths() {
     ...pubs
       .filter((p) => p.data.downloadable === false)
       .map((p) => ({
-        id: p.id.split('/').pop().replace(/\s+/g, '-').toLowerCase(),
+        id: (p.id.split('/').pop() ?? '').replace(/\s+/g, '-').toLowerCase(),
         title: p.data.title,
         back: p.data.language === 'th' ? '/publications/thai' : '/publications/english',
       })),
     ...books
       .filter((b) => b.data.downloadable === false)
-      .map((b) => ({ id: b.id.split('/').pop().replace(/\s+/g, '-').toLowerCase(), title: b.data.title, back: '/publications/books' })),
+      .map((b) => ({ id: (b.id.split('/').pop() ?? '').replace(/\s+/g, '-').toLowerCase(), title: b.data.title, back: '/publications/books' })),
   ];
   return entries.map((e) => ({ params: { slug: e.id }, props: e }));
 }

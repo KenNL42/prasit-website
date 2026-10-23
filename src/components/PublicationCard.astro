@@ -21,6 +21,8 @@ const url = pdfUrl(pub);
 const abstractLength = (pub.body ?? '').trim().length;
 const citation = buildCitation(pub);
 const langTag = pub.data.language === 'th' ? 'th' : 'en';
+const slug = pub.id.split('/').pop()!.replace(/\s+/g, '-').toLowerCase();
+const detailUrl = `${lang === 'th' ? '/th' : ''}/publications/${slug}`;
 ---
 
 <article
@@ -44,7 +46,7 @@ const langTag = pub.data.language === 'th' ? 'th' : 'en';
 
   <!-- Title -->
   <h3 class="mt-3 font-serif text-lg font-semibold leading-snug text-ink">
-    {pub.data.title}
+    <a href={detailUrl} class="transition-colors hover:text-navy">{pub.data.title}</a>
   </h3>
 
   <!-- Authors -->

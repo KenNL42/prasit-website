@@ -6,7 +6,9 @@ import { baseHtmlPlugin } from './scripts/base-html-plugin.mjs';
 
 // https://astro.build/config
 export default defineConfig({
-  // Set the public site URL so the sitemap and canonical URLs are generated correctly.
+  // Staging (GitHub Pages): canonicals/sitemap stay on the staging URL;
+  // duplicate-content protection is the PUBLIC_NOINDEX env (meta robots
+  // noindex) set in the deploy workflow — see src/layouts/Layout.astro.
   site: 'https://kennl42.github.io',
   base: '/prasit-website',
   trailingSlash: 'always',
