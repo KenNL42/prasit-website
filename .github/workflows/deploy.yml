@@ -37,6 +37,11 @@ jobs:
           # build-cmd: pnpm run build # The command to run to build your site. Runs the package build script/task by default. (optional)
         # env:
           # PUBLIC_POKEAPI: 'https://pokeapi.co/api/v2' # Use single quotation marks for the variable value. (optional)
+        env:
+          # Staging only: keep the GitHub Pages preview out of Google search
+          # results — the production domain (prasitleepreecha.com) is the
+          # canonical site. Layout.astro emits meta robots noindex when set.
+          PUBLIC_NOINDEX: 'true'
 
   deploy:
     needs: build
