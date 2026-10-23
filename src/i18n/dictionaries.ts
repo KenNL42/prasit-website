@@ -105,6 +105,7 @@ const en = {
     readOnline: 'Read online',
     viewOnlyNote: 'View online only — not available for download.',
     viewerEmpty: 'No scanned pages were found for this entry.',
+    details: 'View details',
   },
   photos: {
     title: 'Photos',
@@ -231,6 +232,7 @@ const th: Dictionary = {
     readOnline: 'อ่านออนไลน์',
     viewOnlyNote: 'อ่านได้ทางออนไลน์เท่านั้น — ไม่สามารถดาวน์โหลดได้',
     viewerEmpty: 'ไม่พบภาพหน้าของเอกสารนี้',
+    details: 'ดูรายละเอียด',
   },
   photos: {
     title: 'ภาพถ่าย',

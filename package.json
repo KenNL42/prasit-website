@@ -16,7 +16,7 @@
     "convert:bibliography": "node scripts/convert-bibliography.mjs",
     "sync:access": "node scripts/py.mjs scripts/sync-access.py",
     "render:viewer": "node scripts/py.mjs scripts/render-viewer.py",
-    "deploy": "npm run build && npx vercel deploy dist --prod",
+    "deploy": "npm run build && node scripts/write-vercel-json.mjs && npx vercel deploy dist --prod",
     "astro": "astro"
   },
   "dependencies": {

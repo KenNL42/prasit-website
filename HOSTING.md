@@ -178,10 +178,18 @@ Already in place (no work needed):
 - **robots.txt** (allow all + sitemap line)
 - `<title>` / meta description / author / robots per page, both languages
 - **Open Graph** + **Twitter cards** with a 1200×630 `og-image.png`
+  (+ `og:locale:alternate` for the other language)
 - **JSON-LD structured data**: `Person` (name, job title, worksFor,
   sameAs → Google Scholar/Academia, knowsAbout) + `WebSite` + `Organization`
+- **Individual pages per publication/book** (`/publications/<slug>`,
+  `/publications/books/<slug>`, + `/th/…`) with `ScholarlyArticle` / `Book`
+  JSON-LD, citation and abstract — every work is individually indexable
+- `Book` JSON-LD on the books listing; `ImageGallery` JSON-LD on photo albums
 - Descriptive `alt` on every image; custom bilingual **404 page**
 - Thai pages use the correct `<html lang="th">`
+- Long-lived `Cache-Control` headers for immutable assets via
+  `dist/vercel.json` (written by `scripts/write-vercel-json.mjs` during
+  `npm run deploy`)
 
 Verify after the first production deploy:
 
