@@ -1,6 +1,7 @@
 ---
 title: "Monk, Monarch and Mountain Folks: Domestic Tourism and Internal Colonialism in Northern Thailand"
 authors:
+  - "Olivier Evrard"
   - "Prasit Leepreecha"
 year: 2009
 journal: "Critical of Anthropology"

@@ -44,3 +44,5 @@ scripts/service-account-key.json
 
 # python virtual environment
 .venv/
+.vercel
+.env*
